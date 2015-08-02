@@ -4,13 +4,12 @@ const CLIP_STATES = {
   PLAYING: 'playing',
   STOPPED: 'stopped'
 };
-const context = require('./audiocontext');
-const {Promise} = require('es6-promise');
+const PlayableNode = require('./playablenode');
 
 class Clip {
-  constructor () {
+  constructor (location) {
     this.state = CLIP_STATES.IDLE;
-    this.buffer;
+    this.playableNode = new PlayableNode(location);
   }
 
   touch () {
@@ -25,36 +24,18 @@ class Clip {
   }
 
   start () {
-    if (this.state === CLIP_STATES.PLAYING || !this.buffer) { return; }
+    if (this.state === CLIP_STATES.PLAYING) { return; }
     this.state = CLIP_STATES.PLAYING;
-    this.bufferNode = context.createBufferSource();
-    this.bufferNode.buffer = this.buffer;
-    this.bufferNode.loop = true;
-    this.bufferNode.connect(context.destination);
-    this.bufferNode.start();
+    this.playableNode.start();
   }
 
   stop () {
-    if (!this.bufferNode) { return; }
-    this.bufferNode.stop();
-    this.bufferNode.disconnect();
-    this.bufferNode = null;
     this.state = CLIP_STATES.IDLE;
+    this.playableNode.stop();
   }
 
   load () {
-    return new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.responseType = 'arraybuffer';
-      xhr.onload = () => {
-        context.decodeAudioData(xhr.response, resolve, reject);
-      };
-      xhr.open('GET', this.location, true);
-      xhr.send();
-    }).then((buffer) => {
-      this.buffer = buffer;
-      return buffer;
-    });
+    return this.playableNode.load();
   }
 
   isScheduled () {

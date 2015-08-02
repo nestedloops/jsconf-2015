@@ -20,6 +20,7 @@ class Scheduler {
   }
 
   schedule () {
+    console.log('bar');
     const clipstToStart = this.clips.filter(filterScheduled);
     clipstToStart.forEach((clip) => { clip.start(); });
 
