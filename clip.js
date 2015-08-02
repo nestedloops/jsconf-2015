@@ -45,6 +45,14 @@ class Clip {
   isStopped () {
     return this.state === CLIP_STATES.STOPPED;
   }
+
+  isIdle () {
+    return this.state === CLIP_STATES.IDLE;
+  }
+
+  isPlaying () {
+    return this.state === CLIP_STATES.PLAYING;
+  }
 }
 
 module.exports = Clip;

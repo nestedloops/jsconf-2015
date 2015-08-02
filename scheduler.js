@@ -1,10 +1,11 @@
 const BeatClock = require('./beatclock');
-
+const {EventEmitter} = require('events');
 const filterScheduled = (clip) => { return clip.isScheduled(); };
 const filterStopped = (clip) => { return clip.isStopped(); };
 
-class Scheduler {
+class Scheduler extends EventEmitter {
   constructor (clips = []) {
+    super();
     this.clips = clips;
     this.clock = new BeatClock();
     this.schedule = this.schedule.bind(this);
@@ -20,12 +21,13 @@ class Scheduler {
   }
 
   schedule () {
-    console.log('bar');
     const clipstToStart = this.clips.filter(filterScheduled);
     clipstToStart.forEach((clip) => { clip.start(); });
 
     const clipstToStop = this.clips.filter(filterStopped);
     clipstToStop.forEach((clip) => { clip.stop(); });
+
+    this.emit('bar');
   }
 }
 
