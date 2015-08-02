@@ -10,7 +10,8 @@
   "license": "MIT",
   "dependencies": {
     "dilla": "^1.5.0",
-    "es6-promise": "^2.3.0"
+    "es6-promise": "^2.3.0",
+    "web-midi": "^1.0.0"
   },
   "devDependencies": {
     "babelify": "^6.1.3",
