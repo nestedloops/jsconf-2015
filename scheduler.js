@@ -1,45 +1,30 @@
-const context = require('./audiocontext');
-const Dilla = require('dilla');
-const EventEmitter = require('events').EventEmitter;
+const BeatClock = require('./beatclock');
 
-class Scheduler extends EventEmitter {
-  constructor () {
-    super()
+const filterScheduled = (clip) => { return clip.isScheduled(); };
+const filterStopped = (clip) => { return clip.isStopped(); };
 
-    this.dilla = Dilla(context, {
-      tempo: 100,
-      beatsPerBar: 4,
-      loopLength: 2
-    });
-
-    this._onTick = this._onTick.bind(this);
-
-    this.dilla.on('tick', this._onTick);
+class Scheduler {
+  constructor (clips = []) {
+    this.clips = clips;
+    this.clock = new BeatClock();
+    this.schedule = this.schedule.bind(this);
   }
 
   start () {
-    this.dilla.start();
+    this.bindToClockEvents();
+    this.clock.start();
   }
 
-  _onTick (_tick) {
-    const split = _tick.position.split('.');
-    const tick = parseInt(split[2]);
-    const beat = parseInt(split[1]);
-    const bar = parseInt(split[0]);
-    if (this.lastBar !== bar) {
-      this.emit('bar', bar)
-    }
-    this.lastBar = bar;
+  bindToClockEvents () {
+    this.clock.on('bar', this.schedule);
+  }
 
-    if (this.lastBeat !== beat) {
-      this.emit('beat', beat)
-    }
-    this.lastBeat = beat;
+  schedule () {
+    const clipstToStart = this.clips.filter(filterScheduled);
+    clipstToStart.forEach((clip) => { clip.start(); });
 
-    if (this.lastTick !== tick) {
-      this.emit('tick', tick)
-    }
-    this.lastTick = tick;
+    const clipstToStop = this.clips.filter(filterStopped);
+    clipstToStop.forEach((clip) => { clip.stop(); });
   }
 }
 

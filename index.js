@@ -1,5 +1,9 @@
 const Scheduler = require('./scheduler');
-
-const s = new Scheduler();
-s.on('bar', (bar) => { console.log('bar', bar);})
-s.start();
+const Clip = require('./clip');
+const c = global.c = new Clip();
+c.location = '/samples/beat1-100bpm.wav';
+c.load().then(() => {
+  c.touch();
+  const s = new Scheduler([c]);
+  s.start();
+});

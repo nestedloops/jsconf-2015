@@ -4,16 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "watchify index.js -o bundle.js -v -d -t babelify"
+    "start": "beefy index.js --open --live -- -t babelify"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "dilla": "^1.5.0"
+    "dilla": "^1.5.0",
+    "es6-promise": "^2.3.0"
   },
   "devDependencies": {
     "babelify": "^6.1.3",
-    "browserify": "^11.0.0",
+    "beefy": "^2.1.5",
+    "eslint": "^1.0.0",
     "watchify": "^3.3.0"
   }
 }
