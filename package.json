@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "beefy index.js --open --live -- -t babelify"
+    "start": "beefy index.js:bundle.js --open --live -- -t babelify"
   },
   "author": "",
   "license": "MIT",
