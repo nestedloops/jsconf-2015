@@ -7,9 +7,9 @@ const CLIP_STATES = {
 const PlayableNode = require('./playablenode');
 
 class Clip {
-  constructor (location) {
+  constructor (options = {}) {
     this.state = CLIP_STATES.IDLE;
-    this.playableNode = new PlayableNode(location);
+    this.playableNode = new PlayableNode(options.location);
   }
 
   touch () {
@@ -17,8 +17,14 @@ class Clip {
       case CLIP_STATES.IDLE:
         this.state = CLIP_STATES.SCHEDULED;
         break;
+      case CLIP_STATES.SCHEDULED:
+        this.state = CLIP_STATES.IDLE;
+        break;
       case CLIP_STATES.PLAYING:
         this.state = CLIP_STATES.STOPPED;
+        break;
+      case CLIP_STATES.STOPPED:
+        this.stop();
         break;
     }
   }
