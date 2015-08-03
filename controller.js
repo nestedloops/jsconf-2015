@@ -42,6 +42,8 @@ const clipToKeyColor = (clip) => {
 };
 
 const update = () => {
+  // don't update if no midi controller present
+  if (!midiController) { return; }
   Object.keys(mappings).forEach((key) => {
     const clip = mappings[key];
     const color = clipToKeyColor(clip);
