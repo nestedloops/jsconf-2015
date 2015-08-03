@@ -41,10 +41,12 @@ const clipToKeyColor = (clip) => {
   }
 };
 
-const update = () => {
+const mappingKeys = Object.keys(mappings);
+const update = (tick, beat) => {
   // don't update if no midi controller present
   if (!midiController) { return; }
-  Object.keys(mappings).forEach((key) => {
+  updateProgress(tick, beat);
+  mappingKeys.forEach((key) => {
     const clip = mappings[key];
     const color = clipToKeyColor(clip);
     setKeyColor(key, color);
@@ -55,13 +57,26 @@ const setKeyColor = (key, color) => {
   midiController.write([144, key, color]);
 };
 
+const updateProgress = (tick, beat) => {
+  const priorTicks = (beat - 1) * 96;
+  const currentTicks = tick;
+  const tickProgress = currentTicks + priorTicks;
+  const totalTicks = 4 * 96;
+  const ratio = tickProgress / totalTicks;
+
+  const position = Math.floor(ratio * 8);
+  for (let i = 1; i <= 8; i++) {
+    setKeyColor((i * 16) - 8, i-1 === position ? COLOR_CODES.AMBER : COLOR_CODES.OFF);
+  }
+};
+
 module.exports = {
   init () {
     midi.getPortNames(setController);
     midi.watchPortNames(setController);
   },
 
-  update () {
-    update();
+  update (tick, beat) {
+    update(tick, beat);
   }
 };

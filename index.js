@@ -1,3 +1,4 @@
+const BeatClock = require('./beatclock');
 const Scheduler = require('./scheduler');
 const controller = require('./controller');
 const mappings = require('./mappings');
@@ -6,13 +7,17 @@ const allClips = [];
 Object.keys(mappings).forEach((key) => {
   allClips.push(mappings[key]);
 });
-const scheduler = new Scheduler(allClips);
 const loadAllClips = allClips.map((clip) => { return clip.load(); });
 
 Promise.all(loadAllClips).then(() => {
+  const clock = new BeatClock();
+  const scheduler = new Scheduler(allClips);
+
+  clock.on('bar', scheduler.schedule);
+  clock.on('tick', controller.update);
+
   controller.init();
-  scheduler.start();
-  scheduler.on('bar', controller.update);
+  clock.start();
 });
 
 

@@ -4,9 +4,9 @@ const EventEmitter = require('events').EventEmitter;
 
 class BeatClock extends EventEmitter {
   constructor () {
-    super()
+    super();
 
-    this.dilla = Dilla(context, {
+    this.dilla = Dilla(context, {
       tempo: 100,
       beatsPerBar: 4,
       loopLength: 2
@@ -27,17 +27,17 @@ class BeatClock extends EventEmitter {
     const beat = parseInt(split[1]);
     const bar = parseInt(split[0]);
     if (this.lastBar !== bar) {
-      this.emit('bar', bar)
+      this.emit('bar', bar);
     }
     this.lastBar = bar;
 
     if (this.lastBeat !== beat) {
-      this.emit('beat', beat)
+      this.emit('beat', beat, bar);
     }
     this.lastBeat = beat;
 
     if (this.lastTick !== tick) {
-      this.emit('tick', tick)
+      this.emit('tick', tick, beat);
     }
     this.lastTick = tick;
   }
