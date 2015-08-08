@@ -5,7 +5,7 @@ const COLOR_CODES = {
   YELLOW: 62,
   GREEN: 60
 };
-const mappings = require('./mappings');
+const {mappings} = require('./mappings');
 const midi = require('web-midi');
 let midiController = null;
 

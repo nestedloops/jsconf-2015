@@ -62,3 +62,4 @@ class Clip {
 }
 
 module.exports = Clip;
+module.exports.States = CLIP_STATES;
