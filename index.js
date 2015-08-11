@@ -7,6 +7,7 @@ const allClips = [];
 Object.keys(mappings).forEach((key) => {
   allClips.push(mappings[key]);
 });
+
 const loadAllClips = allClips.map((clip) => { return clip.load(); });
 
 Promise.all(loadAllClips).then(() => {

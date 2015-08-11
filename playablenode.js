@@ -1,9 +1,12 @@
 const context = require('./audiocontext');
 const {Promise} = require('es6-promise');
+const buffers = {};
 
 class PlayableNode {
-  constructor (location) {
-    this.location = location;
+  constructor (options = {}) {
+    this.options = options;
+    this.location = options.location;
+    this.loops = options.loops;
     this.buffer = null;
     this.bufferNode = null;
     this.out = context.createGain();
@@ -20,28 +23,28 @@ class PlayableNode {
       xhr.open('GET', this.location, true);
       xhr.send();
     }).then((buffer) => {
+      buffers[this.location] = buffer;
       this.buffer = buffer;
       return buffer;
     });
   }
 
   start () {
-    if (!this.buffer) { return; }
+    if (!this.buffer && !buffers[this.options.location]) { return; }
     this.bufferNode = context.createBufferSource();
-    this.bufferNode.buffer = this.buffer;
-    this.bufferNode.loop = true;
+    this.bufferNode.buffer = this.buffer || buffers[this.location];
+    if (this.loops) {
+      this.bufferNode.loop = true;
+    }
     this.bufferNode.connect(this.out);
-    this.out.gain.exponentialRampToValueAtTime(1, context.currentTime + .00001);
+    this.out.gain.exponentialRampToValueAtTime(this.options.gain || 1, context.currentTime + .00001);
     this.bufferNode.start();
+    return this.bufferNode;
   }
 
   stop () {
     this.out.gain.exponentialRampToValueAtTime(.01, context.currentTime + .2);
-    setTimeout(() => {
-      this.bufferNode.stop();
-      this.bufferNode.disconnect();
-      this.bufferNode = null;
-    }, 1000);
+    return this.bufferNode;
   }
 }
 

@@ -8,8 +8,11 @@ const PlayableNode = require('./playablenode');
 
 class Clip {
   constructor (options = {}) {
+    this.options = options;
+    // snaps to bars
+    this.snaps = true;
     this.state = CLIP_STATES.IDLE;
-    this.playableNode = new PlayableNode(options.location);
+    this.playableNode = new PlayableNode(options);
   }
 
   touch () {
@@ -62,3 +65,4 @@ class Clip {
 }
 
 module.exports = Clip;
+module.exports.States = CLIP_STATES;

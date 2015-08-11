@@ -1,5 +1,4 @@
 const {Promise} = require('es6-promise');
-const States = require('./clip').States;
 const video = require('./video');
 
 class PlayableNode {

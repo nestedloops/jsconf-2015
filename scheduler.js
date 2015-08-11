@@ -3,7 +3,7 @@ const filterStopped = (clip) => { return clip.isStopped(); };
 
 class Scheduler {
   constructor (clips = []) {
-    this.clips = clips;
+    this.clips = clips.filter((clip) => { return clip.snaps; });
     this.schedule = this.schedule.bind(this);
   }
 
