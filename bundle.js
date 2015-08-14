@@ -186,7 +186,8 @@ var midi = require('web-midi');
 var midiController = null;
 
 var setController = function setController(err, names) {
-  if (names.length === 0 || err) return;
+  console.log('setController', err, names);
+  if (!names || names.length === 0 || err) return;
   midiController = global.midiController = midi(names[0]);
   observeController();
 };

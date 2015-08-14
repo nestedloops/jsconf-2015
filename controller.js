@@ -10,7 +10,8 @@ const midi = require('web-midi');
 let midiController = null;
 
 const setController = (err, names) => {
-  if (names.length === 0 || err) return;
+  console.log('setController', err, names);
+  if (!names || names.length === 0 || err) return;
   midiController = global.midiController = midi(names[0]);
   observeController();
 };
