@@ -10,9 +10,13 @@ const midi = require('web-midi');
 let midiController = null;
 
 const setController = (err, names) => {
-  console.log('setController', err, names);
+  console.log('all controllers', names);
   if (!names || names.length === 0 || err) return;
-  midiController = global.midiController = midi(names[0]);
+  const filteredControllers = names.filter((controller) => {
+    return controller.toLowerCase().match('launchpad');
+  });
+  console.log('allowed controllers', filteredControllers);
+  midiController = global.midiController = midi(filteredControllers[0]);
   observeController();
 };
 
