@@ -1,17 +1,17 @@
 const Clip = require('./clip');
 const PlaybackManager = require('./playback');
 
-class KillClip extends Clip {
+class StopClip extends Clip {
   touch () {
-    PlaybackManager.kill();
+    PlaybackManager.stopAllNodes();
   }
 
   isScheduled () {
-    return false;
+    return true;
   }
 
   isStopped () {
-    return true;
+    return false;
   }
 
   isIdle () {
@@ -24,4 +24,4 @@ class KillClip extends Clip {
 
 }
 
-module.exports = KillClip;
+module.exports = StopClip;

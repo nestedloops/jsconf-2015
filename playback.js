@@ -13,5 +13,11 @@ module.exports = {
     playingNodes = playingNodes.filter((pn) => { return pn !== node; });
   },
 
-  addNode: (node) => { playingNodes.push(node); }
+  addNode: (node) => { playingNodes.push(node); },
+
+  kill: () => {
+    playingNodes.forEach((node) => {
+      node.stop();
+    });
+  }
 };

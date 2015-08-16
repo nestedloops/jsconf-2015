@@ -1,5 +1,6 @@
 const Clip = require('./clip');
 const KillClip = require('./killclip');
+const StopClip = require('./stopclip');
 const ImmediateClip = require('./immediateclip');
 const VideoNode = require('./playablevideonode');
 
@@ -15,7 +16,7 @@ module.exports = {
   17: new ImmediateClip({location: 'samples/quotes/crockford-upgradingtheweb-0m24s-theresnothing.wav'}),
   18: new ImmediateClip({location: 'samples/quotes/crockford-upgradingtheweb-1m24s-iwillfixtheweb.wav'}),
   19: new ImmediateClip({location: 'samples/quotes/crockford-upgradingtheweb-18m22s-iwanttogetridofjs.wav'}),
-
+  118: new StopClip({}),
   119: new KillClip({})
   // 16: new Clip({location: '/samples/beatbox-100bpm-4bars.wav', bars: 4}),
   // 32: new Clip({location: '/samples/loop-100bpm-2bars.wav', bars: 2}),

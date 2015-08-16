@@ -387,22 +387,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var Clip = require('./clip');
-var States = Clip.States;
 var PlaybackManager = require('./playback');
 
-var ImmediateClip = (function (_Clip) {
-  _inherits(ImmediateClip, _Clip);
+var KillClip = (function (_Clip) {
+  _inherits(KillClip, _Clip);
 
-  function ImmediateClip() {
-    _classCallCheck(this, ImmediateClip);
+  function KillClip() {
+    _classCallCheck(this, KillClip);
 
-    _get(Object.getPrototypeOf(ImmediateClip.prototype), 'constructor', this).apply(this, arguments);
+    _get(Object.getPrototypeOf(KillClip.prototype), 'constructor', this).apply(this, arguments);
   }
 
-  _createClass(ImmediateClip, [{
+  _createClass(KillClip, [{
     key: 'touch',
     value: function touch() {
-      PlaybackManager.stopAllNodes();
+      PlaybackManager.kill();
     }
   }, {
     key: 'isScheduled',
@@ -426,16 +425,17 @@ var ImmediateClip = (function (_Clip) {
     }
   }]);
 
-  return ImmediateClip;
+  return KillClip;
 })(Clip);
 
-module.exports = ImmediateClip;
+module.exports = KillClip;
 
 },{"./clip":3,"./playback":48}],8:[function(require,module,exports){
 'use strict';
 
 var Clip = require('./clip');
 var KillClip = require('./killclip');
+var StopClip = require('./stopclip');
 var ImmediateClip = require('./immediateclip');
 var VideoNode = require('./playablevideonode');
 
@@ -451,7 +451,7 @@ module.exports = {
   17: new ImmediateClip({ location: 'samples/quotes/crockford-upgradingtheweb-0m24s-theresnothing.wav' }),
   18: new ImmediateClip({ location: 'samples/quotes/crockford-upgradingtheweb-1m24s-iwillfixtheweb.wav' }),
   19: new ImmediateClip({ location: 'samples/quotes/crockford-upgradingtheweb-18m22s-iwanttogetridofjs.wav' }),
-
+  118: new StopClip({}),
   119: new KillClip({})
   // 16: new Clip({location: '/samples/beatbox-100bpm-4bars.wav', bars: 4}),
   // 32: new Clip({location: '/samples/loop-100bpm-2bars.wav', bars: 2}),
@@ -459,7 +459,7 @@ module.exports = {
   // 34: new VideoNode('videos/crockford2.mp4')
 };
 
-},{"./clip":3,"./immediateclip":5,"./killclip":7,"./playablevideonode":47}],9:[function(require,module,exports){
+},{"./clip":3,"./immediateclip":5,"./killclip":7,"./playablevideonode":47,"./stopclip":50}],9:[function(require,module,exports){
 
 },{}],10:[function(require,module,exports){
 /*!
@@ -8081,7 +8081,7 @@ var PlayableNode = (function () {
 
 module.exports = PlayableNode;
 
-},{"./video":50,"es6-promise":44}],48:[function(require,module,exports){
+},{"./video":51,"es6-promise":44}],48:[function(require,module,exports){
 "use strict";
 
 var playingNodes = [];
@@ -8103,6 +8103,12 @@ module.exports = {
 
   addNode: function addNode(node) {
     playingNodes.push(node);
+  },
+
+  kill: function kill() {
+    playingNodes.forEach(function (node) {
+      node.stop();
+    });
   }
 };
 
@@ -8153,6 +8159,61 @@ var Scheduler = (function () {
 module.exports = Scheduler;
 
 },{}],50:[function(require,module,exports){
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Clip = require('./clip');
+var PlaybackManager = require('./playback');
+
+var StopClip = (function (_Clip) {
+  _inherits(StopClip, _Clip);
+
+  function StopClip() {
+    _classCallCheck(this, StopClip);
+
+    _get(Object.getPrototypeOf(StopClip.prototype), 'constructor', this).apply(this, arguments);
+  }
+
+  _createClass(StopClip, [{
+    key: 'touch',
+    value: function touch() {
+      PlaybackManager.stopAllNodes();
+    }
+  }, {
+    key: 'isScheduled',
+    value: function isScheduled() {
+      return true;
+    }
+  }, {
+    key: 'isStopped',
+    value: function isStopped() {
+      return false;
+    }
+  }, {
+    key: 'isIdle',
+    value: function isIdle() {
+      return false;
+    }
+  }, {
+    key: 'isPlaying',
+    value: function isPlaying() {
+      return false;
+    }
+  }]);
+
+  return StopClip;
+})(Clip);
+
+module.exports = StopClip;
+
+},{"./clip":3,"./playback":48}],51:[function(require,module,exports){
 'use strict';
 
 module.exports = document.getElementById('video');
