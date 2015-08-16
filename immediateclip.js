@@ -16,6 +16,9 @@ class ImmediateClip extends Clip {
     this.playableNode.start().onended = () => {
       this.state = States.IDLE;
     };
+    this.playableNode.onstopped = () => {
+      this.state = States.IDLE;
+    };
     this.state = States.PLAYING;
   }
 }

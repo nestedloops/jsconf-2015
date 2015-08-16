@@ -5,7 +5,10 @@ const mappings = require('./mappings');
 const {Promise} = require('es6-promise');
 const allClips = [];
 Object.keys(mappings).forEach((key) => {
-  allClips.push(mappings[key]);
+  let clip = mappings[key];
+  if (clip.options.location) {
+    allClips.push(mappings[key]);
+  }
 });
 
 const loadAllClips = allClips.map((clip) => { return clip.load(); });

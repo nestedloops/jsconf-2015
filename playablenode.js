@@ -1,5 +1,6 @@
 const context = require('./audiocontext');
 const {Promise} = require('es6-promise');
+const PlaybackManager = require('./playback');
 const buffers = {};
 
 class PlayableNode {
@@ -7,6 +8,7 @@ class PlayableNode {
     this.options = options;
     this.location = options.location;
     this.loops = options.loops;
+    this.isUntouchable = options.isUntouchable || false;
     this.buffer = null;
     this.bufferNode = null;
     this.out = context.createGain();
@@ -30,7 +32,12 @@ class PlayableNode {
   }
 
   start () {
+    // check if it has a buffer, only play it when there is one
     if (!this.buffer && !buffers[this.options.location]) { return; }
+    // stop all nodes before playing this one
+    PlaybackManager.stopAllNodes();
+    PlaybackManager.addNode(this);
+
     this.bufferNode = context.createBufferSource();
     this.bufferNode.buffer = this.buffer || buffers[this.location];
     if (this.loops) {
@@ -43,7 +50,12 @@ class PlayableNode {
   }
 
   stop () {
-    this.out.gain.exponentialRampToValueAtTime(.01, context.currentTime + .2);
+    if (this.bufferNode) {
+      this.bufferNode.stop();
+      this.bufferNode.disconnect();
+    }
+    if (this.onstopped) this.onstopped();
+    PlaybackManager.removeNode(this);
     return this.bufferNode;
   }
 }

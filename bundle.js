@@ -76,7 +76,7 @@ var BeatClock = (function (_EventEmitter) {
 
 module.exports = BeatClock;
 
-},{"./audiocontext":1,"dilla":34,"events":13}],3:[function(require,module,exports){
+},{"./audiocontext":1,"dilla":35,"events":14}],3:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -170,7 +170,7 @@ var Clip = (function () {
 module.exports = Clip;
 module.exports.States = CLIP_STATES;
 
-},{"./playablenode":45}],4:[function(require,module,exports){
+},{"./playablenode":46}],4:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -265,7 +265,7 @@ module.exports = {
 };
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./mappings":7,"web-midi":44}],5:[function(require,module,exports){
+},{"./mappings":8,"web-midi":45}],5:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -302,6 +302,9 @@ var ImmediateClip = (function (_Clip) {
       this.playableNode.start().onended = function () {
         _this.state = States.IDLE;
       };
+      this.playableNode.onstopped = function () {
+        _this.state = States.IDLE;
+      };
       this.state = States.PLAYING;
     }
   }]);
@@ -311,7 +314,7 @@ var ImmediateClip = (function (_Clip) {
 
 module.exports = ImmediateClip;
 
-},{"./clip":3,"./playablenode":45}],6:[function(require,module,exports){
+},{"./clip":3,"./playablenode":46}],6:[function(require,module,exports){
 'use strict';
 
 var BeatClock = require('./beatclock');
@@ -325,7 +328,10 @@ var Promise = _require.Promise;
 
 var allClips = [];
 Object.keys(mappings).forEach(function (key) {
-  allClips.push(mappings[key]);
+  var clip = mappings[key];
+  if (clip.options.location) {
+    allClips.push(mappings[key]);
+  }
 });
 
 var loadAllClips = allClips.map(function (clip) {
@@ -369,10 +375,67 @@ Promise.all(loadAllClips).then(function () {
 // };
 // requestAnimationFrame(draw);
 
-},{"./beatclock":2,"./controller":4,"./mappings":7,"./scheduler":47,"es6-promise":43}],7:[function(require,module,exports){
+},{"./beatclock":2,"./controller":4,"./mappings":8,"./scheduler":49,"es6-promise":44}],7:[function(require,module,exports){
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Clip = require('./clip');
+var States = Clip.States;
+var PlaybackManager = require('./playback');
+
+var ImmediateClip = (function (_Clip) {
+  _inherits(ImmediateClip, _Clip);
+
+  function ImmediateClip() {
+    _classCallCheck(this, ImmediateClip);
+
+    _get(Object.getPrototypeOf(ImmediateClip.prototype), 'constructor', this).apply(this, arguments);
+  }
+
+  _createClass(ImmediateClip, [{
+    key: 'touch',
+    value: function touch() {
+      PlaybackManager.stopAllNodes();
+    }
+  }, {
+    key: 'isScheduled',
+    value: function isScheduled() {
+      return false;
+    }
+  }, {
+    key: 'isStopped',
+    value: function isStopped() {
+      return true;
+    }
+  }, {
+    key: 'isIdle',
+    value: function isIdle() {
+      return false;
+    }
+  }, {
+    key: 'isPlaying',
+    value: function isPlaying() {
+      return false;
+    }
+  }]);
+
+  return ImmediateClip;
+})(Clip);
+
+module.exports = ImmediateClip;
+
+},{"./clip":3,"./playback":48}],8:[function(require,module,exports){
 'use strict';
 
 var Clip = require('./clip');
+var KillClip = require('./killclip');
 var ImmediateClip = require('./immediateclip');
 var VideoNode = require('./playablevideonode');
 
@@ -384,20 +447,21 @@ module.exports = {
   4: new ImmediateClip({ location: 'samples/quotes/EmberConf2015-OpeningKeynote-47m32s-performanceisafeature.wav' }),
   5: new ImmediateClip({ location: 'samples/quotes/EmberConf2015-OpeningKeynote-50m44s-virtualdom.wav' }),
   6: new ImmediateClip({ location: 'samples/quotes/JamesHalliday-LXJS2013-0m35s-wanttomakethebrowsernice.wav' }),
-  16: new ImmediateClip({ location: 'samples/150809leon4js.mp3', gain: 1 }),
+  16: new ImmediateClip({ location: 'samples/150809leon4js.mp3', gain: 1, isUntouchable: true }),
   17: new ImmediateClip({ location: 'samples/quotes/crockford-upgradingtheweb-0m24s-theresnothing.wav' }),
   18: new ImmediateClip({ location: 'samples/quotes/crockford-upgradingtheweb-1m24s-iwillfixtheweb.wav' }),
-  19: new ImmediateClip({ location: 'samples/quotes/crockford-upgradingtheweb-18m22s-iwanttogetridofjs.wav' })
+  19: new ImmediateClip({ location: 'samples/quotes/crockford-upgradingtheweb-18m22s-iwanttogetridofjs.wav' }),
 
+  119: new KillClip({})
   // 16: new Clip({location: '/samples/beatbox-100bpm-4bars.wav', bars: 4}),
   // 32: new Clip({location: '/samples/loop-100bpm-2bars.wav', bars: 2}),
   // 33: new VideoNode('videos/crockford.mp4'),
   // 34: new VideoNode('videos/crockford2.mp4')
 };
 
-},{"./clip":3,"./immediateclip":5,"./playablevideonode":46}],8:[function(require,module,exports){
+},{"./clip":3,"./immediateclip":5,"./killclip":7,"./playablevideonode":47}],9:[function(require,module,exports){
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 /*!
  * The buffer module from node.js, for the browser.
  *
@@ -1862,7 +1926,7 @@ function decodeUtf8Char (str) {
   }
 }
 
-},{"base64-js":10,"ieee754":11,"is-array":12}],10:[function(require,module,exports){
+},{"base64-js":11,"ieee754":12,"is-array":13}],11:[function(require,module,exports){
 var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
 ;(function (exports) {
@@ -1988,7 +2052,7 @@ var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 	exports.fromByteArray = uint8ToBase64
 }(typeof exports === 'undefined' ? (this.base64js = {}) : exports))
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = nBytes * 8 - mLen - 1
@@ -2074,7 +2138,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 
 /**
  * isArray
@@ -2109,7 +2173,7 @@ module.exports = isArray || function (val) {
   return !! val && '[object Array]' == str.call(val);
 };
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -2412,7 +2476,7 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -2437,12 +2501,12 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 module.exports = Array.isArray || function (arr) {
   return Object.prototype.toString.call(arr) == '[object Array]';
 };
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -2534,10 +2598,10 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 module.exports = require("./lib/_stream_duplex.js")
 
-},{"./lib/_stream_duplex.js":18}],18:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":19}],19:[function(require,module,exports){
 // a duplex stream is just a stream that is both readable and writable.
 // Since JS doesn't have multiple prototypal inheritance, this class
 // prototypally inherits from Readable, and then parasitically from
@@ -2621,7 +2685,7 @@ function forEach (xs, f) {
   }
 }
 
-},{"./_stream_readable":20,"./_stream_writable":22,"core-util-is":23,"inherits":14,"process-nextick-args":24}],19:[function(require,module,exports){
+},{"./_stream_readable":21,"./_stream_writable":23,"core-util-is":24,"inherits":15,"process-nextick-args":25}],20:[function(require,module,exports){
 // a passthrough stream.
 // basically just the most minimal sort of Transform stream.
 // Every written chunk gets output as-is.
@@ -2650,7 +2714,7 @@ PassThrough.prototype._transform = function(chunk, encoding, cb) {
   cb(null, chunk);
 };
 
-},{"./_stream_transform":21,"core-util-is":23,"inherits":14}],20:[function(require,module,exports){
+},{"./_stream_transform":22,"core-util-is":24,"inherits":15}],21:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -3613,7 +3677,7 @@ function indexOf (xs, x) {
 }
 
 }).call(this,require('_process'))
-},{"./_stream_duplex":18,"_process":16,"buffer":9,"core-util-is":23,"events":13,"inherits":14,"isarray":15,"process-nextick-args":24,"string_decoder/":31,"util":8}],21:[function(require,module,exports){
+},{"./_stream_duplex":19,"_process":17,"buffer":10,"core-util-is":24,"events":14,"inherits":15,"isarray":16,"process-nextick-args":25,"string_decoder/":32,"util":9}],22:[function(require,module,exports){
 // a transform stream is a readable/writable stream where you do
 // something with the data.  Sometimes it's called a "filter",
 // but that's not a great name for it, since that implies a thing where
@@ -3812,7 +3876,7 @@ function done(stream, er) {
   return stream.push(null);
 }
 
-},{"./_stream_duplex":18,"core-util-is":23,"inherits":14}],22:[function(require,module,exports){
+},{"./_stream_duplex":19,"core-util-is":24,"inherits":15}],23:[function(require,module,exports){
 // A bit simpler than readable streams.
 // Implement an async ._write(chunk, cb), and it'll handle all
 // the drain event emission and buffering.
@@ -4334,7 +4398,7 @@ function endWritable(stream, state, cb) {
   state.ended = true;
 }
 
-},{"./_stream_duplex":18,"buffer":9,"core-util-is":23,"events":13,"inherits":14,"process-nextick-args":24,"util-deprecate":25}],23:[function(require,module,exports){
+},{"./_stream_duplex":19,"buffer":10,"core-util-is":24,"events":14,"inherits":15,"process-nextick-args":25,"util-deprecate":26}],24:[function(require,module,exports){
 (function (Buffer){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -4444,7 +4508,7 @@ function objectToString(o) {
   return Object.prototype.toString.call(o);
 }
 }).call(this,require("buffer").Buffer)
-},{"buffer":9}],24:[function(require,module,exports){
+},{"buffer":10}],25:[function(require,module,exports){
 (function (process){
 'use strict';
 module.exports = nextTick;
@@ -4461,7 +4525,7 @@ function nextTick(fn) {
 }
 
 }).call(this,require('_process'))
-},{"_process":16}],25:[function(require,module,exports){
+},{"_process":17}],26:[function(require,module,exports){
 (function (global){
 
 /**
@@ -4527,10 +4591,10 @@ function config (name) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 module.exports = require("./lib/_stream_passthrough.js")
 
-},{"./lib/_stream_passthrough.js":19}],27:[function(require,module,exports){
+},{"./lib/_stream_passthrough.js":20}],28:[function(require,module,exports){
 var Stream = (function (){
   try {
     return require('st' + 'ream'); // hack to fix a circular dependency issue when used with browserify
@@ -4544,13 +4608,13 @@ exports.Duplex = require('./lib/_stream_duplex.js');
 exports.Transform = require('./lib/_stream_transform.js');
 exports.PassThrough = require('./lib/_stream_passthrough.js');
 
-},{"./lib/_stream_duplex.js":18,"./lib/_stream_passthrough.js":19,"./lib/_stream_readable.js":20,"./lib/_stream_transform.js":21,"./lib/_stream_writable.js":22}],28:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":19,"./lib/_stream_passthrough.js":20,"./lib/_stream_readable.js":21,"./lib/_stream_transform.js":22,"./lib/_stream_writable.js":23}],29:[function(require,module,exports){
 module.exports = require("./lib/_stream_transform.js")
 
-},{"./lib/_stream_transform.js":21}],29:[function(require,module,exports){
+},{"./lib/_stream_transform.js":22}],30:[function(require,module,exports){
 module.exports = require("./lib/_stream_writable.js")
 
-},{"./lib/_stream_writable.js":22}],30:[function(require,module,exports){
+},{"./lib/_stream_writable.js":23}],31:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -4679,7 +4743,7 @@ Stream.prototype.pipe = function(dest, options) {
   return dest;
 };
 
-},{"events":13,"inherits":14,"readable-stream/duplex.js":17,"readable-stream/passthrough.js":26,"readable-stream/readable.js":27,"readable-stream/transform.js":28,"readable-stream/writable.js":29}],31:[function(require,module,exports){
+},{"events":14,"inherits":15,"readable-stream/duplex.js":18,"readable-stream/passthrough.js":27,"readable-stream/readable.js":28,"readable-stream/transform.js":29,"readable-stream/writable.js":30}],32:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -4902,14 +4966,14 @@ function base64DetectIncompleteChar(buffer) {
   this.charLength = this.charReceived ? 3 : 0;
 }
 
-},{"buffer":9}],32:[function(require,module,exports){
+},{"buffer":10}],33:[function(require,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],33:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 (function (process,global){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -5499,7 +5563,7 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":32,"_process":16,"inherits":14}],34:[function(require,module,exports){
+},{"./support/isBuffer":33,"_process":17,"inherits":15}],35:[function(require,module,exports){
 var events = require('events');
 var inherits = require('util').inherits;
 var bopper = require('bopper');
@@ -5760,7 +5824,7 @@ proto.setLoopLength = function setLoopLength (bars) {
 
 module.exports = Dilla;
 
-},{"./lib/checkValid":35,"./lib/positionHelper":36,"./vendor/ditty":42,"bopper":37,"dilla-expressions":40,"events":13,"util":33}],35:[function(require,module,exports){
+},{"./lib/checkValid":36,"./lib/positionHelper":37,"./vendor/ditty":43,"bopper":38,"dilla-expressions":41,"events":14,"util":34}],36:[function(require,module,exports){
 var checkValid = {
 
   'number': function checkValidNumber (name, value) {
@@ -5783,7 +5847,7 @@ var checkValid = {
 
 module.exports = checkValid;
 
-},{}],36:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 var checkValid = require('./checkValid');
 
 var positionHelper = {
@@ -5821,7 +5885,7 @@ var positionHelper = {
 
 module.exports = positionHelper;
 
-},{"./checkValid":35}],37:[function(require,module,exports){
+},{"./checkValid":36}],38:[function(require,module,exports){
 var Stream = require('stream')
 var Event = require('geval')
 
@@ -5987,7 +6051,7 @@ function bopperTick(e){
   var state = this._state
   this.schedule(state.cycleLength * state.preCycle)
 }
-},{"geval":39,"stream":30,"util":33}],38:[function(require,module,exports){
+},{"geval":40,"stream":31,"util":34}],39:[function(require,module,exports){
 module.exports = Event
 
 function Event() {
@@ -6015,7 +6079,7 @@ function Event() {
     }
 }
 
-},{}],39:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 var Event = require('./event.js')
 
 module.exports = Source
@@ -6028,7 +6092,7 @@ function Source(broadcaster) {
     return tuple.listen
 }
 
-},{"./event.js":38}],40:[function(require,module,exports){
+},{"./event.js":39}],41:[function(require,module,exports){
 var memoize = require('lodash.memoize');
 
 function hashArgs () {
@@ -6191,7 +6255,7 @@ function expressions (notes, options) {
 
 module.exports = expressions;
 
-},{"lodash.memoize":41}],41:[function(require,module,exports){
+},{"lodash.memoize":42}],42:[function(require,module,exports){
 /**
  * lodash 3.0.4 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -6360,7 +6424,7 @@ memoize.Cache = MapCache;
 
 module.exports = memoize;
 
-},{}],42:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 module.exports = Ditty
 
 var Stream = require('stream')
@@ -6559,7 +6623,7 @@ function shouldSendImmediately(message, loop){
   return message.event === 'stop' && (!loop || !loop.length)
 }
 
-},{"stream":30,"util":33}],43:[function(require,module,exports){
+},{"stream":31,"util":34}],44:[function(require,module,exports){
 (function (process,global){
 /*!
  * @overview es6-promise - a tiny implementation of Promises/A+.
@@ -7535,7 +7599,7 @@ function shouldSendImmediately(message, loop){
 
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":16}],44:[function(require,module,exports){
+},{"_process":17}],45:[function(require,module,exports){
 (function (process){
 var Stream = require('stream')
 var splitter = /^(.+)\/([0-9]+)$/
@@ -7854,7 +7918,7 @@ function normalizeOpts(opts) {
   return opts
 }
 }).call(this,require('_process'))
-},{"_process":16,"stream":30}],45:[function(require,module,exports){
+},{"_process":17,"stream":31}],46:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -7867,6 +7931,7 @@ var _require = require('es6-promise');
 
 var Promise = _require.Promise;
 
+var PlaybackManager = require('./playback');
 var buffers = {};
 
 var PlayableNode = (function () {
@@ -7878,6 +7943,7 @@ var PlayableNode = (function () {
     this.options = options;
     this.location = options.location;
     this.loops = options.loops;
+    this.isUntouchable = options.isUntouchable || false;
     this.buffer = null;
     this.bufferNode = null;
     this.out = context.createGain();
@@ -7906,9 +7972,14 @@ var PlayableNode = (function () {
   }, {
     key: 'start',
     value: function start() {
+      // check if it has a buffer, only play it when there is one
       if (!this.buffer && !buffers[this.options.location]) {
         return;
       }
+      // stop all nodes before playing this one
+      PlaybackManager.stopAllNodes();
+      PlaybackManager.addNode(this);
+
       this.bufferNode = context.createBufferSource();
       this.bufferNode.buffer = this.buffer || buffers[this.location];
       if (this.loops) {
@@ -7922,7 +7993,12 @@ var PlayableNode = (function () {
   }, {
     key: 'stop',
     value: function stop() {
-      this.out.gain.exponentialRampToValueAtTime(.01, context.currentTime + .2);
+      if (this.bufferNode) {
+        this.bufferNode.stop();
+        this.bufferNode.disconnect();
+      }
+      if (this.onstopped) this.onstopped();
+      PlaybackManager.removeNode(this);
       return this.bufferNode;
     }
   }]);
@@ -7932,7 +8008,7 @@ var PlayableNode = (function () {
 
 module.exports = PlayableNode;
 
-},{"./audiocontext":1,"es6-promise":43}],46:[function(require,module,exports){
+},{"./audiocontext":1,"./playback":48,"es6-promise":44}],47:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -8005,7 +8081,32 @@ var PlayableNode = (function () {
 
 module.exports = PlayableNode;
 
-},{"./video":48,"es6-promise":43}],47:[function(require,module,exports){
+},{"./video":50,"es6-promise":44}],48:[function(require,module,exports){
+"use strict";
+
+var playingNodes = [];
+
+module.exports = {
+  stopAllNodes: function stopAllNodes() {
+    playingNodes.forEach(function (node) {
+      if (!node.isUntouchable) {
+        node.stop();
+      }
+    });
+  },
+
+  removeNode: function removeNode(node) {
+    playingNodes = playingNodes.filter(function (pn) {
+      return pn !== node;
+    });
+  },
+
+  addNode: function addNode(node) {
+    playingNodes.push(node);
+  }
+};
+
+},{}],49:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -8051,7 +8152,7 @@ var Scheduler = (function () {
 
 module.exports = Scheduler;
 
-},{}],48:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 'use strict';
 
 module.exports = document.getElementById('video');
