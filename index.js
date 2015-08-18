@@ -3,6 +3,7 @@ const Scheduler = require('./scheduler');
 const controller = require('./controller');
 const mappings = require('./mappings');
 const {Promise} = require('es6-promise');
+const visualisation = require('./visualisation');
 const allClips = [];
 Object.keys(mappings).forEach((key) => {
   let clip = mappings[key];
@@ -22,6 +23,7 @@ Promise.all(loadAllClips).then(() => {
 
   controller.init();
   clock.start();
+  visualisation.start();
 });
 
 // const video = require('./video');

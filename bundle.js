@@ -76,7 +76,7 @@ var BeatClock = (function (_EventEmitter) {
 
 module.exports = BeatClock;
 
-},{"./audiocontext":1,"dilla":35,"events":14}],3:[function(require,module,exports){
+},{"./audiocontext":1,"dilla":36,"events":15}],3:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -170,7 +170,7 @@ var Clip = (function () {
 module.exports = Clip;
 module.exports.States = CLIP_STATES;
 
-},{"./playablenode":46}],4:[function(require,module,exports){
+},{"./playablenode":47}],4:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -265,7 +265,7 @@ module.exports = {
 };
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./mappings":8,"web-midi":45}],5:[function(require,module,exports){
+},{"./mappings":8,"web-midi":46}],5:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -314,7 +314,7 @@ var ImmediateClip = (function (_Clip) {
 
 module.exports = ImmediateClip;
 
-},{"./clip":3,"./playablenode":46}],6:[function(require,module,exports){
+},{"./clip":3,"./playablenode":47}],6:[function(require,module,exports){
 'use strict';
 
 var BeatClock = require('./beatclock');
@@ -326,6 +326,7 @@ var _require = require('es6-promise');
 
 var Promise = _require.Promise;
 
+var visualisation = require('./visualisation');
 var allClips = [];
 Object.keys(mappings).forEach(function (key) {
   var clip = mappings[key];
@@ -347,6 +348,7 @@ Promise.all(loadAllClips).then(function () {
 
   controller.init();
   clock.start();
+  visualisation.start();
 });
 
 // const video = require('./video');
@@ -375,7 +377,7 @@ Promise.all(loadAllClips).then(function () {
 // };
 // requestAnimationFrame(draw);
 
-},{"./beatclock":2,"./controller":4,"./mappings":8,"./scheduler":49,"es6-promise":44}],7:[function(require,module,exports){
+},{"./beatclock":2,"./controller":4,"./mappings":8,"./scheduler":50,"./visualisation":53,"es6-promise":45}],7:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -430,7 +432,7 @@ var KillClip = (function (_Clip) {
 
 module.exports = KillClip;
 
-},{"./clip":3,"./playback":48}],8:[function(require,module,exports){
+},{"./clip":3,"./playback":49}],8:[function(require,module,exports){
 'use strict';
 
 var Clip = require('./clip');
@@ -459,9 +461,46 @@ module.exports = {
   // 34: new VideoNode('videos/crockford2.mp4')
 };
 
-},{"./clip":3,"./immediateclip":5,"./killclip":7,"./playablevideonode":47,"./stopclip":50}],9:[function(require,module,exports){
+},{"./clip":3,"./immediateclip":5,"./killclip":7,"./playablevideonode":48,"./stopclip":51}],9:[function(require,module,exports){
+'use strict';
 
-},{}],10:[function(require,module,exports){
+var context = require('./audiocontext');
+var master = context.createGain();
+var sidechain = context.createGain();
+var analyser = context.createAnalyser();
+analyser.smoothingTimeConstant = 0.3;
+analyser.fftSize = 1024;
+
+master.connect(analyser);
+analyser.connect(context.destination);
+
+sidechain.connect(context.destination);
+
+module.exports = master;
+module.exports.analyser = analyser;
+
+var untouchableSource = undefined;
+module.exports.isolateAnalyser = function (node) {
+  if (node.isUntouchable) {
+    untouchableSource = node;
+  }
+  node.out.connect(master.analyser);
+  if (untouchableSource && untouchableSource !== node) {
+    untouchableSource.out.disconnect();
+    untouchableSource.out.connect(sidechain);
+  }
+};
+
+module.exports.release = function () {
+  if (untouchableSource) {
+    untouchableSource.out.disconnect();
+    untouchableSource.out.connect(master);
+  }
+};
+
+},{"./audiocontext":1}],10:[function(require,module,exports){
+
+},{}],11:[function(require,module,exports){
 /*!
  * The buffer module from node.js, for the browser.
  *
@@ -1926,7 +1965,7 @@ function decodeUtf8Char (str) {
   }
 }
 
-},{"base64-js":11,"ieee754":12,"is-array":13}],11:[function(require,module,exports){
+},{"base64-js":12,"ieee754":13,"is-array":14}],12:[function(require,module,exports){
 var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
 ;(function (exports) {
@@ -2052,7 +2091,7 @@ var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 	exports.fromByteArray = uint8ToBase64
 }(typeof exports === 'undefined' ? (this.base64js = {}) : exports))
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = nBytes * 8 - mLen - 1
@@ -2138,7 +2177,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 
 /**
  * isArray
@@ -2173,7 +2212,7 @@ module.exports = isArray || function (val) {
   return !! val && '[object Array]' == str.call(val);
 };
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -2476,7 +2515,7 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -2501,12 +2540,12 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 module.exports = Array.isArray || function (arr) {
   return Object.prototype.toString.call(arr) == '[object Array]';
 };
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -2598,10 +2637,10 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 module.exports = require("./lib/_stream_duplex.js")
 
-},{"./lib/_stream_duplex.js":19}],19:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":20}],20:[function(require,module,exports){
 // a duplex stream is just a stream that is both readable and writable.
 // Since JS doesn't have multiple prototypal inheritance, this class
 // prototypally inherits from Readable, and then parasitically from
@@ -2685,7 +2724,7 @@ function forEach (xs, f) {
   }
 }
 
-},{"./_stream_readable":21,"./_stream_writable":23,"core-util-is":24,"inherits":15,"process-nextick-args":25}],20:[function(require,module,exports){
+},{"./_stream_readable":22,"./_stream_writable":24,"core-util-is":25,"inherits":16,"process-nextick-args":26}],21:[function(require,module,exports){
 // a passthrough stream.
 // basically just the most minimal sort of Transform stream.
 // Every written chunk gets output as-is.
@@ -2714,7 +2753,7 @@ PassThrough.prototype._transform = function(chunk, encoding, cb) {
   cb(null, chunk);
 };
 
-},{"./_stream_transform":22,"core-util-is":24,"inherits":15}],21:[function(require,module,exports){
+},{"./_stream_transform":23,"core-util-is":25,"inherits":16}],22:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -3677,7 +3716,7 @@ function indexOf (xs, x) {
 }
 
 }).call(this,require('_process'))
-},{"./_stream_duplex":19,"_process":17,"buffer":10,"core-util-is":24,"events":14,"inherits":15,"isarray":16,"process-nextick-args":25,"string_decoder/":32,"util":9}],22:[function(require,module,exports){
+},{"./_stream_duplex":20,"_process":18,"buffer":11,"core-util-is":25,"events":15,"inherits":16,"isarray":17,"process-nextick-args":26,"string_decoder/":33,"util":10}],23:[function(require,module,exports){
 // a transform stream is a readable/writable stream where you do
 // something with the data.  Sometimes it's called a "filter",
 // but that's not a great name for it, since that implies a thing where
@@ -3876,7 +3915,7 @@ function done(stream, er) {
   return stream.push(null);
 }
 
-},{"./_stream_duplex":19,"core-util-is":24,"inherits":15}],23:[function(require,module,exports){
+},{"./_stream_duplex":20,"core-util-is":25,"inherits":16}],24:[function(require,module,exports){
 // A bit simpler than readable streams.
 // Implement an async ._write(chunk, cb), and it'll handle all
 // the drain event emission and buffering.
@@ -4398,7 +4437,7 @@ function endWritable(stream, state, cb) {
   state.ended = true;
 }
 
-},{"./_stream_duplex":19,"buffer":10,"core-util-is":24,"events":14,"inherits":15,"process-nextick-args":25,"util-deprecate":26}],24:[function(require,module,exports){
+},{"./_stream_duplex":20,"buffer":11,"core-util-is":25,"events":15,"inherits":16,"process-nextick-args":26,"util-deprecate":27}],25:[function(require,module,exports){
 (function (Buffer){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -4508,7 +4547,7 @@ function objectToString(o) {
   return Object.prototype.toString.call(o);
 }
 }).call(this,require("buffer").Buffer)
-},{"buffer":10}],25:[function(require,module,exports){
+},{"buffer":11}],26:[function(require,module,exports){
 (function (process){
 'use strict';
 module.exports = nextTick;
@@ -4525,7 +4564,7 @@ function nextTick(fn) {
 }
 
 }).call(this,require('_process'))
-},{"_process":17}],26:[function(require,module,exports){
+},{"_process":18}],27:[function(require,module,exports){
 (function (global){
 
 /**
@@ -4591,10 +4630,10 @@ function config (name) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],27:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 module.exports = require("./lib/_stream_passthrough.js")
 
-},{"./lib/_stream_passthrough.js":20}],28:[function(require,module,exports){
+},{"./lib/_stream_passthrough.js":21}],29:[function(require,module,exports){
 var Stream = (function (){
   try {
     return require('st' + 'ream'); // hack to fix a circular dependency issue when used with browserify
@@ -4608,13 +4647,13 @@ exports.Duplex = require('./lib/_stream_duplex.js');
 exports.Transform = require('./lib/_stream_transform.js');
 exports.PassThrough = require('./lib/_stream_passthrough.js');
 
-},{"./lib/_stream_duplex.js":19,"./lib/_stream_passthrough.js":20,"./lib/_stream_readable.js":21,"./lib/_stream_transform.js":22,"./lib/_stream_writable.js":23}],29:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":20,"./lib/_stream_passthrough.js":21,"./lib/_stream_readable.js":22,"./lib/_stream_transform.js":23,"./lib/_stream_writable.js":24}],30:[function(require,module,exports){
 module.exports = require("./lib/_stream_transform.js")
 
-},{"./lib/_stream_transform.js":22}],30:[function(require,module,exports){
+},{"./lib/_stream_transform.js":23}],31:[function(require,module,exports){
 module.exports = require("./lib/_stream_writable.js")
 
-},{"./lib/_stream_writable.js":23}],31:[function(require,module,exports){
+},{"./lib/_stream_writable.js":24}],32:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -4743,7 +4782,7 @@ Stream.prototype.pipe = function(dest, options) {
   return dest;
 };
 
-},{"events":14,"inherits":15,"readable-stream/duplex.js":18,"readable-stream/passthrough.js":27,"readable-stream/readable.js":28,"readable-stream/transform.js":29,"readable-stream/writable.js":30}],32:[function(require,module,exports){
+},{"events":15,"inherits":16,"readable-stream/duplex.js":19,"readable-stream/passthrough.js":28,"readable-stream/readable.js":29,"readable-stream/transform.js":30,"readable-stream/writable.js":31}],33:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -4966,14 +5005,14 @@ function base64DetectIncompleteChar(buffer) {
   this.charLength = this.charReceived ? 3 : 0;
 }
 
-},{"buffer":10}],33:[function(require,module,exports){
+},{"buffer":11}],34:[function(require,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],34:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 (function (process,global){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -5563,7 +5602,7 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":33,"_process":17,"inherits":15}],35:[function(require,module,exports){
+},{"./support/isBuffer":34,"_process":18,"inherits":16}],36:[function(require,module,exports){
 var events = require('events');
 var inherits = require('util').inherits;
 var bopper = require('bopper');
@@ -5824,7 +5863,7 @@ proto.setLoopLength = function setLoopLength (bars) {
 
 module.exports = Dilla;
 
-},{"./lib/checkValid":36,"./lib/positionHelper":37,"./vendor/ditty":43,"bopper":38,"dilla-expressions":41,"events":14,"util":34}],36:[function(require,module,exports){
+},{"./lib/checkValid":37,"./lib/positionHelper":38,"./vendor/ditty":44,"bopper":39,"dilla-expressions":42,"events":15,"util":35}],37:[function(require,module,exports){
 var checkValid = {
 
   'number': function checkValidNumber (name, value) {
@@ -5847,7 +5886,7 @@ var checkValid = {
 
 module.exports = checkValid;
 
-},{}],37:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 var checkValid = require('./checkValid');
 
 var positionHelper = {
@@ -5885,7 +5924,7 @@ var positionHelper = {
 
 module.exports = positionHelper;
 
-},{"./checkValid":36}],38:[function(require,module,exports){
+},{"./checkValid":37}],39:[function(require,module,exports){
 var Stream = require('stream')
 var Event = require('geval')
 
@@ -6051,7 +6090,7 @@ function bopperTick(e){
   var state = this._state
   this.schedule(state.cycleLength * state.preCycle)
 }
-},{"geval":40,"stream":31,"util":34}],39:[function(require,module,exports){
+},{"geval":41,"stream":32,"util":35}],40:[function(require,module,exports){
 module.exports = Event
 
 function Event() {
@@ -6079,7 +6118,7 @@ function Event() {
     }
 }
 
-},{}],40:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 var Event = require('./event.js')
 
 module.exports = Source
@@ -6092,7 +6131,7 @@ function Source(broadcaster) {
     return tuple.listen
 }
 
-},{"./event.js":39}],41:[function(require,module,exports){
+},{"./event.js":40}],42:[function(require,module,exports){
 var memoize = require('lodash.memoize');
 
 function hashArgs () {
@@ -6255,7 +6294,7 @@ function expressions (notes, options) {
 
 module.exports = expressions;
 
-},{"lodash.memoize":42}],42:[function(require,module,exports){
+},{"lodash.memoize":43}],43:[function(require,module,exports){
 /**
  * lodash 3.0.4 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -6424,7 +6463,7 @@ memoize.Cache = MapCache;
 
 module.exports = memoize;
 
-},{}],43:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 module.exports = Ditty
 
 var Stream = require('stream')
@@ -6623,7 +6662,7 @@ function shouldSendImmediately(message, loop){
   return message.event === 'stop' && (!loop || !loop.length)
 }
 
-},{"stream":31,"util":34}],44:[function(require,module,exports){
+},{"stream":32,"util":35}],45:[function(require,module,exports){
 (function (process,global){
 /*!
  * @overview es6-promise - a tiny implementation of Promises/A+.
@@ -7599,7 +7638,7 @@ function shouldSendImmediately(message, loop){
 
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":17}],45:[function(require,module,exports){
+},{"_process":18}],46:[function(require,module,exports){
 (function (process){
 var Stream = require('stream')
 var splitter = /^(.+)\/([0-9]+)$/
@@ -7918,7 +7957,7 @@ function normalizeOpts(opts) {
   return opts
 }
 }).call(this,require('_process'))
-},{"_process":17,"stream":31}],46:[function(require,module,exports){
+},{"_process":18,"stream":32}],47:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -7926,6 +7965,7 @@ var _createClass = (function () { function defineProperties(target, props) { for
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 var context = require('./audiocontext');
+var master = require('./master');
 
 var _require = require('es6-promise');
 
@@ -7947,7 +7987,7 @@ var PlayableNode = (function () {
     this.buffer = null;
     this.bufferNode = null;
     this.out = context.createGain();
-    this.out.connect(context.destination);
+    this.out.connect(master);
   }
 
   _createClass(PlayableNode, [{
@@ -7986,8 +8026,10 @@ var PlayableNode = (function () {
         this.bufferNode.loop = true;
       }
       this.bufferNode.connect(this.out);
+      this.bufferNode.addEventListener('ended', this.stop.bind(this));
       this.out.gain.exponentialRampToValueAtTime(this.options.gain || 1, context.currentTime + .00001);
       this.bufferNode.start();
+      master.isolateAnalyser(this);
       return this.bufferNode;
     }
   }, {
@@ -7997,6 +8039,7 @@ var PlayableNode = (function () {
         this.bufferNode.stop();
         this.bufferNode.disconnect();
       }
+      master.release();
       if (this.onstopped) this.onstopped();
       PlaybackManager.removeNode(this);
       return this.bufferNode;
@@ -8008,7 +8051,7 @@ var PlayableNode = (function () {
 
 module.exports = PlayableNode;
 
-},{"./audiocontext":1,"./playback":48,"es6-promise":44}],47:[function(require,module,exports){
+},{"./audiocontext":1,"./master":9,"./playback":49,"es6-promise":45}],48:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -8081,7 +8124,7 @@ var PlayableNode = (function () {
 
 module.exports = PlayableNode;
 
-},{"./video":51,"es6-promise":44}],48:[function(require,module,exports){
+},{"./video":52,"es6-promise":45}],49:[function(require,module,exports){
 "use strict";
 
 var playingNodes = [];
@@ -8112,7 +8155,7 @@ module.exports = {
   }
 };
 
-},{}],49:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -8158,7 +8201,7 @@ var Scheduler = (function () {
 
 module.exports = Scheduler;
 
-},{}],50:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -8213,9 +8256,155 @@ var StopClip = (function (_Clip) {
 
 module.exports = StopClip;
 
-},{"./clip":3,"./playback":48}],51:[function(require,module,exports){
+},{"./clip":3,"./playback":49}],52:[function(require,module,exports){
 'use strict';
 
 module.exports = document.getElementById('video');
 
-},{}]},{},[6]);
+},{}],53:[function(require,module,exports){
+'use strict';
+
+var analyser = require('./master').analyser;
+var canvas = document.getElementById('visualisation');
+var ctx = canvas.getContext('2d');
+
+var bars = Array(300);
+var barCount = 60;
+var forward = true;
+var lineWidth = 15;
+var lineGap = 18;
+var heightFactor = 2;
+var delay = 10;
+var animate = 'auto';
+var animateSwitch = 1000;
+var hue = 300;
+var width = undefined,
+    height = undefined;
+
+var render = function render() {
+  var array = new Uint8Array(analyser.frequencyBinCount);
+  analyser.getByteFrequencyData(array);
+  var average = getAverageVolume(array);
+  average *= heightFactor;
+
+  bars[0] = average;
+  average *= 0.8;
+  for (var i = 1; i < barCount; i++) {
+    average = average - Math.sqrt(average) + 1;
+    if (average < 0) {
+      average = 0;
+    }
+    (function (i, average) {
+      setTimeout(function () {
+        bars[i] = average;
+      }, delay * (forward ? i : 60 - i));
+    })(i, average);
+  }
+  draw();
+  requestAnimationFrame(render);
+};
+
+var draw = function draw() {
+  // clear the current state
+  ctx.clearRect(0, 0, width, height);
+
+  // set the fill style
+
+  var average = bars[0];
+  var color = getColor(average);
+  rect(width / 2 - lineWidth / 2, height / 2 - average / 2, lineWidth, average, color);
+  for (var i = 1; i < barCount; i++) {
+    average = bars[i];
+    color = getColor(average);
+
+    if (average === undefined || average <= 0) {
+      average = 0;
+    } else {
+      rect(width / 2 - lineWidth / 2 + (lineWidth + lineGap) * i, height / 2 - average / 2, lineWidth, average, color);
+      rect(width / 2 - lineWidth / 2 - (lineWidth + lineGap) * i, height / 2 - average / 2, lineWidth, average, color);
+    }
+  }
+};
+
+var colors = ['#111', 'purple', 'magenta', 'pink', 'red', 'orange', 'yellow', 'green', 'cyan', 'blue'];
+var getColor = function getColor(val) {
+  if (hue == 0) {
+    colors = ['#111', 'purple', 'magenta', 'pink', 'red', 'orange', 'yellow', 'green', 'cyan', 'blue'];
+    for (var i = 0; i < hue; i++) {
+      colors.unshift(colors.pop());
+    }
+    var whiteIndex = colors.indexOf('#111');
+    colors.splice(whiteIndex, 1);
+    colors.unshift('#111');
+  } else {
+    colors = Array(10);
+    colors[0] = '#111';
+    var lightness = 49;
+    for (var j = 9; j >= 1; j--) {
+      colors[j] = 'hsl(' + hue + ', 100%, ' + lightness + '%)';
+      lightness -= 5;
+    }
+  }
+
+  var colorIndex = Math.floor(val / (10 * heightFactor));
+  if (colorIndex > 9) {
+    colorIndex = 9;
+  } else if (colorIndex < 0) {
+    colorIndex = 0;
+  }
+  return colors[colorIndex];
+};
+
+var rect = function rect(x, y, width, height, color) {
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(x, y, width, height);
+  ctx.stroke();
+  ctx.clip();
+
+  ctx.fillStyle = color;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.restore();
+};
+
+var flip = function flip() {
+  if (animate == 'auto') {
+    if (forward) {
+      forward = false;
+    } else {
+      forward = true;
+    }
+  }
+  setTimeout(flip, animateSwitch);
+};
+
+var getAverageVolume = function getAverageVolume(array) {
+  var values = 0;
+  var average;
+
+  var length = array.length;
+
+  // get all the frequency amplitudes
+  for (var i = 0; i < length; i++) {
+    values += array[i];
+  }
+
+  average = values / length;
+  return average;
+};
+
+var fullScreen = function fullScreen() {
+  width = canvas.width = window.innerWidth;
+  height = canvas.height = window.innerHeight;
+  barCount = width / (lineWidth * 2) / 2;
+};
+
+module.exports = {
+  start: function start() {
+    fullScreen();
+    flip();
+    requestAnimationFrame(render);
+  }
+};
+
+},{"./master":9}]},{},[6]);

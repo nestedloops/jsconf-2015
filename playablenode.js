@@ -1,4 +1,5 @@
 const context = require('./audiocontext');
+const master = require('./master');
 const {Promise} = require('es6-promise');
 const PlaybackManager = require('./playback');
 const buffers = {};
@@ -12,7 +13,7 @@ class PlayableNode {
     this.buffer = null;
     this.bufferNode = null;
     this.out = context.createGain();
-    this.out.connect(context.destination);
+    this.out.connect(master);
   }
 
   load () {
@@ -44,8 +45,10 @@ class PlayableNode {
       this.bufferNode.loop = true;
     }
     this.bufferNode.connect(this.out);
+    this.bufferNode.addEventListener('ended', this.stop.bind(this));
     this.out.gain.exponentialRampToValueAtTime(this.options.gain || 1, context.currentTime + .00001);
     this.bufferNode.start();
+    master.isolateAnalyser(this);
     return this.bufferNode;
   }
 
@@ -54,6 +57,7 @@ class PlayableNode {
       this.bufferNode.stop();
       this.bufferNode.disconnect();
     }
+    master.release();
     if (this.onstopped) this.onstopped();
     PlaybackManager.removeNode(this);
     return this.bufferNode;
