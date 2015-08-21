@@ -17,9 +17,9 @@ module.exports = {
   18: new ImmediateClip({location: 'samples/quotes/crockford-upgradingtheweb-1m24s-iwillfixtheweb.wav'}),
   19: new ImmediateClip({location: 'samples/quotes/crockford-upgradingtheweb-18m22s-iwanttogetridofjs.wav'}),
   118: new StopClip({}),
-  119: new KillClip({})
+  119: new KillClip({}),
   // 16: new Clip({location: '/samples/beatbox-100bpm-4bars.wav', bars: 4}),
   // 32: new Clip({location: '/samples/loop-100bpm-2bars.wav', bars: 2}),
-  // 33: new VideoNode('videos/crockford.mp4'),
-  // 34: new VideoNode('videos/crockford2.mp4')
+  33: new VideoNode('videos/phillip-roberts-event-loop-1_28-1_37-js-what-are-you.mp4'),
+  34: new VideoNode('videos/crockford2.mp4')
 };

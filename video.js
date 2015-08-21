@@ -1,1 +1,1 @@
-module.exports =  document.getElementById('video');
+module.exports = document.getElementById('video');

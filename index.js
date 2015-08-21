@@ -7,7 +7,7 @@ const visualisation = require('./visualisation');
 const allClips = [];
 Object.keys(mappings).forEach((key) => {
   let clip = mappings[key];
-  if (clip.options.location) {
+  if (clip.location || clip.options && clip.options.location) {
     allClips.push(mappings[key]);
   }
 });

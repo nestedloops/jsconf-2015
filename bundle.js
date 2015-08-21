@@ -330,7 +330,7 @@ var visualisation = require('./visualisation');
 var allClips = [];
 Object.keys(mappings).forEach(function (key) {
   var clip = mappings[key];
-  if (clip.options.location) {
+  if (clip.location || clip.options && clip.options.location) {
     allClips.push(mappings[key]);
   }
 });
@@ -454,11 +454,11 @@ module.exports = {
   18: new ImmediateClip({ location: 'samples/quotes/crockford-upgradingtheweb-1m24s-iwillfixtheweb.wav' }),
   19: new ImmediateClip({ location: 'samples/quotes/crockford-upgradingtheweb-18m22s-iwanttogetridofjs.wav' }),
   118: new StopClip({}),
-  119: new KillClip({})
+  119: new KillClip({}),
   // 16: new Clip({location: '/samples/beatbox-100bpm-4bars.wav', bars: 4}),
   // 32: new Clip({location: '/samples/loop-100bpm-2bars.wav', bars: 2}),
-  // 33: new VideoNode('videos/crockford.mp4'),
-  // 34: new VideoNode('videos/crockford2.mp4')
+  33: new VideoNode('videos/phillip-roberts-event-loop-1_28-1_37-js-what-are-you.mp4'),
+  34: new VideoNode('videos/crockford2.mp4')
 };
 
 },{"./clip":3,"./immediateclip":5,"./killclip":7,"./playablevideonode":48,"./stopclip":51}],9:[function(require,module,exports){
@@ -471,10 +471,11 @@ var analyser = context.createAnalyser();
 analyser.smoothingTimeConstant = 0.3;
 analyser.fftSize = 1024;
 
+master.gain.value = 1;
 master.connect(analyser);
 analyser.connect(context.destination);
 
-sidechain.connect(context.destination);
+sidechain.gain.value = 1;
 
 module.exports = master;
 module.exports.analyser = analyser;
@@ -488,12 +489,15 @@ module.exports.isolateAnalyser = function (node) {
   if (untouchableSource && untouchableSource !== node) {
     untouchableSource.out.disconnect();
     untouchableSource.out.connect(sidechain);
+    sidechain.connect(context.destination);
   }
 };
 
 module.exports.release = function () {
   if (untouchableSource) {
+    console.log('release');
     untouchableSource.out.disconnect();
+    sidechain.disconnect();
     untouchableSource.out.connect(master);
   }
 };
@@ -1126,20 +1130,84 @@ function base64Slice (buf, start, end) {
 }
 
 function utf8Slice (buf, start, end) {
-  var res = ''
-  var tmp = ''
   end = Math.min(buf.length, end)
+  var firstByte
+  var secondByte
+  var thirdByte
+  var fourthByte
+  var bytesPerSequence
+  var tempCodePoint
+  var codePoint
+  var res = []
+  var i = start
 
-  for (var i = start; i < end; i++) {
-    if (buf[i] <= 0x7F) {
-      res += decodeUtf8Char(tmp) + String.fromCharCode(buf[i])
-      tmp = ''
+  for (; i < end; i += bytesPerSequence) {
+    firstByte = buf[i]
+    codePoint = 0xFFFD
+
+    if (firstByte > 0xEF) {
+      bytesPerSequence = 4
+    } else if (firstByte > 0xDF) {
+      bytesPerSequence = 3
+    } else if (firstByte > 0xBF) {
+      bytesPerSequence = 2
     } else {
-      tmp += '%' + buf[i].toString(16)
+      bytesPerSequence = 1
     }
+
+    if (i + bytesPerSequence <= end) {
+      switch (bytesPerSequence) {
+        case 1:
+          if (firstByte < 0x80) {
+            codePoint = firstByte
+          }
+          break
+        case 2:
+          secondByte = buf[i + 1]
+          if ((secondByte & 0xC0) === 0x80) {
+            tempCodePoint = (firstByte & 0x1F) << 0x6 | (secondByte & 0x3F)
+            if (tempCodePoint > 0x7F) {
+              codePoint = tempCodePoint
+            }
+          }
+          break
+        case 3:
+          secondByte = buf[i + 1]
+          thirdByte = buf[i + 2]
+          if ((secondByte & 0xC0) === 0x80 && (thirdByte & 0xC0) === 0x80) {
+            tempCodePoint = (firstByte & 0xF) << 0xC | (secondByte & 0x3F) << 0x6 | (thirdByte & 0x3F)
+            if (tempCodePoint > 0x7FF && (tempCodePoint < 0xD800 || tempCodePoint > 0xDFFF)) {
+              codePoint = tempCodePoint
+            }
+          }
+          break
+        case 4:
+          secondByte = buf[i + 1]
+          thirdByte = buf[i + 2]
+          fourthByte = buf[i + 3]
+          if ((secondByte & 0xC0) === 0x80 && (thirdByte & 0xC0) === 0x80 && (fourthByte & 0xC0) === 0x80) {
+            tempCodePoint = (firstByte & 0xF) << 0x12 | (secondByte & 0x3F) << 0xC | (thirdByte & 0x3F) << 0x6 | (fourthByte & 0x3F)
+            if (tempCodePoint > 0xFFFF && tempCodePoint < 0x110000) {
+              codePoint = tempCodePoint
+            }
+          }
+      }
+    }
+
+    if (codePoint === 0xFFFD) {
+      // we generated an invalid codePoint so make sure to only advance by 1 byte
+      bytesPerSequence = 1
+    } else if (codePoint > 0xFFFF) {
+      // encode to utf16 (surrogate pair dance)
+      codePoint -= 0x10000
+      res.push(codePoint >>> 10 & 0x3FF | 0xD800)
+      codePoint = 0xDC00 | codePoint & 0x3FF
+    }
+
+    res.push(codePoint)
   }
 
-  return res + decodeUtf8Char(tmp)
+  return String.fromCharCode.apply(String, res)
 }
 
 function asciiSlice (buf, start, end) {
@@ -1845,47 +1913,48 @@ function utf8ToBytes (string, units) {
   var length = string.length
   var leadSurrogate = null
   var bytes = []
-  var i = 0
 
-  for (; i < length; i++) {
+  for (var i = 0; i < length; i++) {
     codePoint = string.charCodeAt(i)
 
     // is surrogate component
     if (codePoint > 0xD7FF && codePoint < 0xE000) {
       // last char was a lead
-      if (leadSurrogate) {
-        // 2 leads in a row
-        if (codePoint < 0xDC00) {
-          if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
-          leadSurrogate = codePoint
-          continue
-        } else {
-          // valid surrogate pair
-          codePoint = leadSurrogate - 0xD800 << 10 | codePoint - 0xDC00 | 0x10000
-          leadSurrogate = null
-        }
-      } else {
+      if (!leadSurrogate) {
         // no lead yet
-
         if (codePoint > 0xDBFF) {
           // unexpected trail
           if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
           continue
+
         } else if (i + 1 === length) {
           // unpaired lead
           if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
           continue
-        } else {
-          // valid lead
-          leadSurrogate = codePoint
-          continue
         }
+
+        // valid lead
+        leadSurrogate = codePoint
+
+        continue
       }
+
+      // 2 leads in a row
+      if (codePoint < 0xDC00) {
+        if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
+        leadSurrogate = codePoint
+        continue
+      }
+
+      // valid surrogate pair
+      codePoint = leadSurrogate - 0xD800 << 10 | codePoint - 0xDC00 | 0x10000
+
     } else if (leadSurrogate) {
       // valid bmp char, but last char was a lead
       if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
-      leadSurrogate = null
     }
+
+    leadSurrogate = null
 
     // encode utf8
     if (codePoint < 0x80) {
@@ -1904,7 +1973,7 @@ function utf8ToBytes (string, units) {
         codePoint >> 0x6 & 0x3F | 0x80,
         codePoint & 0x3F | 0x80
       )
-    } else if (codePoint < 0x200000) {
+    } else if (codePoint < 0x110000) {
       if ((units -= 4) < 0) break
       bytes.push(
         codePoint >> 0x12 | 0xF0,
@@ -1955,14 +2024,6 @@ function blitBuffer (src, dst, offset, length) {
     dst[i + offset] = src[i]
   }
   return i
-}
-
-function decodeUtf8Char (str) {
-  try {
-    return decodeURIComponent(str)
-  } catch (err) {
-    return String.fromCharCode(0xFFFD) // UTF 8 invalid char
-  }
 }
 
 },{"base64-js":12,"ieee754":13,"is-array":14}],12:[function(require,module,exports){
@@ -8058,17 +8119,24 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
+var context = require('./audiocontext');
+var master = require('./master');
+var PlaybackManager = require('./playback');
+
 var _require = require('es6-promise');
 
 var Promise = _require.Promise;
 
 var video = require('./video');
+var sourceNode = context.createMediaElementSource(video);
 
 var PlayableNode = (function () {
   function PlayableNode(location) {
     _classCallCheck(this, PlayableNode);
 
     this.location = location;
+    this.out = context.createGain();
+    this.out.connect(master);
   }
 
   _createClass(PlayableNode, [{
@@ -8090,13 +8158,32 @@ var PlayableNode = (function () {
   }, {
     key: 'start',
     value: function start() {
+      var _this2 = this;
+
+      this.stop();
       video.pause();
       video.src = this.location;
       video.play();
+      PlaybackManager.stopAllNodes();
+      PlaybackManager.addNode(this);
+      this.state = 'playing';
+      video.addEventListener('ended', function () {
+        _this2.stop();
+      });
+      sourceNode.connect(this.out);
+      master.isolateAnalyser(this);
     }
   }, {
     key: 'stop',
-    value: function stop() {}
+    value: function stop() {
+      video.src = '';
+      this.state = 'idle';
+      master.release();
+      PlaybackManager.removeNode(this);
+      if (sourceNode) {
+        sourceNode.disconnect();
+      }
+    }
   }, {
     key: 'isScheduled',
     value: function isScheduled() {
@@ -8110,12 +8197,12 @@ var PlayableNode = (function () {
   }, {
     key: 'isIdle',
     value: function isIdle() {
-      return false;
+      return this.state === 'idle';
     }
   }, {
     key: 'isPlaying',
     value: function isPlaying() {
-      return false;
+      return this.state === 'playing';
     }
   }]);
 
@@ -8124,7 +8211,7 @@ var PlayableNode = (function () {
 
 module.exports = PlayableNode;
 
-},{"./video":52,"es6-promise":45}],49:[function(require,module,exports){
+},{"./audiocontext":1,"./master":9,"./playback":49,"./video":52,"es6-promise":45}],49:[function(require,module,exports){
 "use strict";
 
 var playingNodes = [];
