@@ -8161,7 +8161,8 @@ var PlayableNode = (function () {
       return new Promise(function (resolve) {
         var v = document.createElement('video');
         v.src = _this.location;
-        v.addEventListener('loadeddata', resolve);
+        // v.addEventListener('loadeddata', resolve);
+        resolve();
       });
     }
   }, {

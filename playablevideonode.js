@@ -16,7 +16,8 @@ class PlayableNode {
     return new Promise((resolve) => {
       const v = document.createElement('video');
       v.src = this.location;
-      v.addEventListener('loadeddata', resolve);
+      // v.addEventListener('loadeddata', resolve);
+      resolve();
     });
   }
 
