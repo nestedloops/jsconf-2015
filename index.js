@@ -15,6 +15,7 @@ Object.keys(mappings).forEach((key) => {
 const loadAllClips = allClips.map((clip) => { return clip.load(); });
 
 Promise.all(loadAllClips).then(() => {
+  console.log('all loaded');
   const clock = new BeatClock();
   const scheduler = new Scheduler(allClips);
 
