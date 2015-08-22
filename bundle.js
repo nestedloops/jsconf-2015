@@ -328,6 +328,7 @@ var Promise = _require.Promise;
 
 var visualisation = require('./visualisation');
 var allClips = [];
+
 Object.keys(mappings).forEach(function (key) {
   var clip = mappings[key];
   if (clip.location || clip.options && clip.options.location) {
@@ -8160,6 +8161,7 @@ var PlayableNode = (function () {
 
       return new Promise(function (resolve) {
         var v = document.createElement('video');
+        v.preload = 'auto';
         v.src = _this.location;
         // v.addEventListener('loadeddata', resolve);
         resolve();

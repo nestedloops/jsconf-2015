@@ -15,6 +15,7 @@ class PlayableNode {
   load () {
     return new Promise((resolve) => {
       const v = document.createElement('video');
+      v.preload = 'auto';
       v.src = this.location;
       // v.addEventListener('loadeddata', resolve);
       resolve();

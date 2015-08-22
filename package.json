@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "beefy index.js:bundle.js --open --live -- -t babelify",
+    "start": "node scripts/start.js",
     "build": "browserify index.js -o bundle.js -t babelify"
   },
   "author": "",
@@ -19,6 +19,7 @@
     "beefy": "^2.1.5",
     "browserify": "11.0.1",
     "eslint": "^1.0.0",
-    "watchify": "^3.3.0"
+    "watchify": "^3.3.0",
+    "node-static": "cloudhead/node-static"
   }
 }
