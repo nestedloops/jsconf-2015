@@ -328,7 +328,6 @@ var Promise = _require.Promise;
 
 var visualisation = require('./visualisation');
 var allClips = [];
-
 Object.keys(mappings).forEach(function (key) {
   var clip = mappings[key];
   if (clip.location || clip.options && clip.options.location) {
@@ -8145,6 +8144,8 @@ var Promise = _require.Promise;
 var video = require('./video');
 var sourceNode = context.createMediaElementSource(video);
 
+var lastPlayingNode = undefined;
+
 var PlayableNode = (function () {
   function PlayableNode(location) {
     _classCallCheck(this, PlayableNode);
@@ -8152,6 +8153,8 @@ var PlayableNode = (function () {
     this.location = location;
     this.out = context.createGain();
     this.out.connect(master);
+
+    this.stop = this.stop.bind(this);
   }
 
   _createClass(PlayableNode, [{
@@ -8175,24 +8178,25 @@ var PlayableNode = (function () {
   }, {
     key: 'start',
     value: function start() {
-      var _this2 = this;
-
-      this.stop();
+      if (lastPlayingNode) {
+        lastPlayingNode.stop();
+      }
       video.pause();
+      console.log('start');
       video.src = this.location;
       video.play();
       PlaybackManager.stopAllNodes();
       PlaybackManager.addNode(this);
       this.state = 'playing';
-      video.addEventListener('ended', function () {
-        _this2.stop();
-      });
+      video.addEventListener('ended', this.stop);
       sourceNode.connect(this.out);
       master.isolateAnalyser(this);
+      lastPlayingNode = this;
     }
   }, {
     key: 'stop',
     value: function stop() {
+      video.removeEventListener('ended', this.stop);
       video.src = '';
       this.state = 'idle';
       master.release();
