@@ -33,6 +33,7 @@ module.exports = {
   50: new VideoNode('videos/raquel-velez-evolution-of-a-programmer-14_27-14_50-these-people.mp4'),
   51: new VideoNode('videos/raquel-velez-evolution-of-a-programmer-24_10-24_42-we-are-in-this-together.mp4'),
   52: new VideoNode('videos/amy-lynn-taylor-remote-20_10-20_12-use-emoji.mp4'),
-  53: new VideoNode('videos/amy-lynn-taylor-remote-20_29-20_36-express-gratitude.mp4')
+  53: new VideoNode('videos/amy-lynn-taylor-remote-20_29-20_36-express-gratitude.mp4'),
+  54: new VideoNode('videos/ddd.mov')
 
 };

@@ -20,6 +20,6 @@
     "browserify": "11.0.1",
     "eslint": "^1.0.0",
     "watchify": "^3.3.0",
-    "node-static": "cloudhead/node-static"
+    "node-static": "cloudhead/node-static#c6a338c24a"
   }
 }

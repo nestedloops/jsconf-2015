@@ -2,8 +2,6 @@ const context = require('./audiocontext');
 const master = require('./master');
 const PlaybackManager = require('./playback');
 const {Promise} = require('es6-promise');
-const video = require('./video');
-const sourceNode = context.createMediaElementSource(video);
 
 let lastPlayingNode;
 
@@ -18,11 +16,30 @@ class PlayableNode {
 
   load () {
     return new Promise((resolve) => {
+      const location = this.location;
       const v = document.createElement('video');
       v.preload = 'auto';
-      v.src = this.location;
-      // v.addEventListener('loadeddata', resolve);
-      resolve();
+      this.videoNode = v;
+      this.sourceNode = context.createMediaElementSource(this.videoNode);
+
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', this.location, true);
+      xhr.responseType = 'arraybuffer';
+      xhr.onload = (event) => {
+        const blob = new Blob([event.target.response], {type: 'video/mp4'});
+        v.src = URL.createObjectURL(blob);
+        resolve();
+      };
+
+      xhr.onprogress = function(event){
+        if(event.lengthComputable) {
+          const percentage = (event.loaded / event.total) * 100;
+          if (percentage >= 100) {
+            console.log(location, percentage, '%');
+          }
+        }
+      };
+      xhr.send();
     });
   }
 
@@ -34,27 +51,32 @@ class PlayableNode {
     if (lastPlayingNode) {
       lastPlayingNode.stop();
     }
-    video.pause();
-    console.log('start');
-    video.src = this.location;
-    video.play();
+    document.body.appendChild(this.videoNode);
+    this.videoNode.pause();
+    this.videoNode.play();
     PlaybackManager.stopAllNodes();
     PlaybackManager.addNode(this);
     this.state = 'playing';
-    video.addEventListener('ended', this.stop);
-    sourceNode.connect(this.out);
+    this.videoNode.addEventListener('ended', this.stop);
+    this.sourceNode.connect(this.out);
     master.isolateAnalyser(this);
     lastPlayingNode = this;
   }
 
   stop () {
-    video.removeEventListener('ended', this.stop);
-    video.src = '';
+    try {
+      document.body.removeChild(this.videoNode);
+    } catch(e) {
+      console.warn(e);
+    }
+    this.videoNode.removeEventListener('ended', this.stop);
+    this.videoNode.currentTime = 0;
+    this.videoNode.pause();
     this.state = 'idle';
     master.release();
     PlaybackManager.removeNode(this);
-    if (sourceNode) {
-      sourceNode.disconnect();
+    if (this.sourceNode) {
+      this.sourceNode.disconnect();
     }
   }
 

@@ -378,7 +378,7 @@ Promise.all(loadAllClips).then(function () {
 // };
 // requestAnimationFrame(draw);
 
-},{"./beatclock":2,"./controller":4,"./mappings":8,"./scheduler":50,"./visualisation":53,"es6-promise":45}],7:[function(require,module,exports){
+},{"./beatclock":2,"./controller":4,"./mappings":8,"./scheduler":50,"./visualisation":52,"es6-promise":45}],7:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -471,7 +471,8 @@ module.exports = {
   50: new VideoNode('videos/raquel-velez-evolution-of-a-programmer-14_27-14_50-these-people.mp4'),
   51: new VideoNode('videos/raquel-velez-evolution-of-a-programmer-24_10-24_42-we-are-in-this-together.mp4'),
   52: new VideoNode('videos/amy-lynn-taylor-remote-20_10-20_12-use-emoji.mp4'),
-  53: new VideoNode('videos/amy-lynn-taylor-remote-20_29-20_36-express-gratitude.mp4')
+  53: new VideoNode('videos/amy-lynn-taylor-remote-20_29-20_36-express-gratitude.mp4'),
+  54: new VideoNode('videos/ddd.mov')
 
 };
 
@@ -8141,9 +8142,6 @@ var _require = require('es6-promise');
 
 var Promise = _require.Promise;
 
-var video = require('./video');
-var sourceNode = context.createMediaElementSource(video);
-
 var lastPlayingNode = undefined;
 
 var PlayableNode = (function () {
@@ -8163,11 +8161,30 @@ var PlayableNode = (function () {
       var _this = this;
 
       return new Promise(function (resolve) {
+        var location = _this.location;
         var v = document.createElement('video');
         v.preload = 'auto';
-        v.src = _this.location;
-        // v.addEventListener('loadeddata', resolve);
-        resolve();
+        _this.videoNode = v;
+        _this.sourceNode = context.createMediaElementSource(_this.videoNode);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', _this.location, true);
+        xhr.responseType = 'arraybuffer';
+        xhr.onload = function (event) {
+          var blob = new Blob([event.target.response], { type: 'video/mp4' });
+          v.src = URL.createObjectURL(blob);
+          resolve();
+        };
+
+        xhr.onprogress = function (event) {
+          if (event.lengthComputable) {
+            var percentage = event.loaded / event.total * 100;
+            if (percentage >= 100) {
+              console.log(location, percentage, '%');
+            }
+          }
+        };
+        xhr.send();
       });
     }
   }, {
@@ -8181,28 +8198,33 @@ var PlayableNode = (function () {
       if (lastPlayingNode) {
         lastPlayingNode.stop();
       }
-      video.pause();
-      console.log('start');
-      video.src = this.location;
-      video.play();
+      document.body.appendChild(this.videoNode);
+      this.videoNode.pause();
+      this.videoNode.play();
       PlaybackManager.stopAllNodes();
       PlaybackManager.addNode(this);
       this.state = 'playing';
-      video.addEventListener('ended', this.stop);
-      sourceNode.connect(this.out);
+      this.videoNode.addEventListener('ended', this.stop);
+      this.sourceNode.connect(this.out);
       master.isolateAnalyser(this);
       lastPlayingNode = this;
     }
   }, {
     key: 'stop',
     value: function stop() {
-      video.removeEventListener('ended', this.stop);
-      video.src = '';
+      try {
+        document.body.removeChild(this.videoNode);
+      } catch (e) {
+        console.warn(e);
+      }
+      this.videoNode.removeEventListener('ended', this.stop);
+      this.videoNode.currentTime = 0;
+      this.videoNode.pause();
       this.state = 'idle';
       master.release();
       PlaybackManager.removeNode(this);
-      if (sourceNode) {
-        sourceNode.disconnect();
+      if (this.sourceNode) {
+        this.sourceNode.disconnect();
       }
     }
   }, {
@@ -8232,7 +8254,7 @@ var PlayableNode = (function () {
 
 module.exports = PlayableNode;
 
-},{"./audiocontext":1,"./master":9,"./playback":49,"./video":52,"es6-promise":45}],49:[function(require,module,exports){
+},{"./audiocontext":1,"./master":9,"./playback":49,"es6-promise":45}],49:[function(require,module,exports){
 "use strict";
 
 var playingNodes = [];
@@ -8365,11 +8387,6 @@ var StopClip = (function (_Clip) {
 module.exports = StopClip;
 
 },{"./clip":3,"./playback":49}],52:[function(require,module,exports){
-'use strict';
-
-module.exports = document.getElementById('video');
-
-},{}],53:[function(require,module,exports){
 'use strict';
 
 var analyser = require('./master').analyser;
