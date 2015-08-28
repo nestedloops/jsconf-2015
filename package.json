@@ -17,7 +17,6 @@
     "web-midi": "^1.0.0"
   },
   "devDependencies": {
-    "beefy": "^2.1.5",
     "eslint": "^1.0.0",
     "esnow": "^1.0.11",
     "node-static": "cloudhead/node-static#c6a338c24a",
