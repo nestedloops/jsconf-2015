@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node scripts/start.js",
-    "build": "browserify index.js -o bundle.js -t babelify"
+    "build": "esnow -e index.js -o . -f bundle.js",
+    "watch": "esnow -e index.js -o . -f bundle.js -w"
   },
   "author": "",
   "license": "MIT",
@@ -19,7 +20,8 @@
     "beefy": "^2.1.5",
     "browserify": "11.0.1",
     "eslint": "^1.0.0",
-    "watchify": "^3.3.0",
-    "node-static": "cloudhead/node-static#c6a338c24a"
+    "esnow": "^1.0.11",
+    "node-static": "cloudhead/node-static#c6a338c24a",
+    "watchify": "^3.3.0"
   }
 }
