@@ -8,6 +8,7 @@ var context = new AudioContext();
 module.exports = context;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+
 },{}],2:[function(require,module,exports){
 'use strict';
 
@@ -265,6 +266,7 @@ module.exports = {
 };
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+
 },{"./mappings":8,"web-midi":46}],5:[function(require,module,exports){
 'use strict';
 
@@ -434,9 +436,9 @@ var KillClip = (function (_Clip) {
 module.exports = KillClip;
 
 },{"./clip":3,"./playback":49}],8:[function(require,module,exports){
+// const Clip = require('./clip');
 'use strict';
 
-var Clip = require('./clip');
 var KillClip = require('./killclip');
 var StopClip = require('./stopclip');
 var ImmediateClip = require('./immediateclip');
@@ -462,10 +464,9 @@ module.exports = {
   33: new VideoNode('videos/jenn-schiffer-bresenham-06_29-06_35-js-is-pseudocode.mp4'),
   34: new VideoNode('videos/reactconf-immutablejs-30_28-30_40-no-more-mutable-state-stockholm.mp4'),
   35: new VideoNode('videos/reactconf-immutablejs-14_09-12_18-why-should-we-care.mp4'),
-  36: new VideoNode('videos/jafar-husain-async-programming-0_49-0_59-we-decided-to-change.mp4'),
-  37: new VideoNode('videos/jafar-husain-async-programming-23_51-26_00-but-there-is-a-problem.mp4'),
+  36: new VideoNode('videos/jafar-husain-async-programming-0_49-0_59-we-decided-to-change-2.mp4'),
+  37: new VideoNode('videos/jafar-husain-async-programming-25_51-26_00-but-there-is-a-problem.mp4'),
   38: new VideoNode('videos/david-nolen-immutable-08_30-08_36-as-js-dev-you-destroy.mp4'),
-
   48: new VideoNode('videos/ashley-williams-if-you-wish-15_11-15_26-class-definition-we-might-not-need.mp4'),
   49: new VideoNode('videos/ashley-williams-if-you-wish-17_43-17_55-what-even-is-a-class.mp4'),
   50: new VideoNode('videos/raquel-velez-evolution-of-a-programmer-14_27-14_50-these-people.mp4'),
@@ -473,10 +474,9 @@ module.exports = {
   52: new VideoNode('videos/amy-lynn-taylor-remote-20_10-20_12-use-emoji.mp4'),
   53: new VideoNode('videos/amy-lynn-taylor-remote-20_29-20_36-express-gratitude.mp4'),
   54: new VideoNode('videos/ddd.mov')
-
 };
 
-},{"./clip":3,"./immediateclip":5,"./killclip":7,"./playablevideonode":48,"./stopclip":51}],9:[function(require,module,exports){
+},{"./immediateclip":5,"./killclip":7,"./playablevideonode":48,"./stopclip":51}],9:[function(require,module,exports){
 'use strict';
 
 var context = require('./audiocontext');
@@ -3792,6 +3792,7 @@ function indexOf (xs, x) {
 }
 
 }).call(this,require('_process'))
+
 },{"./_stream_duplex":20,"_process":18,"buffer":11,"core-util-is":25,"events":15,"inherits":16,"isarray":17,"process-nextick-args":26,"string_decoder/":33,"util":10}],23:[function(require,module,exports){
 // a transform stream is a readable/writable stream where you do
 // something with the data.  Sometimes it's called a "filter",
@@ -4623,6 +4624,7 @@ function objectToString(o) {
   return Object.prototype.toString.call(o);
 }
 }).call(this,require("buffer").Buffer)
+
 },{"buffer":11}],26:[function(require,module,exports){
 (function (process){
 'use strict';
@@ -4640,6 +4642,7 @@ function nextTick(fn) {
 }
 
 }).call(this,require('_process'))
+
 },{"_process":18}],27:[function(require,module,exports){
 (function (global){
 
@@ -4706,6 +4709,7 @@ function config (name) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+
 },{}],28:[function(require,module,exports){
 module.exports = require("./lib/_stream_passthrough.js")
 
@@ -5678,6 +5682,7 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+
 },{"./support/isBuffer":34,"_process":18,"inherits":16}],36:[function(require,module,exports){
 var events = require('events');
 var inherits = require('util').inherits;
@@ -7714,6 +7719,7 @@ function shouldSendImmediately(message, loop){
 
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+
 },{"_process":18}],46:[function(require,module,exports){
 (function (process){
 var Stream = require('stream')
@@ -8033,6 +8039,7 @@ function normalizeOpts(opts) {
   return opts
 }
 }).call(this,require('_process'))
+
 },{"_process":18,"stream":32}],47:[function(require,module,exports){
 'use strict';
 
@@ -8532,4 +8539,5 @@ module.exports = {
   }
 };
 
-},{"./master":9}]},{},[6]);
+},{"./master":9}]},{},[6])
+//# sourceMappingURL=bundle.js.map

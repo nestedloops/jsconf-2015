@@ -1,4 +1,4 @@
-const Clip = require('./clip');
+// const Clip = require('./clip');
 const KillClip = require('./killclip');
 const StopClip = require('./stopclip');
 const ImmediateClip = require('./immediateclip');
@@ -24,10 +24,9 @@ module.exports = {
   33: new VideoNode('videos/jenn-schiffer-bresenham-06_29-06_35-js-is-pseudocode.mp4'),
   34: new VideoNode('videos/reactconf-immutablejs-30_28-30_40-no-more-mutable-state-stockholm.mp4'),
   35: new VideoNode('videos/reactconf-immutablejs-14_09-12_18-why-should-we-care.mp4'),
-  36: new VideoNode('videos/jafar-husain-async-programming-0_49-0_59-we-decided-to-change.mp4'),
-  37: new VideoNode('videos/jafar-husain-async-programming-23_51-26_00-but-there-is-a-problem.mp4'),
+  36: new VideoNode('videos/jafar-husain-async-programming-0_49-0_59-we-decided-to-change-2.mp4'),
+  37: new VideoNode('videos/jafar-husain-async-programming-25_51-26_00-but-there-is-a-problem.mp4'),
   38: new VideoNode('videos/david-nolen-immutable-08_30-08_36-as-js-dev-you-destroy.mp4'),
-
   48: new VideoNode('videos/ashley-williams-if-you-wish-15_11-15_26-class-definition-we-might-not-need.mp4'),
   49: new VideoNode('videos/ashley-williams-if-you-wish-17_43-17_55-what-even-is-a-class.mp4'),
   50: new VideoNode('videos/raquel-velez-evolution-of-a-programmer-14_27-14_50-these-people.mp4'),
@@ -35,5 +34,4 @@ module.exports = {
   52: new VideoNode('videos/amy-lynn-taylor-remote-20_10-20_12-use-emoji.mp4'),
   53: new VideoNode('videos/amy-lynn-taylor-remote-20_29-20_36-express-gratitude.mp4'),
   54: new VideoNode('videos/ddd.mov')
-
 };
