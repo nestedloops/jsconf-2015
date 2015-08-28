@@ -17,14 +17,11 @@
     "web-midi": "^1.0.0"
   },
   "devDependencies": {
-    "babelify": "^6.1.3",
     "beefy": "^2.1.5",
-    "browserify": "11.0.1",
     "eslint": "^1.0.0",
     "esnow": "^1.0.11",
     "node-static": "cloudhead/node-static#c6a338c24a",
     "opener": "^1.4.1",
-    "parallelshell": "^2.0.0",
-    "watchify": "^3.3.0"
+    "parallelshell": "^2.0.0"
   }
 }
