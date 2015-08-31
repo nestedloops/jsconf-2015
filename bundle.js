@@ -77,7 +77,7 @@ var BeatClock = (function (_EventEmitter) {
 
 module.exports = BeatClock;
 
-},{"./audiocontext":1,"dilla":10,"events":25}],3:[function(require,module,exports){
+},{"./audiocontext":1,"dilla":36,"events":15}],3:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -380,7 +380,7 @@ Promise.all(loadAllClips).then(function () {
 // };
 // requestAnimationFrame(draw);
 
-},{"./beatclock":2,"./controller":4,"./mappings":8,"./scheduler":50,"./visualisation":52,"es6-promise":19}],7:[function(require,module,exports){
+},{"./beatclock":2,"./controller":4,"./mappings":8,"./scheduler":50,"./visualisation":52,"es6-promise":45}],7:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -488,37 +488,11 @@ module.exports = {
   69: new VideoNode('videos/emberconf3.mp4'),
   70: new VideoNode('videos/emberconf4.mp4'),
   71: new VideoNode('videos/emberconf5.mp4'),
-
-  // 0: new ImmediateClip({location: 'samples/quotes/EmberConf2015-Opening-Keynote-27m00s-es6.wav'}),
-  // 1: new ImmediateClip({location: 'samples/quotes/EmberConf2015-Opening-Keynote-50m45s-virtualdomisreallyfast.wav'}),
-  // 2: new ImmediateClip({location: 'samples/quotes/EmberConf2015-OpeningKeynote-27m10s-es2015.wav'}),
-  // 3: new ImmediateClip({location: 'samples/quotes/EmberConf2015-OpeningKeynote-27m18s-es2016.wav'}),
-  // 4: new ImmediateClip({location: 'samples/quotes/EmberConf2015-OpeningKeynote-47m32s-performanceisafeature.wav'}),
-  // 5: new ImmediateClip({location: 'samples/quotes/EmberConf2015-OpeningKeynote-50m44s-virtualdom.wav'}),
-  // 6: new ImmediateClip({location: 'samples/quotes/JamesHalliday-LXJS2013-0m35s-wanttomakethebrowsernice.wav'}),
-  // 16: new ImmediateClip({location: 'samples/150809leon4js.mp3', gain: 1, isUntouchable: true}),
-  // 17: new ImmediateClip({location: 'samples/quotes/crockford-upgradingtheweb-0m24s-theresnothing.wav'}),
-  // 18: new ImmediateClip({location: 'samples/quotes/crockford-upgradingtheweb-1m24s-iwillfixtheweb.wav'}),
-  // 19: new ImmediateClip({location: 'samples/quotes/crockford-upgradingtheweb-18m22s-iwanttogetridofjs.wav'}),
+  // Leon
   117: new ImmediateClip({ location: 'samples/150809leon4js.mp3', gain: 1, isUntouchable: true }),
+  // Kill buttons
   118: new StopClip({}),
   119: new KillClip({})
-  // 16: new Clip({location: '/samples/beatbox-100bpm-4bars.wav', bars: 4}),
-  // 32: new Clip({location: '/samples/loop-100bpm-2bars.wav', bars: 2}),
-  // 32: new VideoNode('videos/phillip-roberts-event-loop-1_28-1_37-js-what-are-you.mp4'),
-  // 33: new VideoNode('videos/jenn-schiffer-bresenham-06_29-06_35-js-is-pseudocode.mp4'),
-  // 34: new VideoNode('videos/reactconf-immutablejs-30_28-30_40-no-more-mutable-state-stockholm.mp4'),
-  // 35: new VideoNode('videos/reactconf-immutablejs-14_09-12_18-why-should-we-care.mp4'),
-  // 36: new VideoNode('videos/jafar-husain-async-programming-0_49-0_59-we-decided-to-change-2.mp4'),
-  // 37: new VideoNode('videos/jafar-husain-async-programming-25_51-26_00-but-there-is-a-problem.mp4'),
-  // 38: new VideoNode('videos/david-nolen-immutable-08_30-08_36-as-js-dev-you-destroy.mp4'),
-  // 48: new VideoNode('videos/ashley-williams-if-you-wish-15_11-15_26-class-definition-we-might-not-need.mp4'),
-  // 49: new VideoNode('videos/ashley-williams-if-you-wish-17_43-17_55-what-even-is-a-class.mp4'),
-  // 50: new VideoNode('videos/raquel-velez-evolution-of-a-programmer-14_27-14_50-these-people.mp4'),
-  // 51: new VideoNode('videos/raquel-velez-evolution-of-a-programmer-24_10-24_42-we-are-in-this-together.mp4'),
-  // 52: new VideoNode('videos/amy-lynn-taylor-remote-20_10-20_12-use-emoji.mp4'),
-  // 53: new VideoNode('videos/amy-lynn-taylor-remote-20_29-20_36-express-gratitude.mp4'),
-  // 54: new VideoNode('videos/ddd.mov')
 };
 
 },{"./immediateclip":5,"./killclip":7,"./playablevideonode":48,"./stopclip":51}],9:[function(require,module,exports){
@@ -563,2045 +537,8 @@ module.exports.release = function () {
 };
 
 },{"./audiocontext":1}],10:[function(require,module,exports){
-var events = require('events');
-var inherits = require('util').inherits;
-var bopper = require('bopper');
-var ditty = require('./vendor/ditty');
-var expr = require('dilla-expressions');
 
-var checkValid = require('./lib/checkValid');
-var positionHelper = require('./lib/positionHelper');
-
-var loadTime = new Date().valueOf();
-
-function Dilla (audioContext, options) {
-
-  if (!(this instanceof Dilla)){
-    return new Dilla(audioContext, options);
-  }
-
-  if (!audioContext || typeof audioContext !== 'object' || typeof audioContext.createScriptProcessor !== 'function') {
-    throw new Error('Invalid arguments: cannot init without AudioContext');
-  }
-
-  events.EventEmitter.call(this);
-
-  options = options || {};
-
-  this.context = audioContext;
-  this.clock = bopper(this.context);
-  this.scheduler = ditty();
-
-  this.expressions = expr;
-  this.expandNote = options.expandNote;
-
-  this.upstartWait = options.upstartWait || 250;
-  this.setTempo(options.tempo || 120);
-  this.setBeatsPerBar(options.beatsPerBar || 4);
-  this.setLoopLength(options.loopLength || 2);
-
-  this._position = '0.0.00';
-
-  this.clock.on('data', this.updatePositionFromClock.bind(this));
-  this.clock.pipe(this.scheduler).on('data', this.emitStep.bind(this));
-
-  this._keepAlive = this._keepAlive.bind(this);
-}
-
-inherits(Dilla, events.EventEmitter);
-var proto = Dilla.prototype;
-
-proto.updatePositionFromClock = function updatePositionFromClock (step) {
-  var position = this.getPositionFromTime(step.time);
-  if (this._position !== position) {
-    this._position = position;
-    this.emit('tick', { 'position': this._position, 'context': this.context });
-  }
-};
-
-proto.getPositionFromTime = function getPositionFromTime (time) {
-  var offset = (this.clock._state.cycleLength * this.clock._state.preCycle) * 1;
-  var position = this.clock.getPositionAt(time - offset);
-  return this.getPositionFromClockPosition(position);
-};
-
-proto.getPositionFromClockPosition = function getPositionFromClockPosition (position) {
-  checkValid.number('clockPosition', position);
-  if (position < 0) {
-    return '0.0.00';
-  }
-  var beatsPerLoop = this._loopLength * this._beatsPerBar;
-  var loops = Math.floor(position / beatsPerLoop) || 0;
-  position = position - (loops * beatsPerLoop);
-  var bars = Math.floor(position / this._beatsPerBar);
-  position = position - (bars * this._beatsPerBar);
-  var beats = Math.floor(position);
-  position = position - beats;
-  var ticks = Math.floor(position * 96) + 1;
-  if (ticks < 10) {
-    ticks = '0' + ticks;
-  }
-  return (bars + 1) + '.' + (beats + 1) + '.' + ticks;
-};
-
-proto.getClockPositionFromPosition = function getClockPositionFromPosition (position) {
-  var parts = position.split('.');
-  var bars = parseInt(parts[0], 10) - 1;
-  var beats = parseInt(parts[1], 10) - 1;
-  var ticks = parseInt(parts[2], 10) - 1;
-  return (bars * this._beatsPerBar) + beats + (ticks / 96);
-};
-
-proto.getPositionWithOffset = function getPositionWithOffset (position, offset) {
-  if (!checkValid.positionString(position)) {
-    throw new Error('Invalid argument: position is not a valid position string');
-  }
-  if (typeof offset !== 'number' || isNaN(offset) || offset % 1 !== 0) {
-    throw new Error('Invalid argument: offset is not a valid number');
-  }
-  if (!offset) {
-    return position;
-  }
-  var clockPosition = this.getClockPositionFromPosition(position);
-  var clockOffset = offset / 96;
-  return this.getPositionFromClockPosition(clockPosition + clockOffset);
-};
-
-proto.getDurationFromTicks = function getDurationFromTicks (ticks) {
-  checkValid.positiveNumber('ticks', ticks);
-  return (1 / 96) * ticks;
-};
-
-proto.emitStep = function emitStep (step) {
-  var offset = step.offset = (this.clock._state.cycleLength * this.clock._state.preCycle) * 1;
-  var note = step.args = step.args[0];
-  step.time = step.time + offset;
-  step.clockPosition = step.position;
-  step.position = step.event === 'start' ? note.position : this.getPositionWithOffset(note.position, note.duration || 0);
-  if (step.event === 'stop'  && step.position === note.position) {
-    return;
-  }
-  step.context = this.context;
-  this.emit('step', step);
-};
-
-proto.set = function set (id, notes) {
-  var self = this;
-  if (typeof id !== 'string') {
-    throw new Error('Invalid argument: id is not a valid string');
-  }
-  if (!notes || !Array.isArray(notes)) {
-    throw new Error('Invalid argument: notes is not a valid array');
-  }
-
-  notes = this.expressions(notes.map(function (note) {
-    if (!Array.isArray(note) && typeof note === 'object' && !!note.position) {
-      return [note.position, note];
-    }
-    return note;
-  }), {
-    'beatsPerBar': this.beatsPerBar(),
-    'barsPerLoop': this.loopLength()
-  }).filter(function (note) {
-    return positionHelper.isPositionWithinBounds(note[0], self.loopLength(), self.beatsPerBar());
-  }).map(function (note) {
-    if (self.expandNote) {
-      note = self.expandNote(note);
-    }
-    var normal = positionHelper.normalizeNote(note);
-    return [self.getClockPositionFromPosition(normal.position), self.getDurationFromTicks(normal.duration || 0), null, null, normal];
-  });
-
-  this.scheduler.set(id, notes, this.beatsPerBar() * this.loopLength());
-};
-
-proto.get = function get (id) {
-  if (typeof id !== 'string') {
-    throw new Error('Invalid argument: id is not a valid string');
-  }
-  return (this.scheduler.get(id) || []).map(function (note) {
-    return note[4];
-  });
-};
-
-proto.channels = function channels () {
-  return this.scheduler.getIds();
-};
-
-proto.clear = function clear (id) {
-  var self = this;
-  if (id) {
-    if (typeof id !== 'string') {
-      throw new Error('Invalid argument: id is not a valid string');
-    }
-    this.set(id, []);
-  }
-  else {
-    this.scheduler.getIds().forEach(function (id) {
-      self.clear(id);
-    });
-  }
-};
-
-proto._keepAlive = function _keepAlive () {
-  if (this.clock._state.playing) {
-    window.__lastDillaPosition = this._position;
-    window.requestAnimationFrame(this._keepAlive);
-  }
-};
-
-proto.start = function start () {
-  var now = new Date().valueOf();
-  var waited = now - loadTime;
-  if (waited < this.upstartWait) {
-    return setTimeout(start.bind(this), this.upstartWait - waited);
-  }
-
-  if (!this.clock._state.playing) {
-    this.clock.start();
-    this._keepAlive();
-    this.emit('playing');
-  }
-};
-
-proto.pause = function pause () {
-  if (this.clock._state.playing) {
-    this.clock.stop();
-    this.emit('paused');
-  }
-};
-
-proto.stop = function stop () {
-  if (this.clock._state.playing) {
-    this.clock.stop();
-    this.emit('paused');
-    this.clock.setPosition(0);
-    this._position = '0.0.00';
-  }
-};
-
-proto.position = function position () {
-  return this._position;
-};
-
-proto.setPosition = function setPosition (position) {
-  if (!positionHelper.isPositionWithinBounds(position, this.loopLength(), this.beatsPerBar())) {
-    throw new Error('Invalid argument: position is not valid');
-  }
-  this._position = position;
-  this.clock.setPosition(this.getClockPositionFromPosition(position));
-};
-
-proto.tempo = function tempo () {
-  return this.clock.getTempo();
-};
-
-proto.setTempo = function setTempo (tempo) {
-  if (typeof tempo !== 'number' || tempo < 0 || isNaN(tempo)) {
-    throw new Error('Invalid argument: tempo is not a valid number');
-  }
-  this.clock.setTempo(tempo);
-};
-
-proto.beatsPerBar = function beatsPerBar () {
-  return this._beatsPerBar;
-};
-
-proto.setBeatsPerBar = function setBeatsPerBar (beats) {
-  checkValid.positiveNumber('beats', beats);
-  this._beatsPerBar = beats;
-};
-
-proto.loopLength = function loopLength () {
-  return this._loopLength;
-};
-
-proto.setLoopLength = function setLoopLength (bars) {
-  checkValid.positiveNumber('bars', bars);
-  this._loopLength = bars;
-};
-
-module.exports = Dilla;
-
-},{"./lib/checkValid":11,"./lib/positionHelper":12,"./vendor/ditty":18,"bopper":13,"dilla-expressions":16,"events":25,"util":45}],11:[function(require,module,exports){
-var checkValid = {
-
-  'number': function checkValidNumber (name, value) {
-    if (typeof value !== 'number' || isNaN(value)) {
-      throw new Error('Invalid argument: ' + name + ' is not a valid number');
-    }
-  },
-
-  'positiveNumber': function checkValidPositiveNumber (name, value) {
-    checkValid.number(name, value);
-    if (value < 0) {
-      throw new Error('Invalid argument: ' + name + ' is not a valid positive number');
-    }
-  },
-
-  'positionString': function checkValidPositionString (position) {
-    return typeof position === 'string' && !!position.match(/\d\.\d\.\d+/);
-  }
-};
-
-module.exports = checkValid;
-
-},{}],12:[function(require,module,exports){
-var checkValid = require('./checkValid');
-
-var positionHelper = {
-
-  'normalizeNote': function nomalizeNote (params) {
-    if (!params || !Array.isArray(params)) {
-      throw new Error('Invalid argument: note params is not valid array');
-    }
-    var note = typeof params[1] === 'object' ? params[1] : typeof params[0] === 'object' ? params[0] : {};
-    var position = typeof params[0] === 'string' && checkValid.positionString(params[0]) ? params[0] : typeof note.position === 'string' && checkValid.positionString(note.position) ? note.position : null;
-    if (!position) {
-      throw new Error('Invalid argument: position is not valid');
-    }
-    note.position = position;
-    return note;
-  },
-
-  'isPositionWithinBounds': function isPositionWithinBounds (position, barsPerLoop, beatsPerBar) {
-    if (!checkValid.positionString(position)) {
-      return false;
-    }
-
-    var fragments = position.split('.');
-    var bars = parseInt(fragments[0], 10) - 1;
-    var beats = parseInt(fragments[1], 10) - 1;
-    var ticks = parseInt(fragments[2], 10) - 1;
-
-    if (ticks < 0 || beats < 0 || bars < 0 || ticks >= 96 || beats >= beatsPerBar || bars >= barsPerLoop) {
-      return false;
-    }
-
-    return true;
-  }
-};
-
-module.exports = positionHelper;
-
-},{"./checkValid":11}],13:[function(require,module,exports){
-var Stream = require('stream')
-var Event = require('geval')
-
-var inherits = require('util').inherits
-
-module.exports = Bopper
-
-function Bopper(audioContext){
-  if (!(this instanceof Bopper)){
-    return new Bopper(audioContext)
-  }
-
-  var self = this
-
-  Stream.call(this)
-  this.readable = true
-  this.writable = false
-
-  this.context = audioContext
-  var processor = this._processor = audioContext.createScriptProcessor(512, 1, 1)
-
-  var handleTick = bopperTick.bind(this)
-  this._processor.onaudioprocess = handleTick
-
-  var tempo = 120
-  var cycleLength = (1 / audioContext.sampleRate) * this._processor.bufferSize
-
-  this._state = {
-    lastTo: 0,
-    lastEndTime: 0,
-    playing: false,
-    bpm: tempo,
-    beatDuration: 60 / tempo,
-    increment: (tempo / 60) * cycleLength,
-    cycleLength: cycleLength,
-    preCycle: 4,
-  }
-
-  // frp version
-  this.onSchedule = Event(function(broadcast){
-    self.on('data', broadcast)
-  })
-
-  processor.connect(audioContext.destination)
-}
-
-inherits(Bopper, Stream)
-
-var proto = Bopper.prototype
-
-
-proto.start = function(){
-  this._state.playing = true
-  this.emit('start')
-}
-
-proto.stop = function(){
-  this._state.playing = false
-  this.emit('stop')
-}
-
-proto.schedule = function(duration) {
-  var state = this._state
-  var currentTime = this.context.currentTime
-
-  var endTime = this.context.currentTime + duration
-  var time = state.lastEndTime
-
-  if (endTime >= time) {
-    state.lastEndTime = endTime
-
-    if (state.playing){
-      var duration = endTime - time
-      var length = duration / state.beatDuration
-
-      var from = state.lastTo
-      var to = from + length
-      state.lastTo = to
-
-      // skip if getting behind
-      //if ((currentTime - (state.cycleLength*3)) < time){
-        this._schedule(time, from, to)
-      //}
-    }
-  }
-  
-}
-
-proto.setTempo = function(tempo){
-  var bps = tempo/60
-  var state = this._state
-  state.beatDuration = 60/tempo
-  state.increment = bps * state.cycleLength
-  state.bpm = tempo
-  this.emit('tempo', state.bpm)
-}
-
-proto.getTempo = function(){
-  return this._state.bpm
-}
-
-proto.isPlaying = function(){
-  return this._state.playing
-}
-
-proto.setPosition = function(position){
-  this._state.lastTo = parseFloat(position)
-}
-
-proto.setSpeed = function(multiplier){
-  var state = this._state
-
-  multiplier = parseFloat(multiplier) || 0
-
-  var tempo = state.bpm * multiplier
-  var bps = tempo/60
-
-  state.beatDuration = 60/tempo
-  state.increment = bps * state.cycleLength
-}
-
-
-proto.getPositionAt = function(time){
-  var state = this._state
-  var delta = state.lastEndTime - time
-  return state.lastTo - (delta / state.beatDuration)
-}
-
-proto.getTimeAt = function(position){
-  var state = this._state
-  var positionOffset = this.getCurrentPosition() - position
-  return this.context.currentTime - (positionOffset * state.beatDuration)
-}
-
-proto.getCurrentPosition = function(){
-  return this.getPositionAt(this.context.currentTime)
-}
-
-proto.getNextScheduleTime = function(){
-  var state = this._state
-  return state.lastEndTime
-}
-
-proto.getBeatDuration = function(){
-  var state = this._state
-  return state.beatDuration
-}
-
-
-proto._schedule = function(time, from, to){
-  var state = this._state
-  var duration = (to - from) * state.beatDuration
-  this.emit('data', {
-    from: from,
-    to: to,
-    time: time,
-    duration: duration,
-    beatDuration: state.beatDuration
-  })
-}
-
-function bopperTick(e){
-  var state = this._state
-  this.schedule(state.cycleLength * state.preCycle)
-}
-},{"geval":15,"stream":42,"util":45}],14:[function(require,module,exports){
-module.exports = Event
-
-function Event() {
-    var listeners = []
-
-    return { broadcast: broadcast, listen: event }
-
-    function broadcast(value) {
-        for (var i = 0; i < listeners.length; i++) {
-            listeners[i](value)
-        }
-    }
-
-    function event(listener) {
-        listeners.push(listener)
-
-        return removeListener
-
-        function removeListener() {
-            var index = listeners.indexOf(listener)
-            if (index !== -1) {
-                listeners.splice(index, 1)
-            }
-        }
-    }
-}
-
-},{}],15:[function(require,module,exports){
-var Event = require('./event.js')
-
-module.exports = Source
-
-function Source(broadcaster) {
-    var tuple = Event()
-
-    broadcaster(tuple.broadcast)
-
-    return tuple.listen
-}
-
-},{"./event.js":14}],16:[function(require,module,exports){
-var memoize = require('lodash.memoize');
-
-function hashArgs () {
-  return [].slice.call(arguments).join('//');
-}
-function serializeArgs () {
-  return [].slice.call(arguments).map(function (arg) {
-    return typeof arg === 'object' ? JSON.stringify(arg) : arg;
-  }).join('//');
-}
-
-var isPlainPosition = memoize(function (position) {
-  return !!position.match(/^\d+\.\d+\.\d+$/);
-});
-
-var getFragments = memoize(function  (position) {
-  return position.split('.').map(function (fragment) {
-    var fragmentNumber = parseInt(fragment, 10);
-    if (fragment.match(/^\d+$/) && !isNaN(fragmentNumber)) return fragmentNumber;
-    return fragment;
-  });
-});
-
-var skipInRange = memoize(function (min, end, offset, step) {
-  var all = [];
-  while (offset <= end) {
-    if (offset > min) {
-      all.push(offset);
-    }
-    offset += step;
-  }
-  return all;
-}, serializeArgs);
-
-var getRange = memoize(function (start, end) {
-  var all = [];
-  var i = start;
-  while (i <= end) {
-    all.push(i);
-    i++;
-  }
-  return all;
-}, hashArgs);
-
-var filterModulus = memoize(function  (range, mod, res) {
-  return range.filter(function (n) {
-    return n % mod === res;
-  });
-}, hashArgs);
-
-var gtRe = />(\d+)/;
-var ltRe = /<(\d+)/;
-
-function expandToTree (fragment, tree, end, expander) {
-  var start = 1;
-
-  if (/^\d+$/.test(fragment)) {
-    tree[fragment] = {};
-    return;
-  }
-
-  var gtMatch = fragment.match(gtRe) || 0;
-  if (gtMatch) {
-    gtMatch = gtMatch && parseInt(gtMatch[1], 10);
-    start = gtMatch + 1;
-    fragment = fragment.replace(gtRe, '');
-  }
-
-  var ltMatch = fragment.match(ltRe) || 0;
-  if (ltMatch) {
-    ltMatch = ltMatch && parseInt(ltMatch[1], 10);
-    end = ltMatch - 1;
-    fragment = fragment.replace(ltRe, '');
-  }
-
-  var range = getRange(start, end);
-
-  // start new chain here, in case range was changed by gt/lt
-  if (!fragment || fragment === '*') {
-    range.forEach(function (n) {
-      tree[n] = {};
-    });
-  }
-  else if (fragment === 'odd' || fragment === 'even') {
-    var rest = fragment === 'even' ? 0 : 1;
-    filterModulus(range, 2, rest).forEach(function (n) {
-      tree[n] = {};
-    });
-  }
-  else if (typeof fragment === 'string' && ~fragment.indexOf('%')) {
-    var pieces = fragment.split('%');
-    var offset = pieces[0] && parseInt(pieces[0], 10) || 1;
-    var step = parseInt(pieces[1], 10);
-    skipInRange(gtMatch, end, offset, step).forEach(function (n) {
-      tree[n] = {};
-    });
-  }
-  else if (typeof expander === 'function') {
-    var result = expander(fragment, start, end);
-    if (Array.isArray(result)) {
-      result.forEach(function (n) {
-        tree[n] = {};
-      });
-    }
-  }
-}
-
-function flattenTree (tree) {
-  var all = [];
-  Object.keys(tree).forEach(function (bar) {
-    Object.keys(tree[bar]).forEach(function (beat) {
-      Object.keys(tree[bar][beat]).forEach(function (tick) {
-        tick = tick < 10 ? '0' + tick : tick;
-        all.push([bar, beat, tick].join('.'));
-      });
-    });
-  });
-  return all;
-}
-
-var expandExpression = memoize(function (position, bars, beats, expander) {
-  var fragments = getFragments(position);
-  var tree = {};
-
-  expandToTree(fragments[0], tree, bars, expander);
-
-  Object.keys(tree).forEach(function (bar) {
-    expandToTree(fragments[1], tree[bar], beats, expander);
-
-    Object.keys(tree[bar]).forEach(function (beat) {
-      expandToTree(fragments[2], tree[bar][beat], 96, expander);
-    });
-  });
-
-  return flattenTree(tree);
-}, hashArgs);
-
-function expressions (notes, options) {
-
-  if (!notes) throw new Error('Invalid "notes" array');
-  if (!options || typeof options !== 'object') throw new Error('Invalid "options" object');
-  if (typeof options.beatsPerBar !== 'number' || options.beatsPerBar < 0) throw new Error('Invalid options: beatsPerBar is not a valid number');
-  if (typeof options.barsPerLoop !== 'number' || options.barsPerLoop < 0) throw new Error('Invalid options: barsPerLoop is not a valid number');
-
-  var all = [];
-
-  notes.forEach(function (event) {
-
-    var position = event[0];
-    if (isPlainPosition(position)) return all.push(event);
-    expandExpression(position, options.barsPerLoop, options.beatsPerBar, options.expander).forEach(function (expanded) {
-      var clone = event.slice();
-      clone[0] = expanded;
-      all.push(clone);
-    });
-  });
-
-  return all;
-}
-
-module.exports = expressions;
-
-},{"lodash.memoize":17}],17:[function(require,module,exports){
-/**
- * lodash 3.0.4 (Custom Build) <https://lodash.com/>
- * Build: `lodash modern modularize exports="npm" -o ./`
- * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
- * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
- * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
- * Available under MIT license <https://lodash.com/license>
- */
-
-/** Used as the `TypeError` message for "Functions" methods. */
-var FUNC_ERROR_TEXT = 'Expected a function';
-
-/** Used for native method references. */
-var objectProto = Object.prototype;
-
-/** Used to check objects for own properties. */
-var hasOwnProperty = objectProto.hasOwnProperty;
-
-/**
- * Creates a cache object to store key/value pairs.
- *
- * @private
- * @static
- * @name Cache
- * @memberOf _.memoize
- */
-function MapCache() {
-  this.__data__ = {};
-}
-
-/**
- * Removes `key` and its value from the cache.
- *
- * @private
- * @name delete
- * @memberOf _.memoize.Cache
- * @param {string} key The key of the value to remove.
- * @returns {boolean} Returns `true` if the entry was removed successfully, else `false`.
- */
-function mapDelete(key) {
-  return this.has(key) && delete this.__data__[key];
-}
-
-/**
- * Gets the cached value for `key`.
- *
- * @private
- * @name get
- * @memberOf _.memoize.Cache
- * @param {string} key The key of the value to get.
- * @returns {*} Returns the cached value.
- */
-function mapGet(key) {
-  return key == '__proto__' ? undefined : this.__data__[key];
-}
-
-/**
- * Checks if a cached value for `key` exists.
- *
- * @private
- * @name has
- * @memberOf _.memoize.Cache
- * @param {string} key The key of the entry to check.
- * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
- */
-function mapHas(key) {
-  return key != '__proto__' && hasOwnProperty.call(this.__data__, key);
-}
-
-/**
- * Sets `value` to `key` of the cache.
- *
- * @private
- * @name set
- * @memberOf _.memoize.Cache
- * @param {string} key The key of the value to cache.
- * @param {*} value The value to cache.
- * @returns {Object} Returns the cache object.
- */
-function mapSet(key, value) {
-  if (key != '__proto__') {
-    this.__data__[key] = value;
-  }
-  return this;
-}
-
-/**
- * Creates a function that memoizes the result of `func`. If `resolver` is
- * provided it determines the cache key for storing the result based on the
- * arguments provided to the memoized function. By default, the first argument
- * provided to the memoized function is coerced to a string and used as the
- * cache key. The `func` is invoked with the `this` binding of the memoized
- * function.
- *
- * **Note:** The cache is exposed as the `cache` property on the memoized
- * function. Its creation may be customized by replacing the `_.memoize.Cache`
- * constructor with one whose instances implement the [`Map`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-properties-of-the-map-prototype-object)
- * method interface of `get`, `has`, and `set`.
- *
- * @static
- * @memberOf _
- * @category Function
- * @param {Function} func The function to have its output memoized.
- * @param {Function} [resolver] The function to resolve the cache key.
- * @returns {Function} Returns the new memoizing function.
- * @example
- *
- * var upperCase = _.memoize(function(string) {
- *   return string.toUpperCase();
- * });
- *
- * upperCase('fred');
- * // => 'FRED'
- *
- * // modifying the result cache
- * upperCase.cache.set('fred', 'BARNEY');
- * upperCase('fred');
- * // => 'BARNEY'
- *
- * // replacing `_.memoize.Cache`
- * var object = { 'user': 'fred' };
- * var other = { 'user': 'barney' };
- * var identity = _.memoize(_.identity);
- *
- * identity(object);
- * // => { 'user': 'fred' }
- * identity(other);
- * // => { 'user': 'fred' }
- *
- * _.memoize.Cache = WeakMap;
- * var identity = _.memoize(_.identity);
- *
- * identity(object);
- * // => { 'user': 'fred' }
- * identity(other);
- * // => { 'user': 'barney' }
- */
-function memoize(func, resolver) {
-  if (typeof func != 'function' || (resolver && typeof resolver != 'function')) {
-    throw new TypeError(FUNC_ERROR_TEXT);
-  }
-  var memoized = function() {
-    var args = arguments,
-        key = resolver ? resolver.apply(this, args) : args[0],
-        cache = memoized.cache;
-
-    if (cache.has(key)) {
-      return cache.get(key);
-    }
-    var result = func.apply(this, args);
-    memoized.cache = cache.set(key, result);
-    return result;
-  };
-  memoized.cache = new memoize.Cache;
-  return memoized;
-}
-
-// Add functions to the `Map` cache.
-MapCache.prototype['delete'] = mapDelete;
-MapCache.prototype.get = mapGet;
-MapCache.prototype.has = mapHas;
-MapCache.prototype.set = mapSet;
-
-// Assign cache to `_.memoize`.
-memoize.Cache = MapCache;
-
-module.exports = memoize;
-
-},{}],18:[function(require,module,exports){
-module.exports = Ditty
-
-var Stream = require('stream')
-var inherits = require('util').inherits
-
-function Ditty(){
-
-  if (!(this instanceof Ditty)){
-    return new Ditty()
-  }
-
-  Stream.call(this)
-
-  this.readable = true
-  this.writable = true
-
-  this._state = {
-    loops: {},
-    lengths: {},
-    ids: [],
-    queue: []
-  }
-}
-
-inherits(Ditty, Stream)
-
-var proto = Ditty.prototype
-
-proto.set = function(id, events, length){
-  var state = this._state
-  if (events){
-    if (!state.loops[id]){
-      state.ids.push(id)
-    }
-    state.loops[id] = events
-    state.lengths[id] = length || 8
-  } else {
-    var index = state.ids.indexOf(id)
-    if (~index){
-      state.ids.splice(index, 1)
-    }
-    state.loops[id] = null
-  }
-
-  if (state.loops[id]){
-    this.emit('change', {
-      id: id,
-      events: state.loops[id],
-      length: state.lengths[id]
-    })
-  } else {
-    this.emit('change', {
-      id: id
-    })
-  }
-}
-
-proto.get = function(id){
-  return this._state.loops[id]
-}
-
-proto.getLength = function(id){
-  return this._state.lengths[id]
-}
-
-proto.getIds = function(){
-  return this._state.ids
-}
-
-proto.getDescriptors = function(){
-  var state = this._state
-  var result = []
-  for (var i=0;i<state.ids.length;i++){
-    var id = state.ids[i]
-    if (state.loops[id]){
-      result.push({
-        id: id,
-        length: state.lengths[id],
-        events: state.loops[id]
-      })
-    }
-  }
-  return result
-}
-
-proto.update = function(descriptor){
-  this.set(descriptor.id, descriptor.events, descriptor.length)
-}
-
-proto.push = function(data){
-  this.emit('data', data)
-}
-
-proto.write = function(obj){
-  this._transform(obj)
-}
-
-proto._transform = function(obj){
-  var begin = window.performance.now()
-  var endAt = begin + (obj.duration * 5000)
-
-  var state = this._state
-  var from = obj.from
-  var to = obj.to
-  var time = obj.time
-  var nextTime = obj.time + obj.duration
-  var beatDuration = obj.beatDuration
-  var ids = state.ids
-  var queue = state.queue
-  var localQueue = []
-
-  for (var i=queue.length-1;i>=0;i--){
-    var item = queue[i]
-    if (to > item.position || shouldSendImmediately(item, state.loops[item.id])){
-      if (to > item.position){
-        var delta = (item.position - from) * beatDuration
-        item.time = time + delta
-      } else {
-        item.time = time
-        item.position = from
-      }
-      queue.splice(i, 1)
-      this.push(item)
-    }
-  }
-
-  for (var i=0;i<ids.length;i++){
-
-    var id = ids[i]
-    var events = state.loops[id]
-    var loopLength = state.lengths[id]
-
-    for (var j=0;j<events.length;j++){
-
-      var event = events[j]
-      var startPosition = getAbsolutePosition(event[0], from, loopLength)
-      var endPosition = startPosition + event[1]
-
-      if (startPosition >= from && startPosition < to){
-
-        var delta = (startPosition - from) * beatDuration
-        var duration = event[1] * beatDuration
-        var startTime = time + delta
-        var endTime = startTime + duration
-
-        localQueue.push({
-          id: id,
-          event: 'start',
-          position: startPosition,
-          args: event.slice(4),
-          time: startTime
-        })
-
-        localQueue.push({
-          id: id,
-          event: 'stop',
-          position: endPosition,
-          args: event.slice(4),
-          time: endTime
-        })
-      }
-    }
-  }
-
-  // ensure events stream in time sequence
-  localQueue.sort(compare)
-  for (var i=0;i<localQueue.length;i++){
-    var item = localQueue[i]
-    if (item.time < nextTime){
-      if (window.performance.now() < endAt){
-        this.push(item)
-      }
-    } else {
-      // queue event for later
-      queue.push(item)
-    }
-  }
-}
-
-function compare(a,b){
-  return a.time-b.time
-}
-
-function getAbsolutePosition(pos, start, length){
-  pos = pos % length
-  var micro = start % length
-  var position = start+pos-micro
-  if (position < start){
-    return position + length
-  } else {
-    return position
-  }
-}
-
-function shouldSendImmediately(message, loop){
-  return message.event === 'stop' && (!loop || !loop.length)
-}
-
-},{"stream":42,"util":45}],19:[function(require,module,exports){
-(function (process,global){
-/*!
- * @overview es6-promise - a tiny implementation of Promises/A+.
- * @copyright Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors (Conversion to ES6 API by Jake Archibald)
- * @license   Licensed under MIT license
- *            See https://raw.githubusercontent.com/jakearchibald/es6-promise/master/LICENSE
- * @version   2.3.0
- */
-
-(function() {
-    "use strict";
-    function lib$es6$promise$utils$$objectOrFunction(x) {
-      return typeof x === 'function' || (typeof x === 'object' && x !== null);
-    }
-
-    function lib$es6$promise$utils$$isFunction(x) {
-      return typeof x === 'function';
-    }
-
-    function lib$es6$promise$utils$$isMaybeThenable(x) {
-      return typeof x === 'object' && x !== null;
-    }
-
-    var lib$es6$promise$utils$$_isArray;
-    if (!Array.isArray) {
-      lib$es6$promise$utils$$_isArray = function (x) {
-        return Object.prototype.toString.call(x) === '[object Array]';
-      };
-    } else {
-      lib$es6$promise$utils$$_isArray = Array.isArray;
-    }
-
-    var lib$es6$promise$utils$$isArray = lib$es6$promise$utils$$_isArray;
-    var lib$es6$promise$asap$$len = 0;
-    var lib$es6$promise$asap$$toString = {}.toString;
-    var lib$es6$promise$asap$$vertxNext;
-    var lib$es6$promise$asap$$customSchedulerFn;
-
-    var lib$es6$promise$asap$$asap = function asap(callback, arg) {
-      lib$es6$promise$asap$$queue[lib$es6$promise$asap$$len] = callback;
-      lib$es6$promise$asap$$queue[lib$es6$promise$asap$$len + 1] = arg;
-      lib$es6$promise$asap$$len += 2;
-      if (lib$es6$promise$asap$$len === 2) {
-        // If len is 2, that means that we need to schedule an async flush.
-        // If additional callbacks are queued before the queue is flushed, they
-        // will be processed by this flush that we are scheduling.
-        if (lib$es6$promise$asap$$customSchedulerFn) {
-          lib$es6$promise$asap$$customSchedulerFn(lib$es6$promise$asap$$flush);
-        } else {
-          lib$es6$promise$asap$$scheduleFlush();
-        }
-      }
-    }
-
-    function lib$es6$promise$asap$$setScheduler(scheduleFn) {
-      lib$es6$promise$asap$$customSchedulerFn = scheduleFn;
-    }
-
-    function lib$es6$promise$asap$$setAsap(asapFn) {
-      lib$es6$promise$asap$$asap = asapFn;
-    }
-
-    var lib$es6$promise$asap$$browserWindow = (typeof window !== 'undefined') ? window : undefined;
-    var lib$es6$promise$asap$$browserGlobal = lib$es6$promise$asap$$browserWindow || {};
-    var lib$es6$promise$asap$$BrowserMutationObserver = lib$es6$promise$asap$$browserGlobal.MutationObserver || lib$es6$promise$asap$$browserGlobal.WebKitMutationObserver;
-    var lib$es6$promise$asap$$isNode = typeof process !== 'undefined' && {}.toString.call(process) === '[object process]';
-
-    // test for web worker but not in IE10
-    var lib$es6$promise$asap$$isWorker = typeof Uint8ClampedArray !== 'undefined' &&
-      typeof importScripts !== 'undefined' &&
-      typeof MessageChannel !== 'undefined';
-
-    // node
-    function lib$es6$promise$asap$$useNextTick() {
-      var nextTick = process.nextTick;
-      // node version 0.10.x displays a deprecation warning when nextTick is used recursively
-      // setImmediate should be used instead instead
-      var version = process.versions.node.match(/^(?:(\d+)\.)?(?:(\d+)\.)?(\*|\d+)$/);
-      if (Array.isArray(version) && version[1] === '0' && version[2] === '10') {
-        nextTick = setImmediate;
-      }
-      return function() {
-        nextTick(lib$es6$promise$asap$$flush);
-      };
-    }
-
-    // vertx
-    function lib$es6$promise$asap$$useVertxTimer() {
-      return function() {
-        lib$es6$promise$asap$$vertxNext(lib$es6$promise$asap$$flush);
-      };
-    }
-
-    function lib$es6$promise$asap$$useMutationObserver() {
-      var iterations = 0;
-      var observer = new lib$es6$promise$asap$$BrowserMutationObserver(lib$es6$promise$asap$$flush);
-      var node = document.createTextNode('');
-      observer.observe(node, { characterData: true });
-
-      return function() {
-        node.data = (iterations = ++iterations % 2);
-      };
-    }
-
-    // web worker
-    function lib$es6$promise$asap$$useMessageChannel() {
-      var channel = new MessageChannel();
-      channel.port1.onmessage = lib$es6$promise$asap$$flush;
-      return function () {
-        channel.port2.postMessage(0);
-      };
-    }
-
-    function lib$es6$promise$asap$$useSetTimeout() {
-      return function() {
-        setTimeout(lib$es6$promise$asap$$flush, 1);
-      };
-    }
-
-    var lib$es6$promise$asap$$queue = new Array(1000);
-    function lib$es6$promise$asap$$flush() {
-      for (var i = 0; i < lib$es6$promise$asap$$len; i+=2) {
-        var callback = lib$es6$promise$asap$$queue[i];
-        var arg = lib$es6$promise$asap$$queue[i+1];
-
-        callback(arg);
-
-        lib$es6$promise$asap$$queue[i] = undefined;
-        lib$es6$promise$asap$$queue[i+1] = undefined;
-      }
-
-      lib$es6$promise$asap$$len = 0;
-    }
-
-    function lib$es6$promise$asap$$attemptVertex() {
-      try {
-        var r = require;
-        var vertx = r('vertx');
-        lib$es6$promise$asap$$vertxNext = vertx.runOnLoop || vertx.runOnContext;
-        return lib$es6$promise$asap$$useVertxTimer();
-      } catch(e) {
-        return lib$es6$promise$asap$$useSetTimeout();
-      }
-    }
-
-    var lib$es6$promise$asap$$scheduleFlush;
-    // Decide what async method to use to triggering processing of queued callbacks:
-    if (lib$es6$promise$asap$$isNode) {
-      lib$es6$promise$asap$$scheduleFlush = lib$es6$promise$asap$$useNextTick();
-    } else if (lib$es6$promise$asap$$BrowserMutationObserver) {
-      lib$es6$promise$asap$$scheduleFlush = lib$es6$promise$asap$$useMutationObserver();
-    } else if (lib$es6$promise$asap$$isWorker) {
-      lib$es6$promise$asap$$scheduleFlush = lib$es6$promise$asap$$useMessageChannel();
-    } else if (lib$es6$promise$asap$$browserWindow === undefined && typeof require === 'function') {
-      lib$es6$promise$asap$$scheduleFlush = lib$es6$promise$asap$$attemptVertex();
-    } else {
-      lib$es6$promise$asap$$scheduleFlush = lib$es6$promise$asap$$useSetTimeout();
-    }
-
-    function lib$es6$promise$$internal$$noop() {}
-
-    var lib$es6$promise$$internal$$PENDING   = void 0;
-    var lib$es6$promise$$internal$$FULFILLED = 1;
-    var lib$es6$promise$$internal$$REJECTED  = 2;
-
-    var lib$es6$promise$$internal$$GET_THEN_ERROR = new lib$es6$promise$$internal$$ErrorObject();
-
-    function lib$es6$promise$$internal$$selfFullfillment() {
-      return new TypeError("You cannot resolve a promise with itself");
-    }
-
-    function lib$es6$promise$$internal$$cannotReturnOwn() {
-      return new TypeError('A promises callback cannot return that same promise.');
-    }
-
-    function lib$es6$promise$$internal$$getThen(promise) {
-      try {
-        return promise.then;
-      } catch(error) {
-        lib$es6$promise$$internal$$GET_THEN_ERROR.error = error;
-        return lib$es6$promise$$internal$$GET_THEN_ERROR;
-      }
-    }
-
-    function lib$es6$promise$$internal$$tryThen(then, value, fulfillmentHandler, rejectionHandler) {
-      try {
-        then.call(value, fulfillmentHandler, rejectionHandler);
-      } catch(e) {
-        return e;
-      }
-    }
-
-    function lib$es6$promise$$internal$$handleForeignThenable(promise, thenable, then) {
-       lib$es6$promise$asap$$asap(function(promise) {
-        var sealed = false;
-        var error = lib$es6$promise$$internal$$tryThen(then, thenable, function(value) {
-          if (sealed) { return; }
-          sealed = true;
-          if (thenable !== value) {
-            lib$es6$promise$$internal$$resolve(promise, value);
-          } else {
-            lib$es6$promise$$internal$$fulfill(promise, value);
-          }
-        }, function(reason) {
-          if (sealed) { return; }
-          sealed = true;
-
-          lib$es6$promise$$internal$$reject(promise, reason);
-        }, 'Settle: ' + (promise._label || ' unknown promise'));
-
-        if (!sealed && error) {
-          sealed = true;
-          lib$es6$promise$$internal$$reject(promise, error);
-        }
-      }, promise);
-    }
-
-    function lib$es6$promise$$internal$$handleOwnThenable(promise, thenable) {
-      if (thenable._state === lib$es6$promise$$internal$$FULFILLED) {
-        lib$es6$promise$$internal$$fulfill(promise, thenable._result);
-      } else if (thenable._state === lib$es6$promise$$internal$$REJECTED) {
-        lib$es6$promise$$internal$$reject(promise, thenable._result);
-      } else {
-        lib$es6$promise$$internal$$subscribe(thenable, undefined, function(value) {
-          lib$es6$promise$$internal$$resolve(promise, value);
-        }, function(reason) {
-          lib$es6$promise$$internal$$reject(promise, reason);
-        });
-      }
-    }
-
-    function lib$es6$promise$$internal$$handleMaybeThenable(promise, maybeThenable) {
-      if (maybeThenable.constructor === promise.constructor) {
-        lib$es6$promise$$internal$$handleOwnThenable(promise, maybeThenable);
-      } else {
-        var then = lib$es6$promise$$internal$$getThen(maybeThenable);
-
-        if (then === lib$es6$promise$$internal$$GET_THEN_ERROR) {
-          lib$es6$promise$$internal$$reject(promise, lib$es6$promise$$internal$$GET_THEN_ERROR.error);
-        } else if (then === undefined) {
-          lib$es6$promise$$internal$$fulfill(promise, maybeThenable);
-        } else if (lib$es6$promise$utils$$isFunction(then)) {
-          lib$es6$promise$$internal$$handleForeignThenable(promise, maybeThenable, then);
-        } else {
-          lib$es6$promise$$internal$$fulfill(promise, maybeThenable);
-        }
-      }
-    }
-
-    function lib$es6$promise$$internal$$resolve(promise, value) {
-      if (promise === value) {
-        lib$es6$promise$$internal$$reject(promise, lib$es6$promise$$internal$$selfFullfillment());
-      } else if (lib$es6$promise$utils$$objectOrFunction(value)) {
-        lib$es6$promise$$internal$$handleMaybeThenable(promise, value);
-      } else {
-        lib$es6$promise$$internal$$fulfill(promise, value);
-      }
-    }
-
-    function lib$es6$promise$$internal$$publishRejection(promise) {
-      if (promise._onerror) {
-        promise._onerror(promise._result);
-      }
-
-      lib$es6$promise$$internal$$publish(promise);
-    }
-
-    function lib$es6$promise$$internal$$fulfill(promise, value) {
-      if (promise._state !== lib$es6$promise$$internal$$PENDING) { return; }
-
-      promise._result = value;
-      promise._state = lib$es6$promise$$internal$$FULFILLED;
-
-      if (promise._subscribers.length !== 0) {
-        lib$es6$promise$asap$$asap(lib$es6$promise$$internal$$publish, promise);
-      }
-    }
-
-    function lib$es6$promise$$internal$$reject(promise, reason) {
-      if (promise._state !== lib$es6$promise$$internal$$PENDING) { return; }
-      promise._state = lib$es6$promise$$internal$$REJECTED;
-      promise._result = reason;
-
-      lib$es6$promise$asap$$asap(lib$es6$promise$$internal$$publishRejection, promise);
-    }
-
-    function lib$es6$promise$$internal$$subscribe(parent, child, onFulfillment, onRejection) {
-      var subscribers = parent._subscribers;
-      var length = subscribers.length;
-
-      parent._onerror = null;
-
-      subscribers[length] = child;
-      subscribers[length + lib$es6$promise$$internal$$FULFILLED] = onFulfillment;
-      subscribers[length + lib$es6$promise$$internal$$REJECTED]  = onRejection;
-
-      if (length === 0 && parent._state) {
-        lib$es6$promise$asap$$asap(lib$es6$promise$$internal$$publish, parent);
-      }
-    }
-
-    function lib$es6$promise$$internal$$publish(promise) {
-      var subscribers = promise._subscribers;
-      var settled = promise._state;
-
-      if (subscribers.length === 0) { return; }
-
-      var child, callback, detail = promise._result;
-
-      for (var i = 0; i < subscribers.length; i += 3) {
-        child = subscribers[i];
-        callback = subscribers[i + settled];
-
-        if (child) {
-          lib$es6$promise$$internal$$invokeCallback(settled, child, callback, detail);
-        } else {
-          callback(detail);
-        }
-      }
-
-      promise._subscribers.length = 0;
-    }
-
-    function lib$es6$promise$$internal$$ErrorObject() {
-      this.error = null;
-    }
-
-    var lib$es6$promise$$internal$$TRY_CATCH_ERROR = new lib$es6$promise$$internal$$ErrorObject();
-
-    function lib$es6$promise$$internal$$tryCatch(callback, detail) {
-      try {
-        return callback(detail);
-      } catch(e) {
-        lib$es6$promise$$internal$$TRY_CATCH_ERROR.error = e;
-        return lib$es6$promise$$internal$$TRY_CATCH_ERROR;
-      }
-    }
-
-    function lib$es6$promise$$internal$$invokeCallback(settled, promise, callback, detail) {
-      var hasCallback = lib$es6$promise$utils$$isFunction(callback),
-          value, error, succeeded, failed;
-
-      if (hasCallback) {
-        value = lib$es6$promise$$internal$$tryCatch(callback, detail);
-
-        if (value === lib$es6$promise$$internal$$TRY_CATCH_ERROR) {
-          failed = true;
-          error = value.error;
-          value = null;
-        } else {
-          succeeded = true;
-        }
-
-        if (promise === value) {
-          lib$es6$promise$$internal$$reject(promise, lib$es6$promise$$internal$$cannotReturnOwn());
-          return;
-        }
-
-      } else {
-        value = detail;
-        succeeded = true;
-      }
-
-      if (promise._state !== lib$es6$promise$$internal$$PENDING) {
-        // noop
-      } else if (hasCallback && succeeded) {
-        lib$es6$promise$$internal$$resolve(promise, value);
-      } else if (failed) {
-        lib$es6$promise$$internal$$reject(promise, error);
-      } else if (settled === lib$es6$promise$$internal$$FULFILLED) {
-        lib$es6$promise$$internal$$fulfill(promise, value);
-      } else if (settled === lib$es6$promise$$internal$$REJECTED) {
-        lib$es6$promise$$internal$$reject(promise, value);
-      }
-    }
-
-    function lib$es6$promise$$internal$$initializePromise(promise, resolver) {
-      try {
-        resolver(function resolvePromise(value){
-          lib$es6$promise$$internal$$resolve(promise, value);
-        }, function rejectPromise(reason) {
-          lib$es6$promise$$internal$$reject(promise, reason);
-        });
-      } catch(e) {
-        lib$es6$promise$$internal$$reject(promise, e);
-      }
-    }
-
-    function lib$es6$promise$enumerator$$Enumerator(Constructor, input) {
-      var enumerator = this;
-
-      enumerator._instanceConstructor = Constructor;
-      enumerator.promise = new Constructor(lib$es6$promise$$internal$$noop);
-
-      if (enumerator._validateInput(input)) {
-        enumerator._input     = input;
-        enumerator.length     = input.length;
-        enumerator._remaining = input.length;
-
-        enumerator._init();
-
-        if (enumerator.length === 0) {
-          lib$es6$promise$$internal$$fulfill(enumerator.promise, enumerator._result);
-        } else {
-          enumerator.length = enumerator.length || 0;
-          enumerator._enumerate();
-          if (enumerator._remaining === 0) {
-            lib$es6$promise$$internal$$fulfill(enumerator.promise, enumerator._result);
-          }
-        }
-      } else {
-        lib$es6$promise$$internal$$reject(enumerator.promise, enumerator._validationError());
-      }
-    }
-
-    lib$es6$promise$enumerator$$Enumerator.prototype._validateInput = function(input) {
-      return lib$es6$promise$utils$$isArray(input);
-    };
-
-    lib$es6$promise$enumerator$$Enumerator.prototype._validationError = function() {
-      return new Error('Array Methods must be provided an Array');
-    };
-
-    lib$es6$promise$enumerator$$Enumerator.prototype._init = function() {
-      this._result = new Array(this.length);
-    };
-
-    var lib$es6$promise$enumerator$$default = lib$es6$promise$enumerator$$Enumerator;
-
-    lib$es6$promise$enumerator$$Enumerator.prototype._enumerate = function() {
-      var enumerator = this;
-
-      var length  = enumerator.length;
-      var promise = enumerator.promise;
-      var input   = enumerator._input;
-
-      for (var i = 0; promise._state === lib$es6$promise$$internal$$PENDING && i < length; i++) {
-        enumerator._eachEntry(input[i], i);
-      }
-    };
-
-    lib$es6$promise$enumerator$$Enumerator.prototype._eachEntry = function(entry, i) {
-      var enumerator = this;
-      var c = enumerator._instanceConstructor;
-
-      if (lib$es6$promise$utils$$isMaybeThenable(entry)) {
-        if (entry.constructor === c && entry._state !== lib$es6$promise$$internal$$PENDING) {
-          entry._onerror = null;
-          enumerator._settledAt(entry._state, i, entry._result);
-        } else {
-          enumerator._willSettleAt(c.resolve(entry), i);
-        }
-      } else {
-        enumerator._remaining--;
-        enumerator._result[i] = entry;
-      }
-    };
-
-    lib$es6$promise$enumerator$$Enumerator.prototype._settledAt = function(state, i, value) {
-      var enumerator = this;
-      var promise = enumerator.promise;
-
-      if (promise._state === lib$es6$promise$$internal$$PENDING) {
-        enumerator._remaining--;
-
-        if (state === lib$es6$promise$$internal$$REJECTED) {
-          lib$es6$promise$$internal$$reject(promise, value);
-        } else {
-          enumerator._result[i] = value;
-        }
-      }
-
-      if (enumerator._remaining === 0) {
-        lib$es6$promise$$internal$$fulfill(promise, enumerator._result);
-      }
-    };
-
-    lib$es6$promise$enumerator$$Enumerator.prototype._willSettleAt = function(promise, i) {
-      var enumerator = this;
-
-      lib$es6$promise$$internal$$subscribe(promise, undefined, function(value) {
-        enumerator._settledAt(lib$es6$promise$$internal$$FULFILLED, i, value);
-      }, function(reason) {
-        enumerator._settledAt(lib$es6$promise$$internal$$REJECTED, i, reason);
-      });
-    };
-    function lib$es6$promise$promise$all$$all(entries) {
-      return new lib$es6$promise$enumerator$$default(this, entries).promise;
-    }
-    var lib$es6$promise$promise$all$$default = lib$es6$promise$promise$all$$all;
-    function lib$es6$promise$promise$race$$race(entries) {
-      /*jshint validthis:true */
-      var Constructor = this;
-
-      var promise = new Constructor(lib$es6$promise$$internal$$noop);
-
-      if (!lib$es6$promise$utils$$isArray(entries)) {
-        lib$es6$promise$$internal$$reject(promise, new TypeError('You must pass an array to race.'));
-        return promise;
-      }
-
-      var length = entries.length;
-
-      function onFulfillment(value) {
-        lib$es6$promise$$internal$$resolve(promise, value);
-      }
-
-      function onRejection(reason) {
-        lib$es6$promise$$internal$$reject(promise, reason);
-      }
-
-      for (var i = 0; promise._state === lib$es6$promise$$internal$$PENDING && i < length; i++) {
-        lib$es6$promise$$internal$$subscribe(Constructor.resolve(entries[i]), undefined, onFulfillment, onRejection);
-      }
-
-      return promise;
-    }
-    var lib$es6$promise$promise$race$$default = lib$es6$promise$promise$race$$race;
-    function lib$es6$promise$promise$resolve$$resolve(object) {
-      /*jshint validthis:true */
-      var Constructor = this;
-
-      if (object && typeof object === 'object' && object.constructor === Constructor) {
-        return object;
-      }
-
-      var promise = new Constructor(lib$es6$promise$$internal$$noop);
-      lib$es6$promise$$internal$$resolve(promise, object);
-      return promise;
-    }
-    var lib$es6$promise$promise$resolve$$default = lib$es6$promise$promise$resolve$$resolve;
-    function lib$es6$promise$promise$reject$$reject(reason) {
-      /*jshint validthis:true */
-      var Constructor = this;
-      var promise = new Constructor(lib$es6$promise$$internal$$noop);
-      lib$es6$promise$$internal$$reject(promise, reason);
-      return promise;
-    }
-    var lib$es6$promise$promise$reject$$default = lib$es6$promise$promise$reject$$reject;
-
-    var lib$es6$promise$promise$$counter = 0;
-
-    function lib$es6$promise$promise$$needsResolver() {
-      throw new TypeError('You must pass a resolver function as the first argument to the promise constructor');
-    }
-
-    function lib$es6$promise$promise$$needsNew() {
-      throw new TypeError("Failed to construct 'Promise': Please use the 'new' operator, this object constructor cannot be called as a function.");
-    }
-
-    var lib$es6$promise$promise$$default = lib$es6$promise$promise$$Promise;
-    /**
-      Promise objects represent the eventual result of an asynchronous operation. The
-      primary way of interacting with a promise is through its `then` method, which
-      registers callbacks to receive either a promise's eventual value or the reason
-      why the promise cannot be fulfilled.
-
-      Terminology
-      -----------
-
-      - `promise` is an object or function with a `then` method whose behavior conforms to this specification.
-      - `thenable` is an object or function that defines a `then` method.
-      - `value` is any legal JavaScript value (including undefined, a thenable, or a promise).
-      - `exception` is a value that is thrown using the throw statement.
-      - `reason` is a value that indicates why a promise was rejected.
-      - `settled` the final resting state of a promise, fulfilled or rejected.
-
-      A promise can be in one of three states: pending, fulfilled, or rejected.
-
-      Promises that are fulfilled have a fulfillment value and are in the fulfilled
-      state.  Promises that are rejected have a rejection reason and are in the
-      rejected state.  A fulfillment value is never a thenable.
-
-      Promises can also be said to *resolve* a value.  If this value is also a
-      promise, then the original promise's settled state will match the value's
-      settled state.  So a promise that *resolves* a promise that rejects will
-      itself reject, and a promise that *resolves* a promise that fulfills will
-      itself fulfill.
-
-
-      Basic Usage:
-      ------------
-
-      ```js
-      var promise = new Promise(function(resolve, reject) {
-        // on success
-        resolve(value);
-
-        // on failure
-        reject(reason);
-      });
-
-      promise.then(function(value) {
-        // on fulfillment
-      }, function(reason) {
-        // on rejection
-      });
-      ```
-
-      Advanced Usage:
-      ---------------
-
-      Promises shine when abstracting away asynchronous interactions such as
-      `XMLHttpRequest`s.
-
-      ```js
-      function getJSON(url) {
-        return new Promise(function(resolve, reject){
-          var xhr = new XMLHttpRequest();
-
-          xhr.open('GET', url);
-          xhr.onreadystatechange = handler;
-          xhr.responseType = 'json';
-          xhr.setRequestHeader('Accept', 'application/json');
-          xhr.send();
-
-          function handler() {
-            if (this.readyState === this.DONE) {
-              if (this.status === 200) {
-                resolve(this.response);
-              } else {
-                reject(new Error('getJSON: `' + url + '` failed with status: [' + this.status + ']'));
-              }
-            }
-          };
-        });
-      }
-
-      getJSON('/posts.json').then(function(json) {
-        // on fulfillment
-      }, function(reason) {
-        // on rejection
-      });
-      ```
-
-      Unlike callbacks, promises are great composable primitives.
-
-      ```js
-      Promise.all([
-        getJSON('/posts'),
-        getJSON('/comments')
-      ]).then(function(values){
-        values[0] // => postsJSON
-        values[1] // => commentsJSON
-
-        return values;
-      });
-      ```
-
-      @class Promise
-      @param {function} resolver
-      Useful for tooling.
-      @constructor
-    */
-    function lib$es6$promise$promise$$Promise(resolver) {
-      this._id = lib$es6$promise$promise$$counter++;
-      this._state = undefined;
-      this._result = undefined;
-      this._subscribers = [];
-
-      if (lib$es6$promise$$internal$$noop !== resolver) {
-        if (!lib$es6$promise$utils$$isFunction(resolver)) {
-          lib$es6$promise$promise$$needsResolver();
-        }
-
-        if (!(this instanceof lib$es6$promise$promise$$Promise)) {
-          lib$es6$promise$promise$$needsNew();
-        }
-
-        lib$es6$promise$$internal$$initializePromise(this, resolver);
-      }
-    }
-
-    lib$es6$promise$promise$$Promise.all = lib$es6$promise$promise$all$$default;
-    lib$es6$promise$promise$$Promise.race = lib$es6$promise$promise$race$$default;
-    lib$es6$promise$promise$$Promise.resolve = lib$es6$promise$promise$resolve$$default;
-    lib$es6$promise$promise$$Promise.reject = lib$es6$promise$promise$reject$$default;
-    lib$es6$promise$promise$$Promise._setScheduler = lib$es6$promise$asap$$setScheduler;
-    lib$es6$promise$promise$$Promise._setAsap = lib$es6$promise$asap$$setAsap;
-    lib$es6$promise$promise$$Promise._asap = lib$es6$promise$asap$$asap;
-
-    lib$es6$promise$promise$$Promise.prototype = {
-      constructor: lib$es6$promise$promise$$Promise,
-
-    /**
-      The primary way of interacting with a promise is through its `then` method,
-      which registers callbacks to receive either a promise's eventual value or the
-      reason why the promise cannot be fulfilled.
-
-      ```js
-      findUser().then(function(user){
-        // user is available
-      }, function(reason){
-        // user is unavailable, and you are given the reason why
-      });
-      ```
-
-      Chaining
-      --------
-
-      The return value of `then` is itself a promise.  This second, 'downstream'
-      promise is resolved with the return value of the first promise's fulfillment
-      or rejection handler, or rejected if the handler throws an exception.
-
-      ```js
-      findUser().then(function (user) {
-        return user.name;
-      }, function (reason) {
-        return 'default name';
-      }).then(function (userName) {
-        // If `findUser` fulfilled, `userName` will be the user's name, otherwise it
-        // will be `'default name'`
-      });
-
-      findUser().then(function (user) {
-        throw new Error('Found user, but still unhappy');
-      }, function (reason) {
-        throw new Error('`findUser` rejected and we're unhappy');
-      }).then(function (value) {
-        // never reached
-      }, function (reason) {
-        // if `findUser` fulfilled, `reason` will be 'Found user, but still unhappy'.
-        // If `findUser` rejected, `reason` will be '`findUser` rejected and we're unhappy'.
-      });
-      ```
-      If the downstream promise does not specify a rejection handler, rejection reasons will be propagated further downstream.
-
-      ```js
-      findUser().then(function (user) {
-        throw new PedagogicalException('Upstream error');
-      }).then(function (value) {
-        // never reached
-      }).then(function (value) {
-        // never reached
-      }, function (reason) {
-        // The `PedgagocialException` is propagated all the way down to here
-      });
-      ```
-
-      Assimilation
-      ------------
-
-      Sometimes the value you want to propagate to a downstream promise can only be
-      retrieved asynchronously. This can be achieved by returning a promise in the
-      fulfillment or rejection handler. The downstream promise will then be pending
-      until the returned promise is settled. This is called *assimilation*.
-
-      ```js
-      findUser().then(function (user) {
-        return findCommentsByAuthor(user);
-      }).then(function (comments) {
-        // The user's comments are now available
-      });
-      ```
-
-      If the assimliated promise rejects, then the downstream promise will also reject.
-
-      ```js
-      findUser().then(function (user) {
-        return findCommentsByAuthor(user);
-      }).then(function (comments) {
-        // If `findCommentsByAuthor` fulfills, we'll have the value here
-      }, function (reason) {
-        // If `findCommentsByAuthor` rejects, we'll have the reason here
-      });
-      ```
-
-      Simple Example
-      --------------
-
-      Synchronous Example
-
-      ```javascript
-      var result;
-
-      try {
-        result = findResult();
-        // success
-      } catch(reason) {
-        // failure
-      }
-      ```
-
-      Errback Example
-
-      ```js
-      findResult(function(result, err){
-        if (err) {
-          // failure
-        } else {
-          // success
-        }
-      });
-      ```
-
-      Promise Example;
-
-      ```javascript
-      findResult().then(function(result){
-        // success
-      }, function(reason){
-        // failure
-      });
-      ```
-
-      Advanced Example
-      --------------
-
-      Synchronous Example
-
-      ```javascript
-      var author, books;
-
-      try {
-        author = findAuthor();
-        books  = findBooksByAuthor(author);
-        // success
-      } catch(reason) {
-        // failure
-      }
-      ```
-
-      Errback Example
-
-      ```js
-
-      function foundBooks(books) {
-
-      }
-
-      function failure(reason) {
-
-      }
-
-      findAuthor(function(author, err){
-        if (err) {
-          failure(err);
-          // failure
-        } else {
-          try {
-            findBoooksByAuthor(author, function(books, err) {
-              if (err) {
-                failure(err);
-              } else {
-                try {
-                  foundBooks(books);
-                } catch(reason) {
-                  failure(reason);
-                }
-              }
-            });
-          } catch(error) {
-            failure(err);
-          }
-          // success
-        }
-      });
-      ```
-
-      Promise Example;
-
-      ```javascript
-      findAuthor().
-        then(findBooksByAuthor).
-        then(function(books){
-          // found books
-      }).catch(function(reason){
-        // something went wrong
-      });
-      ```
-
-      @method then
-      @param {Function} onFulfilled
-      @param {Function} onRejected
-      Useful for tooling.
-      @return {Promise}
-    */
-      then: function(onFulfillment, onRejection) {
-        var parent = this;
-        var state = parent._state;
-
-        if (state === lib$es6$promise$$internal$$FULFILLED && !onFulfillment || state === lib$es6$promise$$internal$$REJECTED && !onRejection) {
-          return this;
-        }
-
-        var child = new this.constructor(lib$es6$promise$$internal$$noop);
-        var result = parent._result;
-
-        if (state) {
-          var callback = arguments[state - 1];
-          lib$es6$promise$asap$$asap(function(){
-            lib$es6$promise$$internal$$invokeCallback(state, child, callback, result);
-          });
-        } else {
-          lib$es6$promise$$internal$$subscribe(parent, child, onFulfillment, onRejection);
-        }
-
-        return child;
-      },
-
-    /**
-      `catch` is simply sugar for `then(undefined, onRejection)` which makes it the same
-      as the catch block of a try/catch statement.
-
-      ```js
-      function findAuthor(){
-        throw new Error('couldn't find that author');
-      }
-
-      // synchronous
-      try {
-        findAuthor();
-      } catch(reason) {
-        // something went wrong
-      }
-
-      // async with promises
-      findAuthor().catch(function(reason){
-        // something went wrong
-      });
-      ```
-
-      @method catch
-      @param {Function} onRejection
-      Useful for tooling.
-      @return {Promise}
-    */
-      'catch': function(onRejection) {
-        return this.then(null, onRejection);
-      }
-    };
-    function lib$es6$promise$polyfill$$polyfill() {
-      var local;
-
-      if (typeof global !== 'undefined') {
-          local = global;
-      } else if (typeof self !== 'undefined') {
-          local = self;
-      } else {
-          try {
-              local = Function('return this')();
-          } catch (e) {
-              throw new Error('polyfill failed because global object is unavailable in this environment');
-          }
-      }
-
-      var P = local.Promise;
-
-      if (P && Object.prototype.toString.call(P.resolve()) === '[object Promise]' && !P.cast) {
-        return;
-      }
-
-      local.Promise = lib$es6$promise$promise$$default;
-    }
-    var lib$es6$promise$polyfill$$default = lib$es6$promise$polyfill$$polyfill;
-
-    var lib$es6$promise$umd$$ES6Promise = {
-      'Promise': lib$es6$promise$promise$$default,
-      'polyfill': lib$es6$promise$polyfill$$default
-    };
-
-    /* global define:true module:true window: true */
-    if (typeof define === 'function' && define['amd']) {
-      define(function() { return lib$es6$promise$umd$$ES6Promise; });
-    } else if (typeof module !== 'undefined' && module['exports']) {
-      module['exports'] = lib$es6$promise$umd$$ES6Promise;
-    } else if (typeof this !== 'undefined') {
-      this['ES6Promise'] = lib$es6$promise$umd$$ES6Promise;
-    }
-
-    lib$es6$promise$polyfill$$default();
-}).call(this);
-
-
-}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-
-},{"_process":28}],20:[function(require,module,exports){
-
-},{}],21:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 /*!
  * The buffer module from node.js, for the browser.
  *
@@ -4136,7 +2073,7 @@ function blitBuffer (src, dst, offset, length) {
   return i
 }
 
-},{"base64-js":22,"ieee754":23,"is-array":24}],22:[function(require,module,exports){
+},{"base64-js":12,"ieee754":13,"is-array":14}],12:[function(require,module,exports){
 var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
 ;(function (exports) {
@@ -4262,7 +2199,7 @@ var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 	exports.fromByteArray = uint8ToBase64
 }(typeof exports === 'undefined' ? (this.base64js = {}) : exports))
 
-},{}],23:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = nBytes * 8 - mLen - 1
@@ -4348,7 +2285,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],24:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 
 /**
  * isArray
@@ -4383,7 +2320,7 @@ module.exports = isArray || function (val) {
   return !! val && '[object Array]' == str.call(val);
 };
 
-},{}],25:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -4686,7 +2623,7 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],26:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -4711,12 +2648,12 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],27:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 module.exports = Array.isArray || function (arr) {
   return Object.prototype.toString.call(arr) == '[object Array]';
 };
 
-},{}],28:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -4808,10 +2745,10 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],29:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 module.exports = require("./lib/_stream_duplex.js")
 
-},{"./lib/_stream_duplex.js":30}],30:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":20}],20:[function(require,module,exports){
 // a duplex stream is just a stream that is both readable and writable.
 // Since JS doesn't have multiple prototypal inheritance, this class
 // prototypally inherits from Readable, and then parasitically from
@@ -4895,7 +2832,7 @@ function forEach (xs, f) {
   }
 }
 
-},{"./_stream_readable":32,"./_stream_writable":34,"core-util-is":35,"inherits":26,"process-nextick-args":36}],31:[function(require,module,exports){
+},{"./_stream_readable":22,"./_stream_writable":24,"core-util-is":25,"inherits":16,"process-nextick-args":26}],21:[function(require,module,exports){
 // a passthrough stream.
 // basically just the most minimal sort of Transform stream.
 // Every written chunk gets output as-is.
@@ -4924,7 +2861,7 @@ PassThrough.prototype._transform = function(chunk, encoding, cb) {
   cb(null, chunk);
 };
 
-},{"./_stream_transform":33,"core-util-is":35,"inherits":26}],32:[function(require,module,exports){
+},{"./_stream_transform":23,"core-util-is":25,"inherits":16}],22:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -5888,7 +3825,7 @@ function indexOf (xs, x) {
 
 }).call(this,require('_process'))
 
-},{"./_stream_duplex":30,"_process":28,"buffer":21,"core-util-is":35,"events":25,"inherits":26,"isarray":27,"process-nextick-args":36,"string_decoder/":43,"util":20}],33:[function(require,module,exports){
+},{"./_stream_duplex":20,"_process":18,"buffer":11,"core-util-is":25,"events":15,"inherits":16,"isarray":17,"process-nextick-args":26,"string_decoder/":33,"util":10}],23:[function(require,module,exports){
 // a transform stream is a readable/writable stream where you do
 // something with the data.  Sometimes it's called a "filter",
 // but that's not a great name for it, since that implies a thing where
@@ -6087,7 +4024,7 @@ function done(stream, er) {
   return stream.push(null);
 }
 
-},{"./_stream_duplex":30,"core-util-is":35,"inherits":26}],34:[function(require,module,exports){
+},{"./_stream_duplex":20,"core-util-is":25,"inherits":16}],24:[function(require,module,exports){
 // A bit simpler than readable streams.
 // Implement an async ._write(chunk, cb), and it'll handle all
 // the drain event emission and buffering.
@@ -6609,7 +4546,7 @@ function endWritable(stream, state, cb) {
   state.ended = true;
 }
 
-},{"./_stream_duplex":30,"buffer":21,"core-util-is":35,"events":25,"inherits":26,"process-nextick-args":36,"util-deprecate":37}],35:[function(require,module,exports){
+},{"./_stream_duplex":20,"buffer":11,"core-util-is":25,"events":15,"inherits":16,"process-nextick-args":26,"util-deprecate":27}],25:[function(require,module,exports){
 (function (Buffer){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -6720,7 +4657,7 @@ function objectToString(o) {
 }
 }).call(this,require("buffer").Buffer)
 
-},{"buffer":21}],36:[function(require,module,exports){
+},{"buffer":11}],26:[function(require,module,exports){
 (function (process){
 'use strict';
 module.exports = nextTick;
@@ -6738,7 +4675,7 @@ function nextTick(fn) {
 
 }).call(this,require('_process'))
 
-},{"_process":28}],37:[function(require,module,exports){
+},{"_process":18}],27:[function(require,module,exports){
 (function (global){
 
 /**
@@ -6805,10 +4742,10 @@ function config (name) {
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],38:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 module.exports = require("./lib/_stream_passthrough.js")
 
-},{"./lib/_stream_passthrough.js":31}],39:[function(require,module,exports){
+},{"./lib/_stream_passthrough.js":21}],29:[function(require,module,exports){
 var Stream = (function (){
   try {
     return require('st' + 'ream'); // hack to fix a circular dependency issue when used with browserify
@@ -6822,13 +4759,13 @@ exports.Duplex = require('./lib/_stream_duplex.js');
 exports.Transform = require('./lib/_stream_transform.js');
 exports.PassThrough = require('./lib/_stream_passthrough.js');
 
-},{"./lib/_stream_duplex.js":30,"./lib/_stream_passthrough.js":31,"./lib/_stream_readable.js":32,"./lib/_stream_transform.js":33,"./lib/_stream_writable.js":34}],40:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":20,"./lib/_stream_passthrough.js":21,"./lib/_stream_readable.js":22,"./lib/_stream_transform.js":23,"./lib/_stream_writable.js":24}],30:[function(require,module,exports){
 module.exports = require("./lib/_stream_transform.js")
 
-},{"./lib/_stream_transform.js":33}],41:[function(require,module,exports){
+},{"./lib/_stream_transform.js":23}],31:[function(require,module,exports){
 module.exports = require("./lib/_stream_writable.js")
 
-},{"./lib/_stream_writable.js":34}],42:[function(require,module,exports){
+},{"./lib/_stream_writable.js":24}],32:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -6957,7 +4894,7 @@ Stream.prototype.pipe = function(dest, options) {
   return dest;
 };
 
-},{"events":25,"inherits":26,"readable-stream/duplex.js":29,"readable-stream/passthrough.js":38,"readable-stream/readable.js":39,"readable-stream/transform.js":40,"readable-stream/writable.js":41}],43:[function(require,module,exports){
+},{"events":15,"inherits":16,"readable-stream/duplex.js":19,"readable-stream/passthrough.js":28,"readable-stream/readable.js":29,"readable-stream/transform.js":30,"readable-stream/writable.js":31}],33:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -7180,14 +5117,14 @@ function base64DetectIncompleteChar(buffer) {
   this.charLength = this.charReceived ? 3 : 0;
 }
 
-},{"buffer":21}],44:[function(require,module,exports){
+},{"buffer":11}],34:[function(require,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],45:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 (function (process,global){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -7778,7 +5715,2044 @@ function hasOwnProperty(obj, prop) {
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./support/isBuffer":44,"_process":28,"inherits":26}],46:[function(require,module,exports){
+},{"./support/isBuffer":34,"_process":18,"inherits":16}],36:[function(require,module,exports){
+var events = require('events');
+var inherits = require('util').inherits;
+var bopper = require('bopper');
+var ditty = require('./vendor/ditty');
+var expr = require('dilla-expressions');
+
+var checkValid = require('./lib/checkValid');
+var positionHelper = require('./lib/positionHelper');
+
+var loadTime = new Date().valueOf();
+
+function Dilla (audioContext, options) {
+
+  if (!(this instanceof Dilla)){
+    return new Dilla(audioContext, options);
+  }
+
+  if (!audioContext || typeof audioContext !== 'object' || typeof audioContext.createScriptProcessor !== 'function') {
+    throw new Error('Invalid arguments: cannot init without AudioContext');
+  }
+
+  events.EventEmitter.call(this);
+
+  options = options || {};
+
+  this.context = audioContext;
+  this.clock = bopper(this.context);
+  this.scheduler = ditty();
+
+  this.expressions = expr;
+  this.expandNote = options.expandNote;
+
+  this.upstartWait = options.upstartWait || 250;
+  this.setTempo(options.tempo || 120);
+  this.setBeatsPerBar(options.beatsPerBar || 4);
+  this.setLoopLength(options.loopLength || 2);
+
+  this._position = '0.0.00';
+
+  this.clock.on('data', this.updatePositionFromClock.bind(this));
+  this.clock.pipe(this.scheduler).on('data', this.emitStep.bind(this));
+
+  this._keepAlive = this._keepAlive.bind(this);
+}
+
+inherits(Dilla, events.EventEmitter);
+var proto = Dilla.prototype;
+
+proto.updatePositionFromClock = function updatePositionFromClock (step) {
+  var position = this.getPositionFromTime(step.time);
+  if (this._position !== position) {
+    this._position = position;
+    this.emit('tick', { 'position': this._position, 'context': this.context });
+  }
+};
+
+proto.getPositionFromTime = function getPositionFromTime (time) {
+  var offset = (this.clock._state.cycleLength * this.clock._state.preCycle) * 1;
+  var position = this.clock.getPositionAt(time - offset);
+  return this.getPositionFromClockPosition(position);
+};
+
+proto.getPositionFromClockPosition = function getPositionFromClockPosition (position) {
+  checkValid.number('clockPosition', position);
+  if (position < 0) {
+    return '0.0.00';
+  }
+  var beatsPerLoop = this._loopLength * this._beatsPerBar;
+  var loops = Math.floor(position / beatsPerLoop) || 0;
+  position = position - (loops * beatsPerLoop);
+  var bars = Math.floor(position / this._beatsPerBar);
+  position = position - (bars * this._beatsPerBar);
+  var beats = Math.floor(position);
+  position = position - beats;
+  var ticks = Math.floor(position * 96) + 1;
+  if (ticks < 10) {
+    ticks = '0' + ticks;
+  }
+  return (bars + 1) + '.' + (beats + 1) + '.' + ticks;
+};
+
+proto.getClockPositionFromPosition = function getClockPositionFromPosition (position) {
+  var parts = position.split('.');
+  var bars = parseInt(parts[0], 10) - 1;
+  var beats = parseInt(parts[1], 10) - 1;
+  var ticks = parseInt(parts[2], 10) - 1;
+  return (bars * this._beatsPerBar) + beats + (ticks / 96);
+};
+
+proto.getPositionWithOffset = function getPositionWithOffset (position, offset) {
+  if (!checkValid.positionString(position)) {
+    throw new Error('Invalid argument: position is not a valid position string');
+  }
+  if (typeof offset !== 'number' || isNaN(offset) || offset % 1 !== 0) {
+    throw new Error('Invalid argument: offset is not a valid number');
+  }
+  if (!offset) {
+    return position;
+  }
+  var clockPosition = this.getClockPositionFromPosition(position);
+  var clockOffset = offset / 96;
+  return this.getPositionFromClockPosition(clockPosition + clockOffset);
+};
+
+proto.getDurationFromTicks = function getDurationFromTicks (ticks) {
+  checkValid.positiveNumber('ticks', ticks);
+  return (1 / 96) * ticks;
+};
+
+proto.emitStep = function emitStep (step) {
+  var offset = step.offset = (this.clock._state.cycleLength * this.clock._state.preCycle) * 1;
+  var note = step.args = step.args[0];
+  step.time = step.time + offset;
+  step.clockPosition = step.position;
+  step.position = step.event === 'start' ? note.position : this.getPositionWithOffset(note.position, note.duration || 0);
+  if (step.event === 'stop'  && step.position === note.position) {
+    return;
+  }
+  step.context = this.context;
+  this.emit('step', step);
+};
+
+proto.set = function set (id, notes) {
+  var self = this;
+  if (typeof id !== 'string') {
+    throw new Error('Invalid argument: id is not a valid string');
+  }
+  if (!notes || !Array.isArray(notes)) {
+    throw new Error('Invalid argument: notes is not a valid array');
+  }
+
+  notes = this.expressions(notes.map(function (note) {
+    if (!Array.isArray(note) && typeof note === 'object' && !!note.position) {
+      return [note.position, note];
+    }
+    return note;
+  }), {
+    'beatsPerBar': this.beatsPerBar(),
+    'barsPerLoop': this.loopLength()
+  }).filter(function (note) {
+    return positionHelper.isPositionWithinBounds(note[0], self.loopLength(), self.beatsPerBar());
+  }).map(function (note) {
+    if (self.expandNote) {
+      note = self.expandNote(note);
+    }
+    var normal = positionHelper.normalizeNote(note);
+    return [self.getClockPositionFromPosition(normal.position), self.getDurationFromTicks(normal.duration || 0), null, null, normal];
+  });
+
+  this.scheduler.set(id, notes, this.beatsPerBar() * this.loopLength());
+};
+
+proto.get = function get (id) {
+  if (typeof id !== 'string') {
+    throw new Error('Invalid argument: id is not a valid string');
+  }
+  return (this.scheduler.get(id) || []).map(function (note) {
+    return note[4];
+  });
+};
+
+proto.channels = function channels () {
+  return this.scheduler.getIds();
+};
+
+proto.clear = function clear (id) {
+  var self = this;
+  if (id) {
+    if (typeof id !== 'string') {
+      throw new Error('Invalid argument: id is not a valid string');
+    }
+    this.set(id, []);
+  }
+  else {
+    this.scheduler.getIds().forEach(function (id) {
+      self.clear(id);
+    });
+  }
+};
+
+proto._keepAlive = function _keepAlive () {
+  if (this.clock._state.playing) {
+    window.__lastDillaPosition = this._position;
+    window.requestAnimationFrame(this._keepAlive);
+  }
+};
+
+proto.start = function start () {
+  var now = new Date().valueOf();
+  var waited = now - loadTime;
+  if (waited < this.upstartWait) {
+    return setTimeout(start.bind(this), this.upstartWait - waited);
+  }
+
+  if (!this.clock._state.playing) {
+    this.clock.start();
+    this._keepAlive();
+    this.emit('playing');
+  }
+};
+
+proto.pause = function pause () {
+  if (this.clock._state.playing) {
+    this.clock.stop();
+    this.emit('paused');
+  }
+};
+
+proto.stop = function stop () {
+  if (this.clock._state.playing) {
+    this.clock.stop();
+    this.emit('paused');
+    this.clock.setPosition(0);
+    this._position = '0.0.00';
+  }
+};
+
+proto.position = function position () {
+  return this._position;
+};
+
+proto.setPosition = function setPosition (position) {
+  if (!positionHelper.isPositionWithinBounds(position, this.loopLength(), this.beatsPerBar())) {
+    throw new Error('Invalid argument: position is not valid');
+  }
+  this._position = position;
+  this.clock.setPosition(this.getClockPositionFromPosition(position));
+};
+
+proto.tempo = function tempo () {
+  return this.clock.getTempo();
+};
+
+proto.setTempo = function setTempo (tempo) {
+  if (typeof tempo !== 'number' || tempo < 0 || isNaN(tempo)) {
+    throw new Error('Invalid argument: tempo is not a valid number');
+  }
+  this.clock.setTempo(tempo);
+};
+
+proto.beatsPerBar = function beatsPerBar () {
+  return this._beatsPerBar;
+};
+
+proto.setBeatsPerBar = function setBeatsPerBar (beats) {
+  checkValid.positiveNumber('beats', beats);
+  this._beatsPerBar = beats;
+};
+
+proto.loopLength = function loopLength () {
+  return this._loopLength;
+};
+
+proto.setLoopLength = function setLoopLength (bars) {
+  checkValid.positiveNumber('bars', bars);
+  this._loopLength = bars;
+};
+
+module.exports = Dilla;
+
+},{"./lib/checkValid":37,"./lib/positionHelper":38,"./vendor/ditty":44,"bopper":39,"dilla-expressions":42,"events":15,"util":35}],37:[function(require,module,exports){
+var checkValid = {
+
+  'number': function checkValidNumber (name, value) {
+    if (typeof value !== 'number' || isNaN(value)) {
+      throw new Error('Invalid argument: ' + name + ' is not a valid number');
+    }
+  },
+
+  'positiveNumber': function checkValidPositiveNumber (name, value) {
+    checkValid.number(name, value);
+    if (value < 0) {
+      throw new Error('Invalid argument: ' + name + ' is not a valid positive number');
+    }
+  },
+
+  'positionString': function checkValidPositionString (position) {
+    return typeof position === 'string' && !!position.match(/\d\.\d\.\d+/);
+  }
+};
+
+module.exports = checkValid;
+
+},{}],38:[function(require,module,exports){
+var checkValid = require('./checkValid');
+
+var positionHelper = {
+
+  'normalizeNote': function nomalizeNote (params) {
+    if (!params || !Array.isArray(params)) {
+      throw new Error('Invalid argument: note params is not valid array');
+    }
+    var note = typeof params[1] === 'object' ? params[1] : typeof params[0] === 'object' ? params[0] : {};
+    var position = typeof params[0] === 'string' && checkValid.positionString(params[0]) ? params[0] : typeof note.position === 'string' && checkValid.positionString(note.position) ? note.position : null;
+    if (!position) {
+      throw new Error('Invalid argument: position is not valid');
+    }
+    note.position = position;
+    return note;
+  },
+
+  'isPositionWithinBounds': function isPositionWithinBounds (position, barsPerLoop, beatsPerBar) {
+    if (!checkValid.positionString(position)) {
+      return false;
+    }
+
+    var fragments = position.split('.');
+    var bars = parseInt(fragments[0], 10) - 1;
+    var beats = parseInt(fragments[1], 10) - 1;
+    var ticks = parseInt(fragments[2], 10) - 1;
+
+    if (ticks < 0 || beats < 0 || bars < 0 || ticks >= 96 || beats >= beatsPerBar || bars >= barsPerLoop) {
+      return false;
+    }
+
+    return true;
+  }
+};
+
+module.exports = positionHelper;
+
+},{"./checkValid":37}],39:[function(require,module,exports){
+var Stream = require('stream')
+var Event = require('geval')
+
+var inherits = require('util').inherits
+
+module.exports = Bopper
+
+function Bopper(audioContext){
+  if (!(this instanceof Bopper)){
+    return new Bopper(audioContext)
+  }
+
+  var self = this
+
+  Stream.call(this)
+  this.readable = true
+  this.writable = false
+
+  this.context = audioContext
+  var processor = this._processor = audioContext.createScriptProcessor(512, 1, 1)
+
+  var handleTick = bopperTick.bind(this)
+  this._processor.onaudioprocess = handleTick
+
+  var tempo = 120
+  var cycleLength = (1 / audioContext.sampleRate) * this._processor.bufferSize
+
+  this._state = {
+    lastTo: 0,
+    lastEndTime: 0,
+    playing: false,
+    bpm: tempo,
+    beatDuration: 60 / tempo,
+    increment: (tempo / 60) * cycleLength,
+    cycleLength: cycleLength,
+    preCycle: 4,
+  }
+
+  // frp version
+  this.onSchedule = Event(function(broadcast){
+    self.on('data', broadcast)
+  })
+
+  processor.connect(audioContext.destination)
+}
+
+inherits(Bopper, Stream)
+
+var proto = Bopper.prototype
+
+
+proto.start = function(){
+  this._state.playing = true
+  this.emit('start')
+}
+
+proto.stop = function(){
+  this._state.playing = false
+  this.emit('stop')
+}
+
+proto.schedule = function(duration) {
+  var state = this._state
+  var currentTime = this.context.currentTime
+
+  var endTime = this.context.currentTime + duration
+  var time = state.lastEndTime
+
+  if (endTime >= time) {
+    state.lastEndTime = endTime
+
+    if (state.playing){
+      var duration = endTime - time
+      var length = duration / state.beatDuration
+
+      var from = state.lastTo
+      var to = from + length
+      state.lastTo = to
+
+      // skip if getting behind
+      //if ((currentTime - (state.cycleLength*3)) < time){
+        this._schedule(time, from, to)
+      //}
+    }
+  }
+  
+}
+
+proto.setTempo = function(tempo){
+  var bps = tempo/60
+  var state = this._state
+  state.beatDuration = 60/tempo
+  state.increment = bps * state.cycleLength
+  state.bpm = tempo
+  this.emit('tempo', state.bpm)
+}
+
+proto.getTempo = function(){
+  return this._state.bpm
+}
+
+proto.isPlaying = function(){
+  return this._state.playing
+}
+
+proto.setPosition = function(position){
+  this._state.lastTo = parseFloat(position)
+}
+
+proto.setSpeed = function(multiplier){
+  var state = this._state
+
+  multiplier = parseFloat(multiplier) || 0
+
+  var tempo = state.bpm * multiplier
+  var bps = tempo/60
+
+  state.beatDuration = 60/tempo
+  state.increment = bps * state.cycleLength
+}
+
+
+proto.getPositionAt = function(time){
+  var state = this._state
+  var delta = state.lastEndTime - time
+  return state.lastTo - (delta / state.beatDuration)
+}
+
+proto.getTimeAt = function(position){
+  var state = this._state
+  var positionOffset = this.getCurrentPosition() - position
+  return this.context.currentTime - (positionOffset * state.beatDuration)
+}
+
+proto.getCurrentPosition = function(){
+  return this.getPositionAt(this.context.currentTime)
+}
+
+proto.getNextScheduleTime = function(){
+  var state = this._state
+  return state.lastEndTime
+}
+
+proto.getBeatDuration = function(){
+  var state = this._state
+  return state.beatDuration
+}
+
+
+proto._schedule = function(time, from, to){
+  var state = this._state
+  var duration = (to - from) * state.beatDuration
+  this.emit('data', {
+    from: from,
+    to: to,
+    time: time,
+    duration: duration,
+    beatDuration: state.beatDuration
+  })
+}
+
+function bopperTick(e){
+  var state = this._state
+  this.schedule(state.cycleLength * state.preCycle)
+}
+},{"geval":41,"stream":32,"util":35}],40:[function(require,module,exports){
+module.exports = Event
+
+function Event() {
+    var listeners = []
+
+    return { broadcast: broadcast, listen: event }
+
+    function broadcast(value) {
+        for (var i = 0; i < listeners.length; i++) {
+            listeners[i](value)
+        }
+    }
+
+    function event(listener) {
+        listeners.push(listener)
+
+        return removeListener
+
+        function removeListener() {
+            var index = listeners.indexOf(listener)
+            if (index !== -1) {
+                listeners.splice(index, 1)
+            }
+        }
+    }
+}
+
+},{}],41:[function(require,module,exports){
+var Event = require('./event.js')
+
+module.exports = Source
+
+function Source(broadcaster) {
+    var tuple = Event()
+
+    broadcaster(tuple.broadcast)
+
+    return tuple.listen
+}
+
+},{"./event.js":40}],42:[function(require,module,exports){
+var memoize = require('lodash.memoize');
+
+function hashArgs () {
+  return [].slice.call(arguments).join('//');
+}
+function serializeArgs () {
+  return [].slice.call(arguments).map(function (arg) {
+    return typeof arg === 'object' ? JSON.stringify(arg) : arg;
+  }).join('//');
+}
+
+var isPlainPosition = memoize(function (position) {
+  return !!position.match(/^\d+\.\d+\.\d+$/);
+});
+
+var getFragments = memoize(function  (position) {
+  return position.split('.').map(function (fragment) {
+    var fragmentNumber = parseInt(fragment, 10);
+    if (fragment.match(/^\d+$/) && !isNaN(fragmentNumber)) return fragmentNumber;
+    return fragment;
+  });
+});
+
+var skipInRange = memoize(function (min, end, offset, step) {
+  var all = [];
+  while (offset <= end) {
+    if (offset > min) {
+      all.push(offset);
+    }
+    offset += step;
+  }
+  return all;
+}, serializeArgs);
+
+var getRange = memoize(function (start, end) {
+  var all = [];
+  var i = start;
+  while (i <= end) {
+    all.push(i);
+    i++;
+  }
+  return all;
+}, hashArgs);
+
+var filterModulus = memoize(function  (range, mod, res) {
+  return range.filter(function (n) {
+    return n % mod === res;
+  });
+}, hashArgs);
+
+var gtRe = />(\d+)/;
+var ltRe = /<(\d+)/;
+
+function expandToTree (fragment, tree, end, expander) {
+  var start = 1;
+
+  if (/^\d+$/.test(fragment)) {
+    tree[fragment] = {};
+    return;
+  }
+
+  var gtMatch = fragment.match(gtRe) || 0;
+  if (gtMatch) {
+    gtMatch = gtMatch && parseInt(gtMatch[1], 10);
+    start = gtMatch + 1;
+    fragment = fragment.replace(gtRe, '');
+  }
+
+  var ltMatch = fragment.match(ltRe) || 0;
+  if (ltMatch) {
+    ltMatch = ltMatch && parseInt(ltMatch[1], 10);
+    end = ltMatch - 1;
+    fragment = fragment.replace(ltRe, '');
+  }
+
+  var range = getRange(start, end);
+
+  // start new chain here, in case range was changed by gt/lt
+  if (!fragment || fragment === '*') {
+    range.forEach(function (n) {
+      tree[n] = {};
+    });
+  }
+  else if (fragment === 'odd' || fragment === 'even') {
+    var rest = fragment === 'even' ? 0 : 1;
+    filterModulus(range, 2, rest).forEach(function (n) {
+      tree[n] = {};
+    });
+  }
+  else if (typeof fragment === 'string' && ~fragment.indexOf('%')) {
+    var pieces = fragment.split('%');
+    var offset = pieces[0] && parseInt(pieces[0], 10) || 1;
+    var step = parseInt(pieces[1], 10);
+    skipInRange(gtMatch, end, offset, step).forEach(function (n) {
+      tree[n] = {};
+    });
+  }
+  else if (typeof expander === 'function') {
+    var result = expander(fragment, start, end);
+    if (Array.isArray(result)) {
+      result.forEach(function (n) {
+        tree[n] = {};
+      });
+    }
+  }
+}
+
+function flattenTree (tree) {
+  var all = [];
+  Object.keys(tree).forEach(function (bar) {
+    Object.keys(tree[bar]).forEach(function (beat) {
+      Object.keys(tree[bar][beat]).forEach(function (tick) {
+        tick = tick < 10 ? '0' + tick : tick;
+        all.push([bar, beat, tick].join('.'));
+      });
+    });
+  });
+  return all;
+}
+
+var expandExpression = memoize(function (position, bars, beats, expander) {
+  var fragments = getFragments(position);
+  var tree = {};
+
+  expandToTree(fragments[0], tree, bars, expander);
+
+  Object.keys(tree).forEach(function (bar) {
+    expandToTree(fragments[1], tree[bar], beats, expander);
+
+    Object.keys(tree[bar]).forEach(function (beat) {
+      expandToTree(fragments[2], tree[bar][beat], 96, expander);
+    });
+  });
+
+  return flattenTree(tree);
+}, hashArgs);
+
+function expressions (notes, options) {
+
+  if (!notes) throw new Error('Invalid "notes" array');
+  if (!options || typeof options !== 'object') throw new Error('Invalid "options" object');
+  if (typeof options.beatsPerBar !== 'number' || options.beatsPerBar < 0) throw new Error('Invalid options: beatsPerBar is not a valid number');
+  if (typeof options.barsPerLoop !== 'number' || options.barsPerLoop < 0) throw new Error('Invalid options: barsPerLoop is not a valid number');
+
+  var all = [];
+
+  notes.forEach(function (event) {
+
+    var position = event[0];
+    if (isPlainPosition(position)) return all.push(event);
+    expandExpression(position, options.barsPerLoop, options.beatsPerBar, options.expander).forEach(function (expanded) {
+      var clone = event.slice();
+      clone[0] = expanded;
+      all.push(clone);
+    });
+  });
+
+  return all;
+}
+
+module.exports = expressions;
+
+},{"lodash.memoize":43}],43:[function(require,module,exports){
+/**
+ * lodash 3.0.4 (Custom Build) <https://lodash.com/>
+ * Build: `lodash modern modularize exports="npm" -o ./`
+ * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
+ * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+ * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+ * Available under MIT license <https://lodash.com/license>
+ */
+
+/** Used as the `TypeError` message for "Functions" methods. */
+var FUNC_ERROR_TEXT = 'Expected a function';
+
+/** Used for native method references. */
+var objectProto = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
+
+/**
+ * Creates a cache object to store key/value pairs.
+ *
+ * @private
+ * @static
+ * @name Cache
+ * @memberOf _.memoize
+ */
+function MapCache() {
+  this.__data__ = {};
+}
+
+/**
+ * Removes `key` and its value from the cache.
+ *
+ * @private
+ * @name delete
+ * @memberOf _.memoize.Cache
+ * @param {string} key The key of the value to remove.
+ * @returns {boolean} Returns `true` if the entry was removed successfully, else `false`.
+ */
+function mapDelete(key) {
+  return this.has(key) && delete this.__data__[key];
+}
+
+/**
+ * Gets the cached value for `key`.
+ *
+ * @private
+ * @name get
+ * @memberOf _.memoize.Cache
+ * @param {string} key The key of the value to get.
+ * @returns {*} Returns the cached value.
+ */
+function mapGet(key) {
+  return key == '__proto__' ? undefined : this.__data__[key];
+}
+
+/**
+ * Checks if a cached value for `key` exists.
+ *
+ * @private
+ * @name has
+ * @memberOf _.memoize.Cache
+ * @param {string} key The key of the entry to check.
+ * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
+ */
+function mapHas(key) {
+  return key != '__proto__' && hasOwnProperty.call(this.__data__, key);
+}
+
+/**
+ * Sets `value` to `key` of the cache.
+ *
+ * @private
+ * @name set
+ * @memberOf _.memoize.Cache
+ * @param {string} key The key of the value to cache.
+ * @param {*} value The value to cache.
+ * @returns {Object} Returns the cache object.
+ */
+function mapSet(key, value) {
+  if (key != '__proto__') {
+    this.__data__[key] = value;
+  }
+  return this;
+}
+
+/**
+ * Creates a function that memoizes the result of `func`. If `resolver` is
+ * provided it determines the cache key for storing the result based on the
+ * arguments provided to the memoized function. By default, the first argument
+ * provided to the memoized function is coerced to a string and used as the
+ * cache key. The `func` is invoked with the `this` binding of the memoized
+ * function.
+ *
+ * **Note:** The cache is exposed as the `cache` property on the memoized
+ * function. Its creation may be customized by replacing the `_.memoize.Cache`
+ * constructor with one whose instances implement the [`Map`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-properties-of-the-map-prototype-object)
+ * method interface of `get`, `has`, and `set`.
+ *
+ * @static
+ * @memberOf _
+ * @category Function
+ * @param {Function} func The function to have its output memoized.
+ * @param {Function} [resolver] The function to resolve the cache key.
+ * @returns {Function} Returns the new memoizing function.
+ * @example
+ *
+ * var upperCase = _.memoize(function(string) {
+ *   return string.toUpperCase();
+ * });
+ *
+ * upperCase('fred');
+ * // => 'FRED'
+ *
+ * // modifying the result cache
+ * upperCase.cache.set('fred', 'BARNEY');
+ * upperCase('fred');
+ * // => 'BARNEY'
+ *
+ * // replacing `_.memoize.Cache`
+ * var object = { 'user': 'fred' };
+ * var other = { 'user': 'barney' };
+ * var identity = _.memoize(_.identity);
+ *
+ * identity(object);
+ * // => { 'user': 'fred' }
+ * identity(other);
+ * // => { 'user': 'fred' }
+ *
+ * _.memoize.Cache = WeakMap;
+ * var identity = _.memoize(_.identity);
+ *
+ * identity(object);
+ * // => { 'user': 'fred' }
+ * identity(other);
+ * // => { 'user': 'barney' }
+ */
+function memoize(func, resolver) {
+  if (typeof func != 'function' || (resolver && typeof resolver != 'function')) {
+    throw new TypeError(FUNC_ERROR_TEXT);
+  }
+  var memoized = function() {
+    var args = arguments,
+        key = resolver ? resolver.apply(this, args) : args[0],
+        cache = memoized.cache;
+
+    if (cache.has(key)) {
+      return cache.get(key);
+    }
+    var result = func.apply(this, args);
+    memoized.cache = cache.set(key, result);
+    return result;
+  };
+  memoized.cache = new memoize.Cache;
+  return memoized;
+}
+
+// Add functions to the `Map` cache.
+MapCache.prototype['delete'] = mapDelete;
+MapCache.prototype.get = mapGet;
+MapCache.prototype.has = mapHas;
+MapCache.prototype.set = mapSet;
+
+// Assign cache to `_.memoize`.
+memoize.Cache = MapCache;
+
+module.exports = memoize;
+
+},{}],44:[function(require,module,exports){
+module.exports = Ditty
+
+var Stream = require('stream')
+var inherits = require('util').inherits
+
+function Ditty(){
+
+  if (!(this instanceof Ditty)){
+    return new Ditty()
+  }
+
+  Stream.call(this)
+
+  this.readable = true
+  this.writable = true
+
+  this._state = {
+    loops: {},
+    lengths: {},
+    ids: [],
+    queue: []
+  }
+}
+
+inherits(Ditty, Stream)
+
+var proto = Ditty.prototype
+
+proto.set = function(id, events, length){
+  var state = this._state
+  if (events){
+    if (!state.loops[id]){
+      state.ids.push(id)
+    }
+    state.loops[id] = events
+    state.lengths[id] = length || 8
+  } else {
+    var index = state.ids.indexOf(id)
+    if (~index){
+      state.ids.splice(index, 1)
+    }
+    state.loops[id] = null
+  }
+
+  if (state.loops[id]){
+    this.emit('change', {
+      id: id,
+      events: state.loops[id],
+      length: state.lengths[id]
+    })
+  } else {
+    this.emit('change', {
+      id: id
+    })
+  }
+}
+
+proto.get = function(id){
+  return this._state.loops[id]
+}
+
+proto.getLength = function(id){
+  return this._state.lengths[id]
+}
+
+proto.getIds = function(){
+  return this._state.ids
+}
+
+proto.getDescriptors = function(){
+  var state = this._state
+  var result = []
+  for (var i=0;i<state.ids.length;i++){
+    var id = state.ids[i]
+    if (state.loops[id]){
+      result.push({
+        id: id,
+        length: state.lengths[id],
+        events: state.loops[id]
+      })
+    }
+  }
+  return result
+}
+
+proto.update = function(descriptor){
+  this.set(descriptor.id, descriptor.events, descriptor.length)
+}
+
+proto.push = function(data){
+  this.emit('data', data)
+}
+
+proto.write = function(obj){
+  this._transform(obj)
+}
+
+proto._transform = function(obj){
+  var begin = window.performance.now()
+  var endAt = begin + (obj.duration * 5000)
+
+  var state = this._state
+  var from = obj.from
+  var to = obj.to
+  var time = obj.time
+  var nextTime = obj.time + obj.duration
+  var beatDuration = obj.beatDuration
+  var ids = state.ids
+  var queue = state.queue
+  var localQueue = []
+
+  for (var i=queue.length-1;i>=0;i--){
+    var item = queue[i]
+    if (to > item.position || shouldSendImmediately(item, state.loops[item.id])){
+      if (to > item.position){
+        var delta = (item.position - from) * beatDuration
+        item.time = time + delta
+      } else {
+        item.time = time
+        item.position = from
+      }
+      queue.splice(i, 1)
+      this.push(item)
+    }
+  }
+
+  for (var i=0;i<ids.length;i++){
+
+    var id = ids[i]
+    var events = state.loops[id]
+    var loopLength = state.lengths[id]
+
+    for (var j=0;j<events.length;j++){
+
+      var event = events[j]
+      var startPosition = getAbsolutePosition(event[0], from, loopLength)
+      var endPosition = startPosition + event[1]
+
+      if (startPosition >= from && startPosition < to){
+
+        var delta = (startPosition - from) * beatDuration
+        var duration = event[1] * beatDuration
+        var startTime = time + delta
+        var endTime = startTime + duration
+
+        localQueue.push({
+          id: id,
+          event: 'start',
+          position: startPosition,
+          args: event.slice(4),
+          time: startTime
+        })
+
+        localQueue.push({
+          id: id,
+          event: 'stop',
+          position: endPosition,
+          args: event.slice(4),
+          time: endTime
+        })
+      }
+    }
+  }
+
+  // ensure events stream in time sequence
+  localQueue.sort(compare)
+  for (var i=0;i<localQueue.length;i++){
+    var item = localQueue[i]
+    if (item.time < nextTime){
+      if (window.performance.now() < endAt){
+        this.push(item)
+      }
+    } else {
+      // queue event for later
+      queue.push(item)
+    }
+  }
+}
+
+function compare(a,b){
+  return a.time-b.time
+}
+
+function getAbsolutePosition(pos, start, length){
+  pos = pos % length
+  var micro = start % length
+  var position = start+pos-micro
+  if (position < start){
+    return position + length
+  } else {
+    return position
+  }
+}
+
+function shouldSendImmediately(message, loop){
+  return message.event === 'stop' && (!loop || !loop.length)
+}
+
+},{"stream":32,"util":35}],45:[function(require,module,exports){
+(function (process,global){
+/*!
+ * @overview es6-promise - a tiny implementation of Promises/A+.
+ * @copyright Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors (Conversion to ES6 API by Jake Archibald)
+ * @license   Licensed under MIT license
+ *            See https://raw.githubusercontent.com/jakearchibald/es6-promise/master/LICENSE
+ * @version   2.3.0
+ */
+
+(function() {
+    "use strict";
+    function lib$es6$promise$utils$$objectOrFunction(x) {
+      return typeof x === 'function' || (typeof x === 'object' && x !== null);
+    }
+
+    function lib$es6$promise$utils$$isFunction(x) {
+      return typeof x === 'function';
+    }
+
+    function lib$es6$promise$utils$$isMaybeThenable(x) {
+      return typeof x === 'object' && x !== null;
+    }
+
+    var lib$es6$promise$utils$$_isArray;
+    if (!Array.isArray) {
+      lib$es6$promise$utils$$_isArray = function (x) {
+        return Object.prototype.toString.call(x) === '[object Array]';
+      };
+    } else {
+      lib$es6$promise$utils$$_isArray = Array.isArray;
+    }
+
+    var lib$es6$promise$utils$$isArray = lib$es6$promise$utils$$_isArray;
+    var lib$es6$promise$asap$$len = 0;
+    var lib$es6$promise$asap$$toString = {}.toString;
+    var lib$es6$promise$asap$$vertxNext;
+    var lib$es6$promise$asap$$customSchedulerFn;
+
+    var lib$es6$promise$asap$$asap = function asap(callback, arg) {
+      lib$es6$promise$asap$$queue[lib$es6$promise$asap$$len] = callback;
+      lib$es6$promise$asap$$queue[lib$es6$promise$asap$$len + 1] = arg;
+      lib$es6$promise$asap$$len += 2;
+      if (lib$es6$promise$asap$$len === 2) {
+        // If len is 2, that means that we need to schedule an async flush.
+        // If additional callbacks are queued before the queue is flushed, they
+        // will be processed by this flush that we are scheduling.
+        if (lib$es6$promise$asap$$customSchedulerFn) {
+          lib$es6$promise$asap$$customSchedulerFn(lib$es6$promise$asap$$flush);
+        } else {
+          lib$es6$promise$asap$$scheduleFlush();
+        }
+      }
+    }
+
+    function lib$es6$promise$asap$$setScheduler(scheduleFn) {
+      lib$es6$promise$asap$$customSchedulerFn = scheduleFn;
+    }
+
+    function lib$es6$promise$asap$$setAsap(asapFn) {
+      lib$es6$promise$asap$$asap = asapFn;
+    }
+
+    var lib$es6$promise$asap$$browserWindow = (typeof window !== 'undefined') ? window : undefined;
+    var lib$es6$promise$asap$$browserGlobal = lib$es6$promise$asap$$browserWindow || {};
+    var lib$es6$promise$asap$$BrowserMutationObserver = lib$es6$promise$asap$$browserGlobal.MutationObserver || lib$es6$promise$asap$$browserGlobal.WebKitMutationObserver;
+    var lib$es6$promise$asap$$isNode = typeof process !== 'undefined' && {}.toString.call(process) === '[object process]';
+
+    // test for web worker but not in IE10
+    var lib$es6$promise$asap$$isWorker = typeof Uint8ClampedArray !== 'undefined' &&
+      typeof importScripts !== 'undefined' &&
+      typeof MessageChannel !== 'undefined';
+
+    // node
+    function lib$es6$promise$asap$$useNextTick() {
+      var nextTick = process.nextTick;
+      // node version 0.10.x displays a deprecation warning when nextTick is used recursively
+      // setImmediate should be used instead instead
+      var version = process.versions.node.match(/^(?:(\d+)\.)?(?:(\d+)\.)?(\*|\d+)$/);
+      if (Array.isArray(version) && version[1] === '0' && version[2] === '10') {
+        nextTick = setImmediate;
+      }
+      return function() {
+        nextTick(lib$es6$promise$asap$$flush);
+      };
+    }
+
+    // vertx
+    function lib$es6$promise$asap$$useVertxTimer() {
+      return function() {
+        lib$es6$promise$asap$$vertxNext(lib$es6$promise$asap$$flush);
+      };
+    }
+
+    function lib$es6$promise$asap$$useMutationObserver() {
+      var iterations = 0;
+      var observer = new lib$es6$promise$asap$$BrowserMutationObserver(lib$es6$promise$asap$$flush);
+      var node = document.createTextNode('');
+      observer.observe(node, { characterData: true });
+
+      return function() {
+        node.data = (iterations = ++iterations % 2);
+      };
+    }
+
+    // web worker
+    function lib$es6$promise$asap$$useMessageChannel() {
+      var channel = new MessageChannel();
+      channel.port1.onmessage = lib$es6$promise$asap$$flush;
+      return function () {
+        channel.port2.postMessage(0);
+      };
+    }
+
+    function lib$es6$promise$asap$$useSetTimeout() {
+      return function() {
+        setTimeout(lib$es6$promise$asap$$flush, 1);
+      };
+    }
+
+    var lib$es6$promise$asap$$queue = new Array(1000);
+    function lib$es6$promise$asap$$flush() {
+      for (var i = 0; i < lib$es6$promise$asap$$len; i+=2) {
+        var callback = lib$es6$promise$asap$$queue[i];
+        var arg = lib$es6$promise$asap$$queue[i+1];
+
+        callback(arg);
+
+        lib$es6$promise$asap$$queue[i] = undefined;
+        lib$es6$promise$asap$$queue[i+1] = undefined;
+      }
+
+      lib$es6$promise$asap$$len = 0;
+    }
+
+    function lib$es6$promise$asap$$attemptVertex() {
+      try {
+        var r = require;
+        var vertx = r('vertx');
+        lib$es6$promise$asap$$vertxNext = vertx.runOnLoop || vertx.runOnContext;
+        return lib$es6$promise$asap$$useVertxTimer();
+      } catch(e) {
+        return lib$es6$promise$asap$$useSetTimeout();
+      }
+    }
+
+    var lib$es6$promise$asap$$scheduleFlush;
+    // Decide what async method to use to triggering processing of queued callbacks:
+    if (lib$es6$promise$asap$$isNode) {
+      lib$es6$promise$asap$$scheduleFlush = lib$es6$promise$asap$$useNextTick();
+    } else if (lib$es6$promise$asap$$BrowserMutationObserver) {
+      lib$es6$promise$asap$$scheduleFlush = lib$es6$promise$asap$$useMutationObserver();
+    } else if (lib$es6$promise$asap$$isWorker) {
+      lib$es6$promise$asap$$scheduleFlush = lib$es6$promise$asap$$useMessageChannel();
+    } else if (lib$es6$promise$asap$$browserWindow === undefined && typeof require === 'function') {
+      lib$es6$promise$asap$$scheduleFlush = lib$es6$promise$asap$$attemptVertex();
+    } else {
+      lib$es6$promise$asap$$scheduleFlush = lib$es6$promise$asap$$useSetTimeout();
+    }
+
+    function lib$es6$promise$$internal$$noop() {}
+
+    var lib$es6$promise$$internal$$PENDING   = void 0;
+    var lib$es6$promise$$internal$$FULFILLED = 1;
+    var lib$es6$promise$$internal$$REJECTED  = 2;
+
+    var lib$es6$promise$$internal$$GET_THEN_ERROR = new lib$es6$promise$$internal$$ErrorObject();
+
+    function lib$es6$promise$$internal$$selfFullfillment() {
+      return new TypeError("You cannot resolve a promise with itself");
+    }
+
+    function lib$es6$promise$$internal$$cannotReturnOwn() {
+      return new TypeError('A promises callback cannot return that same promise.');
+    }
+
+    function lib$es6$promise$$internal$$getThen(promise) {
+      try {
+        return promise.then;
+      } catch(error) {
+        lib$es6$promise$$internal$$GET_THEN_ERROR.error = error;
+        return lib$es6$promise$$internal$$GET_THEN_ERROR;
+      }
+    }
+
+    function lib$es6$promise$$internal$$tryThen(then, value, fulfillmentHandler, rejectionHandler) {
+      try {
+        then.call(value, fulfillmentHandler, rejectionHandler);
+      } catch(e) {
+        return e;
+      }
+    }
+
+    function lib$es6$promise$$internal$$handleForeignThenable(promise, thenable, then) {
+       lib$es6$promise$asap$$asap(function(promise) {
+        var sealed = false;
+        var error = lib$es6$promise$$internal$$tryThen(then, thenable, function(value) {
+          if (sealed) { return; }
+          sealed = true;
+          if (thenable !== value) {
+            lib$es6$promise$$internal$$resolve(promise, value);
+          } else {
+            lib$es6$promise$$internal$$fulfill(promise, value);
+          }
+        }, function(reason) {
+          if (sealed) { return; }
+          sealed = true;
+
+          lib$es6$promise$$internal$$reject(promise, reason);
+        }, 'Settle: ' + (promise._label || ' unknown promise'));
+
+        if (!sealed && error) {
+          sealed = true;
+          lib$es6$promise$$internal$$reject(promise, error);
+        }
+      }, promise);
+    }
+
+    function lib$es6$promise$$internal$$handleOwnThenable(promise, thenable) {
+      if (thenable._state === lib$es6$promise$$internal$$FULFILLED) {
+        lib$es6$promise$$internal$$fulfill(promise, thenable._result);
+      } else if (thenable._state === lib$es6$promise$$internal$$REJECTED) {
+        lib$es6$promise$$internal$$reject(promise, thenable._result);
+      } else {
+        lib$es6$promise$$internal$$subscribe(thenable, undefined, function(value) {
+          lib$es6$promise$$internal$$resolve(promise, value);
+        }, function(reason) {
+          lib$es6$promise$$internal$$reject(promise, reason);
+        });
+      }
+    }
+
+    function lib$es6$promise$$internal$$handleMaybeThenable(promise, maybeThenable) {
+      if (maybeThenable.constructor === promise.constructor) {
+        lib$es6$promise$$internal$$handleOwnThenable(promise, maybeThenable);
+      } else {
+        var then = lib$es6$promise$$internal$$getThen(maybeThenable);
+
+        if (then === lib$es6$promise$$internal$$GET_THEN_ERROR) {
+          lib$es6$promise$$internal$$reject(promise, lib$es6$promise$$internal$$GET_THEN_ERROR.error);
+        } else if (then === undefined) {
+          lib$es6$promise$$internal$$fulfill(promise, maybeThenable);
+        } else if (lib$es6$promise$utils$$isFunction(then)) {
+          lib$es6$promise$$internal$$handleForeignThenable(promise, maybeThenable, then);
+        } else {
+          lib$es6$promise$$internal$$fulfill(promise, maybeThenable);
+        }
+      }
+    }
+
+    function lib$es6$promise$$internal$$resolve(promise, value) {
+      if (promise === value) {
+        lib$es6$promise$$internal$$reject(promise, lib$es6$promise$$internal$$selfFullfillment());
+      } else if (lib$es6$promise$utils$$objectOrFunction(value)) {
+        lib$es6$promise$$internal$$handleMaybeThenable(promise, value);
+      } else {
+        lib$es6$promise$$internal$$fulfill(promise, value);
+      }
+    }
+
+    function lib$es6$promise$$internal$$publishRejection(promise) {
+      if (promise._onerror) {
+        promise._onerror(promise._result);
+      }
+
+      lib$es6$promise$$internal$$publish(promise);
+    }
+
+    function lib$es6$promise$$internal$$fulfill(promise, value) {
+      if (promise._state !== lib$es6$promise$$internal$$PENDING) { return; }
+
+      promise._result = value;
+      promise._state = lib$es6$promise$$internal$$FULFILLED;
+
+      if (promise._subscribers.length !== 0) {
+        lib$es6$promise$asap$$asap(lib$es6$promise$$internal$$publish, promise);
+      }
+    }
+
+    function lib$es6$promise$$internal$$reject(promise, reason) {
+      if (promise._state !== lib$es6$promise$$internal$$PENDING) { return; }
+      promise._state = lib$es6$promise$$internal$$REJECTED;
+      promise._result = reason;
+
+      lib$es6$promise$asap$$asap(lib$es6$promise$$internal$$publishRejection, promise);
+    }
+
+    function lib$es6$promise$$internal$$subscribe(parent, child, onFulfillment, onRejection) {
+      var subscribers = parent._subscribers;
+      var length = subscribers.length;
+
+      parent._onerror = null;
+
+      subscribers[length] = child;
+      subscribers[length + lib$es6$promise$$internal$$FULFILLED] = onFulfillment;
+      subscribers[length + lib$es6$promise$$internal$$REJECTED]  = onRejection;
+
+      if (length === 0 && parent._state) {
+        lib$es6$promise$asap$$asap(lib$es6$promise$$internal$$publish, parent);
+      }
+    }
+
+    function lib$es6$promise$$internal$$publish(promise) {
+      var subscribers = promise._subscribers;
+      var settled = promise._state;
+
+      if (subscribers.length === 0) { return; }
+
+      var child, callback, detail = promise._result;
+
+      for (var i = 0; i < subscribers.length; i += 3) {
+        child = subscribers[i];
+        callback = subscribers[i + settled];
+
+        if (child) {
+          lib$es6$promise$$internal$$invokeCallback(settled, child, callback, detail);
+        } else {
+          callback(detail);
+        }
+      }
+
+      promise._subscribers.length = 0;
+    }
+
+    function lib$es6$promise$$internal$$ErrorObject() {
+      this.error = null;
+    }
+
+    var lib$es6$promise$$internal$$TRY_CATCH_ERROR = new lib$es6$promise$$internal$$ErrorObject();
+
+    function lib$es6$promise$$internal$$tryCatch(callback, detail) {
+      try {
+        return callback(detail);
+      } catch(e) {
+        lib$es6$promise$$internal$$TRY_CATCH_ERROR.error = e;
+        return lib$es6$promise$$internal$$TRY_CATCH_ERROR;
+      }
+    }
+
+    function lib$es6$promise$$internal$$invokeCallback(settled, promise, callback, detail) {
+      var hasCallback = lib$es6$promise$utils$$isFunction(callback),
+          value, error, succeeded, failed;
+
+      if (hasCallback) {
+        value = lib$es6$promise$$internal$$tryCatch(callback, detail);
+
+        if (value === lib$es6$promise$$internal$$TRY_CATCH_ERROR) {
+          failed = true;
+          error = value.error;
+          value = null;
+        } else {
+          succeeded = true;
+        }
+
+        if (promise === value) {
+          lib$es6$promise$$internal$$reject(promise, lib$es6$promise$$internal$$cannotReturnOwn());
+          return;
+        }
+
+      } else {
+        value = detail;
+        succeeded = true;
+      }
+
+      if (promise._state !== lib$es6$promise$$internal$$PENDING) {
+        // noop
+      } else if (hasCallback && succeeded) {
+        lib$es6$promise$$internal$$resolve(promise, value);
+      } else if (failed) {
+        lib$es6$promise$$internal$$reject(promise, error);
+      } else if (settled === lib$es6$promise$$internal$$FULFILLED) {
+        lib$es6$promise$$internal$$fulfill(promise, value);
+      } else if (settled === lib$es6$promise$$internal$$REJECTED) {
+        lib$es6$promise$$internal$$reject(promise, value);
+      }
+    }
+
+    function lib$es6$promise$$internal$$initializePromise(promise, resolver) {
+      try {
+        resolver(function resolvePromise(value){
+          lib$es6$promise$$internal$$resolve(promise, value);
+        }, function rejectPromise(reason) {
+          lib$es6$promise$$internal$$reject(promise, reason);
+        });
+      } catch(e) {
+        lib$es6$promise$$internal$$reject(promise, e);
+      }
+    }
+
+    function lib$es6$promise$enumerator$$Enumerator(Constructor, input) {
+      var enumerator = this;
+
+      enumerator._instanceConstructor = Constructor;
+      enumerator.promise = new Constructor(lib$es6$promise$$internal$$noop);
+
+      if (enumerator._validateInput(input)) {
+        enumerator._input     = input;
+        enumerator.length     = input.length;
+        enumerator._remaining = input.length;
+
+        enumerator._init();
+
+        if (enumerator.length === 0) {
+          lib$es6$promise$$internal$$fulfill(enumerator.promise, enumerator._result);
+        } else {
+          enumerator.length = enumerator.length || 0;
+          enumerator._enumerate();
+          if (enumerator._remaining === 0) {
+            lib$es6$promise$$internal$$fulfill(enumerator.promise, enumerator._result);
+          }
+        }
+      } else {
+        lib$es6$promise$$internal$$reject(enumerator.promise, enumerator._validationError());
+      }
+    }
+
+    lib$es6$promise$enumerator$$Enumerator.prototype._validateInput = function(input) {
+      return lib$es6$promise$utils$$isArray(input);
+    };
+
+    lib$es6$promise$enumerator$$Enumerator.prototype._validationError = function() {
+      return new Error('Array Methods must be provided an Array');
+    };
+
+    lib$es6$promise$enumerator$$Enumerator.prototype._init = function() {
+      this._result = new Array(this.length);
+    };
+
+    var lib$es6$promise$enumerator$$default = lib$es6$promise$enumerator$$Enumerator;
+
+    lib$es6$promise$enumerator$$Enumerator.prototype._enumerate = function() {
+      var enumerator = this;
+
+      var length  = enumerator.length;
+      var promise = enumerator.promise;
+      var input   = enumerator._input;
+
+      for (var i = 0; promise._state === lib$es6$promise$$internal$$PENDING && i < length; i++) {
+        enumerator._eachEntry(input[i], i);
+      }
+    };
+
+    lib$es6$promise$enumerator$$Enumerator.prototype._eachEntry = function(entry, i) {
+      var enumerator = this;
+      var c = enumerator._instanceConstructor;
+
+      if (lib$es6$promise$utils$$isMaybeThenable(entry)) {
+        if (entry.constructor === c && entry._state !== lib$es6$promise$$internal$$PENDING) {
+          entry._onerror = null;
+          enumerator._settledAt(entry._state, i, entry._result);
+        } else {
+          enumerator._willSettleAt(c.resolve(entry), i);
+        }
+      } else {
+        enumerator._remaining--;
+        enumerator._result[i] = entry;
+      }
+    };
+
+    lib$es6$promise$enumerator$$Enumerator.prototype._settledAt = function(state, i, value) {
+      var enumerator = this;
+      var promise = enumerator.promise;
+
+      if (promise._state === lib$es6$promise$$internal$$PENDING) {
+        enumerator._remaining--;
+
+        if (state === lib$es6$promise$$internal$$REJECTED) {
+          lib$es6$promise$$internal$$reject(promise, value);
+        } else {
+          enumerator._result[i] = value;
+        }
+      }
+
+      if (enumerator._remaining === 0) {
+        lib$es6$promise$$internal$$fulfill(promise, enumerator._result);
+      }
+    };
+
+    lib$es6$promise$enumerator$$Enumerator.prototype._willSettleAt = function(promise, i) {
+      var enumerator = this;
+
+      lib$es6$promise$$internal$$subscribe(promise, undefined, function(value) {
+        enumerator._settledAt(lib$es6$promise$$internal$$FULFILLED, i, value);
+      }, function(reason) {
+        enumerator._settledAt(lib$es6$promise$$internal$$REJECTED, i, reason);
+      });
+    };
+    function lib$es6$promise$promise$all$$all(entries) {
+      return new lib$es6$promise$enumerator$$default(this, entries).promise;
+    }
+    var lib$es6$promise$promise$all$$default = lib$es6$promise$promise$all$$all;
+    function lib$es6$promise$promise$race$$race(entries) {
+      /*jshint validthis:true */
+      var Constructor = this;
+
+      var promise = new Constructor(lib$es6$promise$$internal$$noop);
+
+      if (!lib$es6$promise$utils$$isArray(entries)) {
+        lib$es6$promise$$internal$$reject(promise, new TypeError('You must pass an array to race.'));
+        return promise;
+      }
+
+      var length = entries.length;
+
+      function onFulfillment(value) {
+        lib$es6$promise$$internal$$resolve(promise, value);
+      }
+
+      function onRejection(reason) {
+        lib$es6$promise$$internal$$reject(promise, reason);
+      }
+
+      for (var i = 0; promise._state === lib$es6$promise$$internal$$PENDING && i < length; i++) {
+        lib$es6$promise$$internal$$subscribe(Constructor.resolve(entries[i]), undefined, onFulfillment, onRejection);
+      }
+
+      return promise;
+    }
+    var lib$es6$promise$promise$race$$default = lib$es6$promise$promise$race$$race;
+    function lib$es6$promise$promise$resolve$$resolve(object) {
+      /*jshint validthis:true */
+      var Constructor = this;
+
+      if (object && typeof object === 'object' && object.constructor === Constructor) {
+        return object;
+      }
+
+      var promise = new Constructor(lib$es6$promise$$internal$$noop);
+      lib$es6$promise$$internal$$resolve(promise, object);
+      return promise;
+    }
+    var lib$es6$promise$promise$resolve$$default = lib$es6$promise$promise$resolve$$resolve;
+    function lib$es6$promise$promise$reject$$reject(reason) {
+      /*jshint validthis:true */
+      var Constructor = this;
+      var promise = new Constructor(lib$es6$promise$$internal$$noop);
+      lib$es6$promise$$internal$$reject(promise, reason);
+      return promise;
+    }
+    var lib$es6$promise$promise$reject$$default = lib$es6$promise$promise$reject$$reject;
+
+    var lib$es6$promise$promise$$counter = 0;
+
+    function lib$es6$promise$promise$$needsResolver() {
+      throw new TypeError('You must pass a resolver function as the first argument to the promise constructor');
+    }
+
+    function lib$es6$promise$promise$$needsNew() {
+      throw new TypeError("Failed to construct 'Promise': Please use the 'new' operator, this object constructor cannot be called as a function.");
+    }
+
+    var lib$es6$promise$promise$$default = lib$es6$promise$promise$$Promise;
+    /**
+      Promise objects represent the eventual result of an asynchronous operation. The
+      primary way of interacting with a promise is through its `then` method, which
+      registers callbacks to receive either a promise's eventual value or the reason
+      why the promise cannot be fulfilled.
+
+      Terminology
+      -----------
+
+      - `promise` is an object or function with a `then` method whose behavior conforms to this specification.
+      - `thenable` is an object or function that defines a `then` method.
+      - `value` is any legal JavaScript value (including undefined, a thenable, or a promise).
+      - `exception` is a value that is thrown using the throw statement.
+      - `reason` is a value that indicates why a promise was rejected.
+      - `settled` the final resting state of a promise, fulfilled or rejected.
+
+      A promise can be in one of three states: pending, fulfilled, or rejected.
+
+      Promises that are fulfilled have a fulfillment value and are in the fulfilled
+      state.  Promises that are rejected have a rejection reason and are in the
+      rejected state.  A fulfillment value is never a thenable.
+
+      Promises can also be said to *resolve* a value.  If this value is also a
+      promise, then the original promise's settled state will match the value's
+      settled state.  So a promise that *resolves* a promise that rejects will
+      itself reject, and a promise that *resolves* a promise that fulfills will
+      itself fulfill.
+
+
+      Basic Usage:
+      ------------
+
+      ```js
+      var promise = new Promise(function(resolve, reject) {
+        // on success
+        resolve(value);
+
+        // on failure
+        reject(reason);
+      });
+
+      promise.then(function(value) {
+        // on fulfillment
+      }, function(reason) {
+        // on rejection
+      });
+      ```
+
+      Advanced Usage:
+      ---------------
+
+      Promises shine when abstracting away asynchronous interactions such as
+      `XMLHttpRequest`s.
+
+      ```js
+      function getJSON(url) {
+        return new Promise(function(resolve, reject){
+          var xhr = new XMLHttpRequest();
+
+          xhr.open('GET', url);
+          xhr.onreadystatechange = handler;
+          xhr.responseType = 'json';
+          xhr.setRequestHeader('Accept', 'application/json');
+          xhr.send();
+
+          function handler() {
+            if (this.readyState === this.DONE) {
+              if (this.status === 200) {
+                resolve(this.response);
+              } else {
+                reject(new Error('getJSON: `' + url + '` failed with status: [' + this.status + ']'));
+              }
+            }
+          };
+        });
+      }
+
+      getJSON('/posts.json').then(function(json) {
+        // on fulfillment
+      }, function(reason) {
+        // on rejection
+      });
+      ```
+
+      Unlike callbacks, promises are great composable primitives.
+
+      ```js
+      Promise.all([
+        getJSON('/posts'),
+        getJSON('/comments')
+      ]).then(function(values){
+        values[0] // => postsJSON
+        values[1] // => commentsJSON
+
+        return values;
+      });
+      ```
+
+      @class Promise
+      @param {function} resolver
+      Useful for tooling.
+      @constructor
+    */
+    function lib$es6$promise$promise$$Promise(resolver) {
+      this._id = lib$es6$promise$promise$$counter++;
+      this._state = undefined;
+      this._result = undefined;
+      this._subscribers = [];
+
+      if (lib$es6$promise$$internal$$noop !== resolver) {
+        if (!lib$es6$promise$utils$$isFunction(resolver)) {
+          lib$es6$promise$promise$$needsResolver();
+        }
+
+        if (!(this instanceof lib$es6$promise$promise$$Promise)) {
+          lib$es6$promise$promise$$needsNew();
+        }
+
+        lib$es6$promise$$internal$$initializePromise(this, resolver);
+      }
+    }
+
+    lib$es6$promise$promise$$Promise.all = lib$es6$promise$promise$all$$default;
+    lib$es6$promise$promise$$Promise.race = lib$es6$promise$promise$race$$default;
+    lib$es6$promise$promise$$Promise.resolve = lib$es6$promise$promise$resolve$$default;
+    lib$es6$promise$promise$$Promise.reject = lib$es6$promise$promise$reject$$default;
+    lib$es6$promise$promise$$Promise._setScheduler = lib$es6$promise$asap$$setScheduler;
+    lib$es6$promise$promise$$Promise._setAsap = lib$es6$promise$asap$$setAsap;
+    lib$es6$promise$promise$$Promise._asap = lib$es6$promise$asap$$asap;
+
+    lib$es6$promise$promise$$Promise.prototype = {
+      constructor: lib$es6$promise$promise$$Promise,
+
+    /**
+      The primary way of interacting with a promise is through its `then` method,
+      which registers callbacks to receive either a promise's eventual value or the
+      reason why the promise cannot be fulfilled.
+
+      ```js
+      findUser().then(function(user){
+        // user is available
+      }, function(reason){
+        // user is unavailable, and you are given the reason why
+      });
+      ```
+
+      Chaining
+      --------
+
+      The return value of `then` is itself a promise.  This second, 'downstream'
+      promise is resolved with the return value of the first promise's fulfillment
+      or rejection handler, or rejected if the handler throws an exception.
+
+      ```js
+      findUser().then(function (user) {
+        return user.name;
+      }, function (reason) {
+        return 'default name';
+      }).then(function (userName) {
+        // If `findUser` fulfilled, `userName` will be the user's name, otherwise it
+        // will be `'default name'`
+      });
+
+      findUser().then(function (user) {
+        throw new Error('Found user, but still unhappy');
+      }, function (reason) {
+        throw new Error('`findUser` rejected and we're unhappy');
+      }).then(function (value) {
+        // never reached
+      }, function (reason) {
+        // if `findUser` fulfilled, `reason` will be 'Found user, but still unhappy'.
+        // If `findUser` rejected, `reason` will be '`findUser` rejected and we're unhappy'.
+      });
+      ```
+      If the downstream promise does not specify a rejection handler, rejection reasons will be propagated further downstream.
+
+      ```js
+      findUser().then(function (user) {
+        throw new PedagogicalException('Upstream error');
+      }).then(function (value) {
+        // never reached
+      }).then(function (value) {
+        // never reached
+      }, function (reason) {
+        // The `PedgagocialException` is propagated all the way down to here
+      });
+      ```
+
+      Assimilation
+      ------------
+
+      Sometimes the value you want to propagate to a downstream promise can only be
+      retrieved asynchronously. This can be achieved by returning a promise in the
+      fulfillment or rejection handler. The downstream promise will then be pending
+      until the returned promise is settled. This is called *assimilation*.
+
+      ```js
+      findUser().then(function (user) {
+        return findCommentsByAuthor(user);
+      }).then(function (comments) {
+        // The user's comments are now available
+      });
+      ```
+
+      If the assimliated promise rejects, then the downstream promise will also reject.
+
+      ```js
+      findUser().then(function (user) {
+        return findCommentsByAuthor(user);
+      }).then(function (comments) {
+        // If `findCommentsByAuthor` fulfills, we'll have the value here
+      }, function (reason) {
+        // If `findCommentsByAuthor` rejects, we'll have the reason here
+      });
+      ```
+
+      Simple Example
+      --------------
+
+      Synchronous Example
+
+      ```javascript
+      var result;
+
+      try {
+        result = findResult();
+        // success
+      } catch(reason) {
+        // failure
+      }
+      ```
+
+      Errback Example
+
+      ```js
+      findResult(function(result, err){
+        if (err) {
+          // failure
+        } else {
+          // success
+        }
+      });
+      ```
+
+      Promise Example;
+
+      ```javascript
+      findResult().then(function(result){
+        // success
+      }, function(reason){
+        // failure
+      });
+      ```
+
+      Advanced Example
+      --------------
+
+      Synchronous Example
+
+      ```javascript
+      var author, books;
+
+      try {
+        author = findAuthor();
+        books  = findBooksByAuthor(author);
+        // success
+      } catch(reason) {
+        // failure
+      }
+      ```
+
+      Errback Example
+
+      ```js
+
+      function foundBooks(books) {
+
+      }
+
+      function failure(reason) {
+
+      }
+
+      findAuthor(function(author, err){
+        if (err) {
+          failure(err);
+          // failure
+        } else {
+          try {
+            findBoooksByAuthor(author, function(books, err) {
+              if (err) {
+                failure(err);
+              } else {
+                try {
+                  foundBooks(books);
+                } catch(reason) {
+                  failure(reason);
+                }
+              }
+            });
+          } catch(error) {
+            failure(err);
+          }
+          // success
+        }
+      });
+      ```
+
+      Promise Example;
+
+      ```javascript
+      findAuthor().
+        then(findBooksByAuthor).
+        then(function(books){
+          // found books
+      }).catch(function(reason){
+        // something went wrong
+      });
+      ```
+
+      @method then
+      @param {Function} onFulfilled
+      @param {Function} onRejected
+      Useful for tooling.
+      @return {Promise}
+    */
+      then: function(onFulfillment, onRejection) {
+        var parent = this;
+        var state = parent._state;
+
+        if (state === lib$es6$promise$$internal$$FULFILLED && !onFulfillment || state === lib$es6$promise$$internal$$REJECTED && !onRejection) {
+          return this;
+        }
+
+        var child = new this.constructor(lib$es6$promise$$internal$$noop);
+        var result = parent._result;
+
+        if (state) {
+          var callback = arguments[state - 1];
+          lib$es6$promise$asap$$asap(function(){
+            lib$es6$promise$$internal$$invokeCallback(state, child, callback, result);
+          });
+        } else {
+          lib$es6$promise$$internal$$subscribe(parent, child, onFulfillment, onRejection);
+        }
+
+        return child;
+      },
+
+    /**
+      `catch` is simply sugar for `then(undefined, onRejection)` which makes it the same
+      as the catch block of a try/catch statement.
+
+      ```js
+      function findAuthor(){
+        throw new Error('couldn't find that author');
+      }
+
+      // synchronous
+      try {
+        findAuthor();
+      } catch(reason) {
+        // something went wrong
+      }
+
+      // async with promises
+      findAuthor().catch(function(reason){
+        // something went wrong
+      });
+      ```
+
+      @method catch
+      @param {Function} onRejection
+      Useful for tooling.
+      @return {Promise}
+    */
+      'catch': function(onRejection) {
+        return this.then(null, onRejection);
+      }
+    };
+    function lib$es6$promise$polyfill$$polyfill() {
+      var local;
+
+      if (typeof global !== 'undefined') {
+          local = global;
+      } else if (typeof self !== 'undefined') {
+          local = self;
+      } else {
+          try {
+              local = Function('return this')();
+          } catch (e) {
+              throw new Error('polyfill failed because global object is unavailable in this environment');
+          }
+      }
+
+      var P = local.Promise;
+
+      if (P && Object.prototype.toString.call(P.resolve()) === '[object Promise]' && !P.cast) {
+        return;
+      }
+
+      local.Promise = lib$es6$promise$promise$$default;
+    }
+    var lib$es6$promise$polyfill$$default = lib$es6$promise$polyfill$$polyfill;
+
+    var lib$es6$promise$umd$$ES6Promise = {
+      'Promise': lib$es6$promise$promise$$default,
+      'polyfill': lib$es6$promise$polyfill$$default
+    };
+
+    /* global define:true module:true window: true */
+    if (typeof define === 'function' && define['amd']) {
+      define(function() { return lib$es6$promise$umd$$ES6Promise; });
+    } else if (typeof module !== 'undefined' && module['exports']) {
+      module['exports'] = lib$es6$promise$umd$$ES6Promise;
+    } else if (typeof this !== 'undefined') {
+      this['ES6Promise'] = lib$es6$promise$umd$$ES6Promise;
+    }
+
+    lib$es6$promise$polyfill$$default();
+}).call(this);
+
+
+}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+
+},{"_process":18}],46:[function(require,module,exports){
 (function (process){
 var Stream = require('stream')
 var splitter = /^(.+)\/([0-9]+)$/
@@ -7955,7 +7929,6 @@ module.exports.watchPortNames = function(listener) {
     if (!err) {
       midi = m
       midi.addEventListener('statechange', handleEvent) 
-      listener(getPortNames(midi))
     }
   })
 
@@ -8099,7 +8072,7 @@ function normalizeOpts(opts) {
 }
 }).call(this,require('_process'))
 
-},{"_process":28,"stream":42}],47:[function(require,module,exports){
+},{"_process":18,"stream":32}],47:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -8193,7 +8166,7 @@ var PlayableNode = (function () {
 
 module.exports = PlayableNode;
 
-},{"./audiocontext":1,"./master":9,"./playback":49,"es6-promise":19}],48:[function(require,module,exports){
+},{"./audiocontext":1,"./master":9,"./playback":49,"es6-promise":45}],48:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -8320,7 +8293,7 @@ var PlayableNode = (function () {
 
 module.exports = PlayableNode;
 
-},{"./audiocontext":1,"./master":9,"./playback":49,"es6-promise":19}],49:[function(require,module,exports){
+},{"./audiocontext":1,"./master":9,"./playback":49,"es6-promise":45}],49:[function(require,module,exports){
 "use strict";
 
 var playingNodes = [];
