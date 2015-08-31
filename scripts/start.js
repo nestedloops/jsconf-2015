@@ -1,5 +1,4 @@
 var nodeStatic = require('node-static');
-
 var fileServer = new nodeStatic.Server('.');
 
 require('http').createServer(function (request, response) {
