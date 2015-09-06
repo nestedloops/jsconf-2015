@@ -1,6 +1,7 @@
 // const Clip = require('./clip');
 const KillClip = require('./killclip');
 const StopClip = require('./stopclip');
+const StopVisClip = require('./stop-vis-clip');
 const ImmediateClip = require('./immediateclip');
 const VideoNode = require('./playablevideonode');
 
@@ -62,6 +63,8 @@ module.exports = {
   81: new VideoNode('videos/720p/emberconf3.m4v'),
   82: new VideoNode('videos/kahlil.mp4'),
 
+  // ROW 8
+  112: new StopVisClip(),
 	// Leon
   117: new ImmediateClip({location: 'samples/150809leon4js.mp3', gain: 1, isUntouchable: true}),
 	// Kill buttons
