@@ -46,7 +46,7 @@ class PlayableNode {
     }
     this.bufferNode.connect(this.out);
     this.bufferNode.addEventListener('ended', this.stop.bind(this));
-    this.out.gain.exponentialRampToValueAtTime(this.options.gain || 1, context.currentTime + .00001);
+    this.out.gain.value = 1;
     this.bufferNode.start();
     master.isolateAnalyser(this);
     return this.bufferNode;

@@ -1,17 +1,20 @@
 const analyser = require('./master').analyser;
 const canvas = document.getElementById('visualisation');
 const ctx = canvas.getContext('2d');
+const JSCONF_HUE = 300;
+const INITIAL_DELAY = 120;
+const INITIAL_HEIGHT_FACTOR = 2;
 
 let bars = Array(300);
 let barCount = 60;
 let forward = true;
 let lineWidth = 6;
 let lineGap = 5;
-let heightFactor = 3;
-let delay = 120;
+let heightFactor = INITIAL_HEIGHT_FACTOR;
+let delay = INITIAL_DELAY;
 let animate = 'auto';
 let animateSwitch = 1000;
-let hue = 300;
+let hue = JSCONF_HUE;
 let width, height;
 
 const render = () => {
@@ -94,7 +97,7 @@ const getColor = (val) => {
   } else {
     colors = Array( 10 );
     colors[ 0 ] = '#111';
-    var lightness = 49;
+    var lightness = 79;
     for ( var j = 9; j >= 1; j-- ) {
       colors[ j ] = 'hsl(' + hue + ', 100%, ' + lightness + '%)';
       lightness -= 5;
@@ -159,5 +162,23 @@ module.exports = {
     fullScreen();
     flip();
     requestAnimationFrame(render);
+  },
+
+  makeColorful () {
+    hue = 0;
+    delay = 50;
+  },
+
+  makeJSConfColors () {
+    hue = JSCONF_HUE;
+    delay = INITIAL_DELAY;
+  },
+
+  makeBig () {
+    heightFactor = 3.5;
+  },
+
+  makeNormalSize () {
+    heightFactor = INITIAL_HEIGHT_FACTOR;
   }
 };

@@ -77,7 +77,7 @@ var BeatClock = (function (_EventEmitter) {
 
 module.exports = BeatClock;
 
-},{"./audiocontext":1,"dilla":36,"events":15}],3:[function(require,module,exports){
+},{"./audiocontext":1,"dilla":38,"events":17}],3:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -171,7 +171,7 @@ var Clip = (function () {
 module.exports = Clip;
 module.exports.States = CLIP_STATES;
 
-},{"./playablenode":47}],4:[function(require,module,exports){
+},{"./playablenode":49}],4:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -267,7 +267,7 @@ module.exports = {
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./mappings":8,"web-midi":46}],5:[function(require,module,exports){
+},{"./mappings":10,"web-midi":48}],5:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -316,7 +316,7 @@ var ImmediateClip = (function (_Clip) {
 
 module.exports = ImmediateClip;
 
-},{"./clip":3,"./playablenode":47}],6:[function(require,module,exports){
+},{"./clip":3,"./playablenode":49}],6:[function(require,module,exports){
 'use strict';
 
 var BeatClock = require('./beatclock');
@@ -380,7 +380,7 @@ Promise.all(loadAllClips).then(function () {
 // };
 // requestAnimationFrame(draw);
 
-},{"./beatclock":2,"./controller":4,"./mappings":8,"./scheduler":50,"./visualisation":53,"es6-promise":45}],7:[function(require,module,exports){
+},{"./beatclock":2,"./controller":4,"./mappings":10,"./scheduler":52,"./visualisation":55,"es6-promise":47}],7:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -435,13 +435,139 @@ var KillClip = (function (_Clip) {
 
 module.exports = KillClip;
 
-},{"./clip":3,"./playback":49}],8:[function(require,module,exports){
+},{"./clip":3,"./playback":51}],8:[function(require,module,exports){
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Clip = require('./clip');
+var vis = require('./visualisation');
+
+var MakeBigClip = (function (_Clip) {
+  _inherits(MakeBigClip, _Clip);
+
+  function MakeBigClip() {
+    _classCallCheck(this, MakeBigClip);
+
+    _get(Object.getPrototypeOf(MakeBigClip.prototype), 'constructor', this).call(this);
+    this.isBig = false;
+  }
+
+  _createClass(MakeBigClip, [{
+    key: 'touch',
+    value: function touch() {
+      this.isBig = !this.isBig;
+
+      if (this.isBig) {
+        vis.makeBig();
+      } else {
+        vis.makeNormalSize();
+      }
+    }
+  }, {
+    key: 'isScheduled',
+    value: function isScheduled() {
+      return false;
+    }
+  }, {
+    key: 'isStopped',
+    value: function isStopped() {
+      return false;
+    }
+  }, {
+    key: 'isIdle',
+    value: function isIdle() {
+      return false;
+    }
+  }, {
+    key: 'isPlaying',
+    value: function isPlaying() {
+      return this.isBig;
+    }
+  }]);
+
+  return MakeBigClip;
+})(Clip);
+
+module.exports = MakeBigClip;
+
+},{"./clip":3,"./visualisation":55}],9:[function(require,module,exports){
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Clip = require('./clip');
+var vis = require('./visualisation');
+
+var MakeColorsClip = (function (_Clip) {
+  _inherits(MakeColorsClip, _Clip);
+
+  function MakeColorsClip() {
+    _classCallCheck(this, MakeColorsClip);
+
+    _get(Object.getPrototypeOf(MakeColorsClip.prototype), 'constructor', this).call(this);
+    this.isColorful = false;
+  }
+
+  _createClass(MakeColorsClip, [{
+    key: 'touch',
+    value: function touch() {
+      this.isColorful = !this.isColorful;
+
+      if (this.isColorful) {
+        vis.makeColorful();
+      } else {
+        vis.makeJSConfColors();
+      }
+    }
+  }, {
+    key: 'isScheduled',
+    value: function isScheduled() {
+      return false;
+    }
+  }, {
+    key: 'isStopped',
+    value: function isStopped() {
+      return false;
+    }
+  }, {
+    key: 'isIdle',
+    value: function isIdle() {
+      return false;
+    }
+  }, {
+    key: 'isPlaying',
+    value: function isPlaying() {
+      return this.isColorful;
+    }
+  }]);
+
+  return MakeColorsClip;
+})(Clip);
+
+module.exports = MakeColorsClip;
+
+},{"./clip":3,"./visualisation":55}],10:[function(require,module,exports){
 // const Clip = require('./clip');
 'use strict';
 
 var KillClip = require('./killclip');
 var StopClip = require('./stopclip');
 var StopVisClip = require('./stop-vis-clip');
+var MakeColorsClip = require('./make-colors-clip');
+var MakeBigClip = require('./make-big-clip');
 var ImmediateClip = require('./immediateclip');
 var VideoNode = require('./playablevideonode');
 
@@ -475,8 +601,8 @@ module.exports = {
   35: new VideoNode('videos/720p/nolan1.m4v'),
   36: new VideoNode('videos/720p/nolan2.m4v'),
   37: new VideoNode('videos/720p/abramov1.m4v'),
-  39: new VideoNode('videos/720p/abramov2.m4v'),
-  40: new VideoNode('videos/720p/crockford12.m4v'),
+  38: new VideoNode('videos/720p/abramov2.m4v'),
+  39: new VideoNode('videos/720p/crockford12.m4v'),
 
   // ROW 4
   48: new VideoNode('videos/720p/rockbot1.m4v'),
@@ -505,6 +631,8 @@ module.exports = {
 
   // ROW 8
   112: new StopVisClip(),
+  113: new MakeColorsClip(),
+  114: new MakeBigClip(),
   // Leon
   117: new ImmediateClip({ location: 'samples/150809leon4js.mp3', gain: 1, isUntouchable: true }),
   // Kill buttons
@@ -512,7 +640,7 @@ module.exports = {
   119: new KillClip({})
 };
 
-},{"./immediateclip":5,"./killclip":7,"./playablevideonode":48,"./stop-vis-clip":51,"./stopclip":52}],9:[function(require,module,exports){
+},{"./immediateclip":5,"./killclip":7,"./make-big-clip":8,"./make-colors-clip":9,"./playablevideonode":50,"./stop-vis-clip":53,"./stopclip":54}],11:[function(require,module,exports){
 'use strict';
 
 var context = require('./audiocontext');
@@ -553,9 +681,9 @@ module.exports.release = function () {
   }
 };
 
-},{"./audiocontext":1}],10:[function(require,module,exports){
+},{"./audiocontext":1}],12:[function(require,module,exports){
 
-},{}],11:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 /*!
  * The buffer module from node.js, for the browser.
  *
@@ -2077,7 +2205,7 @@ function blitBuffer (src, dst, offset, length) {
   return i
 }
 
-},{"base64-js":12,"ieee754":13,"is-array":14}],12:[function(require,module,exports){
+},{"base64-js":14,"ieee754":15,"is-array":16}],14:[function(require,module,exports){
 var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
 ;(function (exports) {
@@ -2203,7 +2331,7 @@ var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 	exports.fromByteArray = uint8ToBase64
 }(typeof exports === 'undefined' ? (this.base64js = {}) : exports))
 
-},{}],13:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = nBytes * 8 - mLen - 1
@@ -2289,7 +2417,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],14:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 
 /**
  * isArray
@@ -2324,7 +2452,7 @@ module.exports = isArray || function (val) {
   return !! val && '[object Array]' == str.call(val);
 };
 
-},{}],15:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -2627,7 +2755,7 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],16:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -2652,12 +2780,12 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],17:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 module.exports = Array.isArray || function (arr) {
   return Object.prototype.toString.call(arr) == '[object Array]';
 };
 
-},{}],18:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -2749,10 +2877,10 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],19:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 module.exports = require("./lib/_stream_duplex.js")
 
-},{"./lib/_stream_duplex.js":20}],20:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":22}],22:[function(require,module,exports){
 // a duplex stream is just a stream that is both readable and writable.
 // Since JS doesn't have multiple prototypal inheritance, this class
 // prototypally inherits from Readable, and then parasitically from
@@ -2836,7 +2964,7 @@ function forEach (xs, f) {
   }
 }
 
-},{"./_stream_readable":22,"./_stream_writable":24,"core-util-is":25,"inherits":16,"process-nextick-args":26}],21:[function(require,module,exports){
+},{"./_stream_readable":24,"./_stream_writable":26,"core-util-is":27,"inherits":18,"process-nextick-args":28}],23:[function(require,module,exports){
 // a passthrough stream.
 // basically just the most minimal sort of Transform stream.
 // Every written chunk gets output as-is.
@@ -2865,7 +2993,7 @@ PassThrough.prototype._transform = function(chunk, encoding, cb) {
   cb(null, chunk);
 };
 
-},{"./_stream_transform":23,"core-util-is":25,"inherits":16}],22:[function(require,module,exports){
+},{"./_stream_transform":25,"core-util-is":27,"inherits":18}],24:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -3829,7 +3957,7 @@ function indexOf (xs, x) {
 
 }).call(this,require('_process'))
 
-},{"./_stream_duplex":20,"_process":18,"buffer":11,"core-util-is":25,"events":15,"inherits":16,"isarray":17,"process-nextick-args":26,"string_decoder/":33,"util":10}],23:[function(require,module,exports){
+},{"./_stream_duplex":22,"_process":20,"buffer":13,"core-util-is":27,"events":17,"inherits":18,"isarray":19,"process-nextick-args":28,"string_decoder/":35,"util":12}],25:[function(require,module,exports){
 // a transform stream is a readable/writable stream where you do
 // something with the data.  Sometimes it's called a "filter",
 // but that's not a great name for it, since that implies a thing where
@@ -4028,7 +4156,7 @@ function done(stream, er) {
   return stream.push(null);
 }
 
-},{"./_stream_duplex":20,"core-util-is":25,"inherits":16}],24:[function(require,module,exports){
+},{"./_stream_duplex":22,"core-util-is":27,"inherits":18}],26:[function(require,module,exports){
 // A bit simpler than readable streams.
 // Implement an async ._write(chunk, cb), and it'll handle all
 // the drain event emission and buffering.
@@ -4550,7 +4678,7 @@ function endWritable(stream, state, cb) {
   state.ended = true;
 }
 
-},{"./_stream_duplex":20,"buffer":11,"core-util-is":25,"events":15,"inherits":16,"process-nextick-args":26,"util-deprecate":27}],25:[function(require,module,exports){
+},{"./_stream_duplex":22,"buffer":13,"core-util-is":27,"events":17,"inherits":18,"process-nextick-args":28,"util-deprecate":29}],27:[function(require,module,exports){
 (function (Buffer){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -4661,7 +4789,7 @@ function objectToString(o) {
 }
 }).call(this,require("buffer").Buffer)
 
-},{"buffer":11}],26:[function(require,module,exports){
+},{"buffer":13}],28:[function(require,module,exports){
 (function (process){
 'use strict';
 module.exports = nextTick;
@@ -4679,7 +4807,7 @@ function nextTick(fn) {
 
 }).call(this,require('_process'))
 
-},{"_process":18}],27:[function(require,module,exports){
+},{"_process":20}],29:[function(require,module,exports){
 (function (global){
 
 /**
@@ -4746,10 +4874,10 @@ function config (name) {
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],28:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 module.exports = require("./lib/_stream_passthrough.js")
 
-},{"./lib/_stream_passthrough.js":21}],29:[function(require,module,exports){
+},{"./lib/_stream_passthrough.js":23}],31:[function(require,module,exports){
 var Stream = (function (){
   try {
     return require('st' + 'ream'); // hack to fix a circular dependency issue when used with browserify
@@ -4763,13 +4891,13 @@ exports.Duplex = require('./lib/_stream_duplex.js');
 exports.Transform = require('./lib/_stream_transform.js');
 exports.PassThrough = require('./lib/_stream_passthrough.js');
 
-},{"./lib/_stream_duplex.js":20,"./lib/_stream_passthrough.js":21,"./lib/_stream_readable.js":22,"./lib/_stream_transform.js":23,"./lib/_stream_writable.js":24}],30:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":22,"./lib/_stream_passthrough.js":23,"./lib/_stream_readable.js":24,"./lib/_stream_transform.js":25,"./lib/_stream_writable.js":26}],32:[function(require,module,exports){
 module.exports = require("./lib/_stream_transform.js")
 
-},{"./lib/_stream_transform.js":23}],31:[function(require,module,exports){
+},{"./lib/_stream_transform.js":25}],33:[function(require,module,exports){
 module.exports = require("./lib/_stream_writable.js")
 
-},{"./lib/_stream_writable.js":24}],32:[function(require,module,exports){
+},{"./lib/_stream_writable.js":26}],34:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -4898,7 +5026,7 @@ Stream.prototype.pipe = function(dest, options) {
   return dest;
 };
 
-},{"events":15,"inherits":16,"readable-stream/duplex.js":19,"readable-stream/passthrough.js":28,"readable-stream/readable.js":29,"readable-stream/transform.js":30,"readable-stream/writable.js":31}],33:[function(require,module,exports){
+},{"events":17,"inherits":18,"readable-stream/duplex.js":21,"readable-stream/passthrough.js":30,"readable-stream/readable.js":31,"readable-stream/transform.js":32,"readable-stream/writable.js":33}],35:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -5121,14 +5249,14 @@ function base64DetectIncompleteChar(buffer) {
   this.charLength = this.charReceived ? 3 : 0;
 }
 
-},{"buffer":11}],34:[function(require,module,exports){
+},{"buffer":13}],36:[function(require,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],35:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 (function (process,global){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -5719,7 +5847,7 @@ function hasOwnProperty(obj, prop) {
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./support/isBuffer":34,"_process":18,"inherits":16}],36:[function(require,module,exports){
+},{"./support/isBuffer":36,"_process":20,"inherits":18}],38:[function(require,module,exports){
 var events = require('events');
 var inherits = require('util').inherits;
 var bopper = require('bopper');
@@ -5980,7 +6108,7 @@ proto.setLoopLength = function setLoopLength (bars) {
 
 module.exports = Dilla;
 
-},{"./lib/checkValid":37,"./lib/positionHelper":38,"./vendor/ditty":44,"bopper":39,"dilla-expressions":42,"events":15,"util":35}],37:[function(require,module,exports){
+},{"./lib/checkValid":39,"./lib/positionHelper":40,"./vendor/ditty":46,"bopper":41,"dilla-expressions":44,"events":17,"util":37}],39:[function(require,module,exports){
 var checkValid = {
 
   'number': function checkValidNumber (name, value) {
@@ -6003,7 +6131,7 @@ var checkValid = {
 
 module.exports = checkValid;
 
-},{}],38:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 var checkValid = require('./checkValid');
 
 var positionHelper = {
@@ -6041,7 +6169,7 @@ var positionHelper = {
 
 module.exports = positionHelper;
 
-},{"./checkValid":37}],39:[function(require,module,exports){
+},{"./checkValid":39}],41:[function(require,module,exports){
 var Stream = require('stream')
 var Event = require('geval')
 
@@ -6207,7 +6335,7 @@ function bopperTick(e){
   var state = this._state
   this.schedule(state.cycleLength * state.preCycle)
 }
-},{"geval":41,"stream":32,"util":35}],40:[function(require,module,exports){
+},{"geval":43,"stream":34,"util":37}],42:[function(require,module,exports){
 module.exports = Event
 
 function Event() {
@@ -6235,7 +6363,7 @@ function Event() {
     }
 }
 
-},{}],41:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 var Event = require('./event.js')
 
 module.exports = Source
@@ -6248,7 +6376,7 @@ function Source(broadcaster) {
     return tuple.listen
 }
 
-},{"./event.js":40}],42:[function(require,module,exports){
+},{"./event.js":42}],44:[function(require,module,exports){
 var memoize = require('lodash.memoize');
 
 function hashArgs () {
@@ -6411,7 +6539,7 @@ function expressions (notes, options) {
 
 module.exports = expressions;
 
-},{"lodash.memoize":43}],43:[function(require,module,exports){
+},{"lodash.memoize":45}],45:[function(require,module,exports){
 /**
  * lodash 3.0.4 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -6580,7 +6708,7 @@ memoize.Cache = MapCache;
 
 module.exports = memoize;
 
-},{}],44:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 module.exports = Ditty
 
 var Stream = require('stream')
@@ -6779,7 +6907,7 @@ function shouldSendImmediately(message, loop){
   return message.event === 'stop' && (!loop || !loop.length)
 }
 
-},{"stream":32,"util":35}],45:[function(require,module,exports){
+},{"stream":34,"util":37}],47:[function(require,module,exports){
 (function (process,global){
 /*!
  * @overview es6-promise - a tiny implementation of Promises/A+.
@@ -7756,7 +7884,7 @@ function shouldSendImmediately(message, loop){
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"_process":18}],46:[function(require,module,exports){
+},{"_process":20}],48:[function(require,module,exports){
 (function (process){
 var Stream = require('stream')
 var splitter = /^(.+)\/([0-9]+)$/
@@ -8076,7 +8204,7 @@ function normalizeOpts(opts) {
 }
 }).call(this,require('_process'))
 
-},{"_process":18,"stream":32}],47:[function(require,module,exports){
+},{"_process":20,"stream":34}],49:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -8146,7 +8274,7 @@ var PlayableNode = (function () {
       }
       this.bufferNode.connect(this.out);
       this.bufferNode.addEventListener('ended', this.stop.bind(this));
-      this.out.gain.exponentialRampToValueAtTime(this.options.gain || 1, context.currentTime + .00001);
+      this.out.gain.value = 1;
       this.bufferNode.start();
       master.isolateAnalyser(this);
       return this.bufferNode;
@@ -8170,7 +8298,7 @@ var PlayableNode = (function () {
 
 module.exports = PlayableNode;
 
-},{"./audiocontext":1,"./master":9,"./playback":49,"es6-promise":45}],48:[function(require,module,exports){
+},{"./audiocontext":1,"./master":11,"./playback":51,"es6-promise":47}],50:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -8297,7 +8425,7 @@ var PlayableNode = (function () {
 
 module.exports = PlayableNode;
 
-},{"./audiocontext":1,"./master":9,"./playback":49,"es6-promise":45}],49:[function(require,module,exports){
+},{"./audiocontext":1,"./master":11,"./playback":51,"es6-promise":47}],51:[function(require,module,exports){
 "use strict";
 
 var playingNodes = [];
@@ -8328,7 +8456,7 @@ module.exports = {
   }
 };
 
-},{}],50:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -8374,7 +8502,7 @@ var Scheduler = (function () {
 
 module.exports = Scheduler;
 
-},{}],51:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -8436,7 +8564,7 @@ var StopVisClip = (function (_Clip) {
 
 module.exports = StopVisClip;
 
-},{"./clip":3}],52:[function(require,module,exports){
+},{"./clip":3}],54:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -8491,23 +8619,26 @@ var StopClip = (function (_Clip) {
 
 module.exports = StopClip;
 
-},{"./clip":3,"./playback":49}],53:[function(require,module,exports){
+},{"./clip":3,"./playback":51}],55:[function(require,module,exports){
 'use strict';
 
 var analyser = require('./master').analyser;
 var canvas = document.getElementById('visualisation');
 var ctx = canvas.getContext('2d');
+var JSCONF_HUE = 300;
+var INITIAL_DELAY = 120;
+var INITIAL_HEIGHT_FACTOR = 2;
 
 var bars = Array(300);
 var barCount = 60;
 var forward = true;
 var lineWidth = 6;
 var lineGap = 5;
-var heightFactor = 3;
-var delay = 120;
+var heightFactor = INITIAL_HEIGHT_FACTOR;
+var delay = INITIAL_DELAY;
 var animate = 'auto';
 var animateSwitch = 1000;
-var hue = 300;
+var hue = JSCONF_HUE;
 var width = undefined,
     height = undefined;
 
@@ -8569,7 +8700,7 @@ var getColor = function getColor(val) {
   } else {
     colors = Array(10);
     colors[0] = '#111';
-    var lightness = 49;
+    var lightness = 79;
     for (var j = 9; j >= 1; j--) {
       colors[j] = 'hsl(' + hue + ', 100%, ' + lightness + '%)';
       lightness -= 5;
@@ -8634,8 +8765,26 @@ module.exports = {
     fullScreen();
     flip();
     requestAnimationFrame(render);
+  },
+
+  makeColorful: function makeColorful() {
+    hue = 0;
+    delay = 50;
+  },
+
+  makeJSConfColors: function makeJSConfColors() {
+    hue = JSCONF_HUE;
+    delay = INITIAL_DELAY;
+  },
+
+  makeBig: function makeBig() {
+    heightFactor = 3.5;
+  },
+
+  makeNormalSize: function makeNormalSize() {
+    heightFactor = INITIAL_HEIGHT_FACTOR;
   }
 };
 
-},{"./master":9}]},{},[6])
+},{"./master":11}]},{},[6])
 //# sourceMappingURL=bundle.js.map

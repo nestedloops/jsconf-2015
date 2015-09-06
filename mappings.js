@@ -2,6 +2,8 @@
 const KillClip = require('./killclip');
 const StopClip = require('./stopclip');
 const StopVisClip = require('./stop-vis-clip');
+const MakeColorsClip = require('./make-colors-clip');
+const MakeBigClip = require('./make-big-clip');
 const ImmediateClip = require('./immediateclip');
 const VideoNode = require('./playablevideonode');
 
@@ -35,8 +37,8 @@ module.exports = {
   35: new VideoNode('videos/720p/nolan1.m4v'),
   36: new VideoNode('videos/720p/nolan2.m4v'),
   37: new VideoNode('videos/720p/abramov1.m4v'),
-  39: new VideoNode('videos/720p/abramov2.m4v'),
-  40: new VideoNode('videos/720p/crockford12.m4v'),
+  38: new VideoNode('videos/720p/abramov2.m4v'),
+  39: new VideoNode('videos/720p/crockford12.m4v'),
 
   // ROW 4
   48: new VideoNode('videos/720p/rockbot1.m4v'),
@@ -65,6 +67,8 @@ module.exports = {
 
   // ROW 8
   112: new StopVisClip(),
+  113: new MakeColorsClip(),
+  114: new MakeBigClip(),
 	// Leon
   117: new ImmediateClip({location: 'samples/150809leon4js.mp3', gain: 1, isUntouchable: true}),
 	// Kill buttons
