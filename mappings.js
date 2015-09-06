@@ -60,6 +60,7 @@ module.exports = {
   // ROW 6
   80: new VideoNode('videos/720p/emberconf1.m4v'),
   81: new VideoNode('videos/720p/emberconf3.m4v'),
+  82: new VideoNode('videos/kahlil.mp4'),
 
 	// Leon
   117: new ImmediateClip({location: 'samples/150809leon4js.mp3', gain: 1, isUntouchable: true}),
