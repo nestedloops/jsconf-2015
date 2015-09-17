@@ -22,8 +22,8 @@ module.exports = {
   // ROW 2
   // Verse 1
   16: new VideoNode('videos/720p/husain2.m4v'),
-  17: new VideoNode('videos/720p/emberconf2a.m4v'),
-  18: new VideoNode('videos/720p/emberconf2b.m4v'),
+  17: new VideoNode('videos/720p/emberconf2a.mp4'),
+  18: new VideoNode('videos/720p/emberconf2b.mp4'),
   19: new VideoNode('videos/720p/husain1.m4v'),
   20: new VideoNode('videos/720p/williams2.m4v'),
   21: new VideoNode('videos/720p/crockford9.m4v'),
