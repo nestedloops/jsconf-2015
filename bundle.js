@@ -380,7 +380,7 @@ Promise.all(loadAllClips).then(function () {
 // };
 // requestAnimationFrame(draw);
 
-},{"./beatclock":2,"./controller":4,"./mappings":10,"./scheduler":52,"./visualisation":55,"es6-promise":21}],7:[function(require,module,exports){
+},{"./beatclock":2,"./controller":4,"./mappings":10,"./scheduler":53,"./visualisation":56,"es6-promise":21}],7:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -497,7 +497,7 @@ var MakeBigClip = (function (_Clip) {
 
 module.exports = MakeBigClip;
 
-},{"./clip":3,"./visualisation":55}],9:[function(require,module,exports){
+},{"./clip":3,"./visualisation":56}],9:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -559,7 +559,7 @@ var MakeColorsClip = (function (_Clip) {
 
 module.exports = MakeColorsClip;
 
-},{"./clip":3,"./visualisation":55}],10:[function(require,module,exports){
+},{"./clip":3,"./visualisation":56}],10:[function(require,module,exports){
 // const Clip = require('./clip');
 'use strict';
 
@@ -570,6 +570,7 @@ var MakeColorsClip = require('./make-colors-clip');
 var MakeBigClip = require('./make-big-clip');
 var ImmediateClip = require('./immediateclip');
 var VideoNode = require('./playablevideonode');
+var PosterClip = require('./poster-clip');
 
 module.exports = {
   // ROW 1
@@ -630,18 +631,30 @@ module.exports = {
   82: new VideoNode('videos/720p/emberconf3.m4v'),
   83: new VideoNode('videos/kahlil.mp4'),
 
+  // ROW 7
+  96: new VideoNode('videos/720p/rockbot3.m4v'),
+  97: new VideoNode('videos/720p/reactconf1.m4v'),
+  98: new VideoNode('videos/720p/williams3.m4v'),
+  99: new VideoNode('videos/720p/crockford1.m4v'),
+  100: new VideoNode('videos/720p/crockford2.m4v'),
+  101: new VideoNode('videos/720p/crockford3.m4v'),
+  102: new VideoNode('videos/720p/rockbot2.m4v'),
+  103: new VideoNode('videos/720p/rockbot1.m4v'),
+
   // ROW 8
   112: new StopVisClip(),
   113: new MakeColorsClip(),
   114: new MakeBigClip(),
+  115: new PosterClip(),
+
   // Leon
-  117: new ImmediateClip({ location: 'samples/150809leon4js.mp3', gain: 1, isUntouchable: true }),
+  117: new ImmediateClip({ location: 'samples/150917-leon4js-backgroundvocals.mp3', gain: 1, isUntouchable: true }),
   // Kill buttons
   118: new StopClip({}),
   119: new KillClip({})
 };
 
-},{"./immediateclip":5,"./killclip":7,"./make-big-clip":8,"./make-colors-clip":9,"./playablevideonode":50,"./stop-vis-clip":53,"./stopclip":54}],11:[function(require,module,exports){
+},{"./immediateclip":5,"./killclip":7,"./make-big-clip":8,"./make-colors-clip":9,"./playablevideonode":50,"./poster-clip":52,"./stop-vis-clip":54,"./stopclip":55}],11:[function(require,module,exports){
 'use strict';
 
 var context = require('./audiocontext');
@@ -8472,6 +8485,68 @@ module.exports = {
 };
 
 },{}],52:[function(require,module,exports){
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Clip = require('./clip');
+var intro = document.getElementById('intro');
+
+var PosterClip = (function (_Clip) {
+  _inherits(PosterClip, _Clip);
+
+  function PosterClip() {
+    _classCallCheck(this, PosterClip);
+
+    _get(Object.getPrototypeOf(PosterClip.prototype), 'constructor', this).call(this);
+    this.isVisible = true;
+  }
+
+  _createClass(PosterClip, [{
+    key: 'touch',
+    value: function touch() {
+      this.isVisible = !this.isVisible;
+
+      if (this.isVisible) {
+        intro.style.opacity = 1;
+      } else {
+        intro.style.opacity = 0;
+      }
+    }
+  }, {
+    key: 'isScheduled',
+    value: function isScheduled() {
+      return false;
+    }
+  }, {
+    key: 'isStopped',
+    value: function isStopped() {
+      return false;
+    }
+  }, {
+    key: 'isIdle',
+    value: function isIdle() {
+      return false;
+    }
+  }, {
+    key: 'isPlaying',
+    value: function isPlaying() {
+      return this.isVisible;
+    }
+  }]);
+
+  return PosterClip;
+})(Clip);
+
+module.exports = PosterClip;
+
+},{"./clip":3}],53:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -8517,7 +8592,7 @@ var Scheduler = (function () {
 
 module.exports = Scheduler;
 
-},{}],53:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -8579,7 +8654,7 @@ var StopVisClip = (function (_Clip) {
 
 module.exports = StopVisClip;
 
-},{"./clip":3}],54:[function(require,module,exports){
+},{"./clip":3}],55:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -8634,7 +8709,7 @@ var StopClip = (function (_Clip) {
 
 module.exports = StopClip;
 
-},{"./clip":3,"./playback":51}],55:[function(require,module,exports){
+},{"./clip":3,"./playback":51}],56:[function(require,module,exports){
 'use strict';
 
 var analyser = require('./master').analyser;
