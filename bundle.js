@@ -171,7 +171,7 @@ var Clip = (function () {
 module.exports = Clip;
 module.exports.States = CLIP_STATES;
 
-},{"./playablenode":49}],4:[function(require,module,exports){
+},{"./playablenode":50}],4:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -316,7 +316,7 @@ var ImmediateClip = (function (_Clip) {
 
 module.exports = ImmediateClip;
 
-},{"./clip":3,"./playablenode":49}],6:[function(require,module,exports){
+},{"./clip":3,"./playablenode":50}],6:[function(require,module,exports){
 'use strict';
 
 var BeatClock = require('./beatclock');
@@ -380,7 +380,7 @@ Promise.all(loadAllClips).then(function () {
 // };
 // requestAnimationFrame(draw);
 
-},{"./beatclock":2,"./controller":4,"./mappings":10,"./scheduler":53,"./visualisation":56,"es6-promise":21}],7:[function(require,module,exports){
+},{"./beatclock":2,"./controller":4,"./mappings":10,"./scheduler":54,"./visualisation":57,"es6-promise":21}],7:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -435,7 +435,7 @@ var KillClip = (function (_Clip) {
 
 module.exports = KillClip;
 
-},{"./clip":3,"./playback":51}],8:[function(require,module,exports){
+},{"./clip":3,"./playback":52}],8:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -497,7 +497,7 @@ var MakeBigClip = (function (_Clip) {
 
 module.exports = MakeBigClip;
 
-},{"./clip":3,"./visualisation":56}],9:[function(require,module,exports){
+},{"./clip":3,"./visualisation":57}],9:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -559,7 +559,7 @@ var MakeColorsClip = (function (_Clip) {
 
 module.exports = MakeColorsClip;
 
-},{"./clip":3,"./visualisation":56}],10:[function(require,module,exports){
+},{"./clip":3,"./visualisation":57}],10:[function(require,module,exports){
 // const Clip = require('./clip');
 'use strict';
 
@@ -571,6 +571,7 @@ var MakeBigClip = require('./make-big-clip');
 var ImmediateClip = require('./immediateclip');
 var VideoNode = require('./playablevideonode');
 var PosterClip = require('./poster-clip');
+var OutroClip = require('./outro-clip');
 
 module.exports = {
   // ROW 1
@@ -646,6 +647,7 @@ module.exports = {
   113: new MakeColorsClip(),
   114: new MakeBigClip(),
   115: new PosterClip(),
+  116: new OutroClip(),
 
   // Leon
   117: new ImmediateClip({ location: 'samples/150917-leon4js-backgroundvocals.mp3', gain: 1, isUntouchable: true }),
@@ -654,7 +656,7 @@ module.exports = {
   119: new KillClip({})
 };
 
-},{"./immediateclip":5,"./killclip":7,"./make-big-clip":8,"./make-colors-clip":9,"./playablevideonode":50,"./poster-clip":52,"./stop-vis-clip":54,"./stopclip":55}],11:[function(require,module,exports){
+},{"./immediateclip":5,"./killclip":7,"./make-big-clip":8,"./make-colors-clip":9,"./outro-clip":49,"./playablevideonode":51,"./poster-clip":53,"./stop-vis-clip":55,"./stopclip":56}],11:[function(require,module,exports){
 'use strict';
 
 var context = require('./audiocontext');
@@ -8237,6 +8239,68 @@ function normalizeOpts(opts) {
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Clip = require('./clip');
+var outro = document.getElementById('outro');
+
+var OutroClip = (function (_Clip) {
+  _inherits(OutroClip, _Clip);
+
+  function OutroClip() {
+    _classCallCheck(this, OutroClip);
+
+    _get(Object.getPrototypeOf(OutroClip.prototype), 'constructor', this).call(this);
+    this.isVisible = false;
+  }
+
+  _createClass(OutroClip, [{
+    key: 'touch',
+    value: function touch() {
+      this.isVisible = !this.isVisible;
+
+      if (this.isVisible) {
+        outro.style.opacity = 1;
+      } else {
+        outro.style.opacity = 0;
+      }
+    }
+  }, {
+    key: 'isScheduled',
+    value: function isScheduled() {
+      return false;
+    }
+  }, {
+    key: 'isStopped',
+    value: function isStopped() {
+      return false;
+    }
+  }, {
+    key: 'isIdle',
+    value: function isIdle() {
+      return false;
+    }
+  }, {
+    key: 'isPlaying',
+    value: function isPlaying() {
+      return this.isVisible;
+    }
+  }]);
+
+  return OutroClip;
+})(Clip);
+
+module.exports = OutroClip;
+
+},{"./clip":3}],50:[function(require,module,exports){
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 var context = require('./audiocontext');
@@ -8326,7 +8390,7 @@ var PlayableNode = (function () {
 
 module.exports = PlayableNode;
 
-},{"./audiocontext":1,"./master":11,"./playback":51,"es6-promise":21}],50:[function(require,module,exports){
+},{"./audiocontext":1,"./master":11,"./playback":52,"es6-promise":21}],51:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -8453,7 +8517,7 @@ var PlayableNode = (function () {
 
 module.exports = PlayableNode;
 
-},{"./audiocontext":1,"./master":11,"./playback":51,"es6-promise":21}],51:[function(require,module,exports){
+},{"./audiocontext":1,"./master":11,"./playback":52,"es6-promise":21}],52:[function(require,module,exports){
 "use strict";
 
 var playingNodes = [];
@@ -8484,7 +8548,7 @@ module.exports = {
   }
 };
 
-},{}],52:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -8546,7 +8610,7 @@ var PosterClip = (function (_Clip) {
 
 module.exports = PosterClip;
 
-},{"./clip":3}],53:[function(require,module,exports){
+},{"./clip":3}],54:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -8592,7 +8656,7 @@ var Scheduler = (function () {
 
 module.exports = Scheduler;
 
-},{}],54:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -8654,7 +8718,7 @@ var StopVisClip = (function (_Clip) {
 
 module.exports = StopVisClip;
 
-},{"./clip":3}],55:[function(require,module,exports){
+},{"./clip":3}],56:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -8709,7 +8773,7 @@ var StopClip = (function (_Clip) {
 
 module.exports = StopClip;
 
-},{"./clip":3,"./playback":51}],56:[function(require,module,exports){
+},{"./clip":3,"./playback":52}],57:[function(require,module,exports){
 'use strict';
 
 var analyser = require('./master').analyser;

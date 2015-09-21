@@ -7,6 +7,7 @@ const MakeBigClip = require('./make-big-clip');
 const ImmediateClip = require('./immediateclip');
 const VideoNode = require('./playablevideonode');
 const PosterClip = require('./poster-clip');
+const OutroClip = require('./outro-clip');
 
 module.exports = {
   // ROW 1
@@ -82,6 +83,7 @@ module.exports = {
   113: new MakeColorsClip(),
   114: new MakeBigClip(),
   115: new PosterClip(),
+  116: new OutroClip(),
 
 	// Leon
   117: new ImmediateClip({location: 'samples/150917-leon4js-backgroundvocals.mp3', gain: 1, isUntouchable: true}),

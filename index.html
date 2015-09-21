@@ -29,7 +29,7 @@
         transition: opacity .2s ease-in-out;
       }
 
-      #intro {
+      #intro, #outro {
         position: absolute;
         top: 0;
         bottom: 0;
@@ -37,10 +37,18 @@
         right: 0;
         width: 100%;
         opacity: 1;
-        transition: opacity .2s ease-in-out;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        transition: opacity .5s ease-in-out;
+        text-align: center;
+      }
+
+      #outro {
+        font-size: 60px;
+        font-weight: bold;
+        opacity: 0;
+      }
+
+      #outro h1 {
+        font-size: 140px;
       }
 
       #poster {
@@ -52,7 +60,22 @@
     <canvas id="visualisation" width="400" height="400"></canvas>
     <div id="intro">
       <img id="poster" src="images/poster.png" />
-    <div>
+    </div>
+    <div id="outro">
+      <h1>Enjoy JSConf.eu!</h1>
+
+      <p>
+        @kahliltweets
+      </p>
+
+      <p>
+        @bonotes
+      </p>
+
+      <p>
+        @thedeftone
+      </p>
+    </div>
     <script src="bundle.js" type="text/javascript"></script>
   </body>
 </html>
