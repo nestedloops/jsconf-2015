@@ -8405,6 +8405,8 @@ var _require = require('es6-promise');
 
 var Promise = _require.Promise;
 
+var videoContainer = document.getElementById('video-container');
+
 var lastPlayingNode = undefined;
 
 var PlayableNode = (function () {
@@ -8461,7 +8463,7 @@ var PlayableNode = (function () {
       if (lastPlayingNode) {
         lastPlayingNode.stop();
       }
-      document.body.appendChild(this.videoNode);
+      videoContainer.appendChild(this.videoNode);
       this.videoNode.pause();
       this.videoNode.play();
       PlaybackManager.stopAllNodes();
@@ -8476,7 +8478,7 @@ var PlayableNode = (function () {
     key: 'stop',
     value: function stop() {
       try {
-        document.body.removeChild(this.videoNode);
+        videoContainer.removeChild(this.videoNode);
       } catch (e) {
         console.warn(e);
       }

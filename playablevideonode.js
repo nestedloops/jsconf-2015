@@ -2,6 +2,7 @@ const context = require('./audiocontext');
 const master = require('./master');
 const PlaybackManager = require('./playback');
 const {Promise} = require('es6-promise');
+const videoContainer = document.getElementById('video-container');
 
 let lastPlayingNode;
 
@@ -51,7 +52,7 @@ class PlayableNode {
     if (lastPlayingNode) {
       lastPlayingNode.stop();
     }
-    document.body.appendChild(this.videoNode);
+    videoContainer.appendChild(this.videoNode);
     this.videoNode.pause();
     this.videoNode.play();
     PlaybackManager.stopAllNodes();
@@ -65,7 +66,7 @@ class PlayableNode {
 
   stop () {
     try {
-      document.body.removeChild(this.videoNode);
+      videoContainer.removeChild(this.videoNode);
     } catch(e) {
       console.warn(e);
     }
