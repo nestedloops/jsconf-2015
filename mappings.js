@@ -86,7 +86,7 @@ module.exports = {
   116: new OutroClip(),
 
 	// Leon
-  117: new ImmediateClip({location: 'samples/150917-leon4js-backgroundvocals.mp3', gain: 1, isUntouchable: true}),
+  // 117: new ImmediateClip({location: 'samples/150917-leon4js-backgroundvocals.mp3', gain: 1, isUntouchable: true}),
 	// Kill buttons
   118: new StopClip({}),
   119: new KillClip({})
