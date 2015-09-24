@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "parallelshell 'node scripts/start.js' 'npm run watch' 'npm run open'",
+    "start": "parallelshell \"node scripts/start.js\" \"npm run watch\" \"npm run open\"",
     "build": "esnow -e index.js -o . -f bundle.js",
     "watch": "esnow -e index.js -o . -f bundle.js -w",
     "open": "opener http://localhost:8080"
