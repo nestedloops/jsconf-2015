@@ -4,7 +4,7 @@ An audio-visual performance written in Web Audio and Web MIDI by Boris Lechelt (
 
 ## How to play
 
-Go to http://janmonschke.com/jsconf-2015, plug in your Launchpad and jam :)
+Go to http://nestedloops.github.io/jsconf-2015/, plug in your Launchpad and jam :)
 
 Also have a look at the code or only `mappings.js` to see which key maps to which functionality.
 
