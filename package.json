@@ -9,7 +9,7 @@
     "watch": "esnow -e index.js -o . -f bundle.js -w",
     "open": "opener http://localhost:8080"
   },
-  "author": "",
+  "author": "Nested Loops",
   "license": "MIT",
   "dependencies": {
     "dilla": "^1.5.0",
