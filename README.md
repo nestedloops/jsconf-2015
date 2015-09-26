@@ -26,7 +26,7 @@ All samples are taken from publicly available talks.
 - David Nolen ([@swannodette](https://twitter.com/swannodette)): [JSConf.us 2014 - Immutability: Putting The Dream Machine To Work](https://www.youtube.com/watch?v=SiFwRtCnxv4)
 - Douglas Crockford: [Nordic.js 2014 - The Better Parts](https://www.youtube.com/watch?v=PSGEjv3Tqo0) and [Angular U 2015 - Upgrading the Web](https://www.youtube.com/watch?v=6UTWAEJlhww)
 - Jafar Husain ([@jhusain](https://twitter.com/jhusain)): [JSConf.us 2015 - Async Programming in ES7](https://www.youtube.com/watch?v=lil4YCCXRYc)
-- James Halliday ([@substack](https://twitter.com/substack): [LXJS 2013 - Modularidade para todos](https://www.youtube.com/watch?v=DCQNm6yiZh0)
+- James Halliday ([@substack](https://twitter.com/substack)): [LXJS 2013 - Modularidade para todos](https://www.youtube.com/watch?v=DCQNm6yiZh0)
 - Jenn Schiffer ([@jennschiffer](https://twitter.com/jennschiffer)): [Code Genius 2015 - Drawing Lines with Bresenham's Line Algorithm](https://www.youtube.com/watch?v=zytBpLlSHms)
 - Philip Roberts ([@philip_roberts](https://twitter.com/philip_roberts)): [JSConf.eu 2014 - What the heck is the event loop anyway?](https://www.youtube.com/watch?v=8aGhZQkoFbQ)
 - Raquel Vélez ([@rockbot](https://twitter.com/rockbot)): [JSConf.eu 2014 - Evolution of a developer](https://www.youtube.com/watch?v=rP1q6oIVco4)
@@ -36,5 +36,5 @@ All samples are taken from publicly available talks.
 ### Creatives
 
 - Boris Lechelt ([@bonotes](https://twitter.com/bonotes)) for producing the track and for creating the visuals
-- Kahlil Lechelt ([@kahliltweets](https://twitter.com/kahliltweets)) for producing and performing the lyrics
+- Kahlil Lechelt ([@kahliltweets](https://twitter.com/kahliltweets)) for writing and performing the lyrics
 - Tyler Benz for the original visualiser implementation (https://github.com/tybenz/visualizr)
