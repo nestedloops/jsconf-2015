@@ -1,6 +1,6 @@
 # JavaScript, what are you?
 
-An audio-visual performance by Boris Lechelt ([@bonotes](https://twitter.com/bonotes)), Kahlil Lechelt ([@kahliltweets](https://twitter.com/kahliltweets)) and Jan Monschke ([@thedeftone](https://twitter.com/thedeftone)) for [JSConf.eu 2015](http://2015.jsconf.eu/).
+An audio-visual performance written in Web Audio and Web MIDI by Boris Lechelt ([@bonotes](https://twitter.com/bonotes)), Kahlil Lechelt ([@kahliltweets](https://twitter.com/kahliltweets)) and Jan Monschke ([@thedeftone](https://twitter.com/thedeftone)) for [JSConf.eu 2015](http://2015.jsconf.eu/).
 
 ## How to play
 
